@@ -1,14 +1,19 @@
-import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 showReceiptModal(
-    {required BuildContext context, required String id, String type = 'html'}) {
+    {required BuildContext context,
+    required String id,
+    String type = 'html',
+    goHome = false}) {
   final controller = WebViewController();
 
-  controller.loadRequest(
-      Uri.parse('https://api.checkbox.in.ua/api/v1/receipts/$id/$type'));
+  try {
+    controller.loadRequest(
+        Uri.parse('https://api.checkbox.in.ua/api/v1/receipts/$id/$type'));
+  } catch (e) {}
+
   showDialog(
       context: context,
       builder: (context) {
@@ -40,7 +45,10 @@ showReceiptModal(
             ),
             IconButton(
               onPressed: () {
-                context.pushReplacementNamed(MainNavigationName.homePage);
+                context.pop();
+                if (goHome) {
+                  context.pop();
+                }
               },
               iconSize: 42,
               icon: const Icon(

@@ -4,7 +4,6 @@ import 'package:check_bloc/presentation/pages/home/home_page.dart';
 import 'package:check_bloc/presentation/pages/login_page.dart';
 import 'package:check_bloc/presentation/pages/receipt/receipt_add_page.dart';
 import 'package:check_bloc/presentation/pages/receipt/receipt_history_page.dart';
-import 'package:check_bloc/presentation/pages/receipt/receupt_success_page.dart';
 import 'package:check_bloc/presentation/pages/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -36,11 +35,6 @@ final router = GoRouter(
           path: 'receipt_add_page',
           name: MainNavigationName.receiptAddPage,
           builder: (context, state) => const ReceiptAddPage(),
-        ),
-        GoRoute(
-          path: 'success_add_receipt',
-          name: MainNavigationName.receiptSuccessAddPage,
-          builder: (context, state) => const ReceiptSuccessPage(),
         ),
         GoRoute(
           path: 'receipt_history_page',

@@ -8,7 +8,6 @@ import 'package:check_bloc/presentation/widgets/receipt_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class ServicePaymentsWidget extends StatefulWidget {
   const ServicePaymentsWidget({super.key});
@@ -63,7 +62,7 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             final id = state.receipt?.id;
             if (id != null) {
-              showReceiptModal(context: context, id: id);
+              showReceiptModal(context: context, id: id, goHome: true);
             }
           });
         }
