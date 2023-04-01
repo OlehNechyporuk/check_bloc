@@ -11,17 +11,15 @@ class ProductsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ProductsBloc>().add(ProductsLoadedEvent());
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
-        final products = context.watch<ProductsBloc>().state.products;
         return ListView.separated(
-          itemCount: products.length + 1,
+          itemCount: state.products.length + 1,
           separatorBuilder: (context, index) => const SizedBox(height: 15),
           itemBuilder: (context, index) {
-            return index == products.length
+            return index == state.products.length
                 ? const _LoadMoreButton()
-                : _ProductRow(products[index], index);
+                : _ProductRow(state.products[index], index);
           },
         );
       },

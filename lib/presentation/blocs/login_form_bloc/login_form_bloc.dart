@@ -17,7 +17,7 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
   final AuthRepository _repository;
 
   LoginFormBloc(this._authBloc, this._repository)
-      : super(const LoginFormState('', '', false, '')) {
+      : super(const LoginFormState.empty()) {
     on<LoginFormUserNameChangeEvent>(_onUserNameChange);
     on<LoginFormPasswordChangeEvent>(_onPasswordChange);
     on<LoginFormSubmitEvent>(_onSubmited);

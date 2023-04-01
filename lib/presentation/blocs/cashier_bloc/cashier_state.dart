@@ -3,6 +3,7 @@ part of 'cashier_bloc.dart';
 
 class CashierState extends Equatable {
   final Cashier? cashier;
+
   const CashierState(this.cashier);
 
   @override

@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<ProductsBloc>(
             create: (context) => ProductsBloc(
               RepositoryProvider.of<ProductRepositoryImpl>(context),
-            ),
+            )..add(ProductsLoadedEvent()),
           ),
           BlocProvider<CashierBloc>(
             create: (context) => CashierBloc(

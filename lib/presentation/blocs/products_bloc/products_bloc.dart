@@ -12,14 +12,11 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final ProductRepository _productRepository;
   Timer? _timer;
 
-  ProductsBloc(this._productRepository)
-      : super(const ProductsState([], false)) {
+  ProductsBloc(this._productRepository) : super(const ProductsState.empty()) {
     on<ProductsLoadedEvent>(_loadProducts);
     on<ProductsSearchEvent>(_searchProducts);
     on<ProductsLoadMoreEvent>(_loadMoreProducts);
-    on<ProductsSearchLoadedEvent>((event, emit) {
-      emit(state.copyWith(products: event.products, showLoadMoreButton: false));
-    });
+    on<ProductsSearchLoadedEvent>(_searchLoaded);
   }
 
   _loadProducts(ProductsLoadedEvent event, emit) async {
@@ -67,5 +64,9 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       products.addAll(nextPageProducts);
       emit(state.copyWith(products: products));
     }
+  }
+
+  _searchLoaded(ProductsSearchLoadedEvent event, emit) {
+    emit(state.copyWith(products: event.products, showLoadMoreButton: false));
   }
 }

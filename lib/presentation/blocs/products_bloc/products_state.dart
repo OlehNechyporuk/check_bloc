@@ -7,6 +7,10 @@ class ProductsState extends Equatable {
 
   const ProductsState(this.products, this.showLoadMoreButton);
 
+  const ProductsState.empty()
+      : products = const [],
+        showLoadMoreButton = false;
+
   @override
   List<Object> get props => [products, showLoadMoreButton];
 

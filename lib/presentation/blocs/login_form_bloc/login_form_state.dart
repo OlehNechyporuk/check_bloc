@@ -13,6 +13,12 @@ class LoginFormState extends Equatable {
     this.errorText,
   );
 
+  const LoginFormState.empty()
+      : userName = '',
+        password = '',
+        isSubmit = false,
+        errorText = '';
+
   bool get canSubmit {
     if (userName.isEmpty || password.isEmpty) {
       return false;
