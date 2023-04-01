@@ -69,6 +69,7 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
       quantity: 1,
     );
 
+    // ignore: unrelated_type_equality_checks
     int find = items.indexWhere((element) => element.id == event.product.code);
 
     if (find < 0) {
@@ -80,10 +81,12 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
       items[find] = items[find].copyWith(quantity: amount + 1);
     }
 
-    emit(state.copyWith(
-      receipt: state.receipt?.copyWith(goods: items),
-      price: null,
-    ));
+    emit(
+      state.copyWith(
+        receipt: state.receipt?.copyWith(goods: items),
+        price: null,
+      ),
+    );
   }
 
   _updatePrice(ReceiptUpdateGoodPriceEvent event, emit) {
@@ -121,11 +124,13 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
 
     items[event.index!] = items[event.index!].copyWith(quantity: newAmount);
 
-    emit(state.copyWith(
-      receipt: state.receipt?.copyWith(
-        goods: items,
+    emit(
+      state.copyWith(
+        receipt: state.receipt?.copyWith(
+          goods: items,
+        ),
       ),
-    ));
+    );
   }
 
   _deleteItem(ReceiptDeleteItemEvent event, emit) {
@@ -135,18 +140,22 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
 
     items.removeAt(event.index);
 
-    emit(state.copyWith(
-      receipt: state.receipt?.copyWith(
-        goods: items,
-        discounts: items.isEmpty ? [] : state.receipt?.discounts,
+    emit(
+      state.copyWith(
+        receipt: state.receipt?.copyWith(
+          goods: items,
+          discounts: items.isEmpty ? [] : state.receipt?.discounts,
+        ),
       ),
-    ));
+    );
   }
 
   _clearItems(ReceiptClearItemsEvent event, emit) {
-    emit(state.copyWith(
-      receipt: state.receipt?.copyWith(goods: [], discounts: []),
-    ));
+    emit(
+      state.copyWith(
+        receipt: state.receipt?.copyWith(goods: [], discounts: []),
+      ),
+    );
   }
 
   _addDiscountToProduct(ReceiptAddDiscountToProductEvent event, emit) {
@@ -157,9 +166,11 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
 
     if (discount <= 0) {
       items[event.index] = items[event.index].copyWith(discounts: []);
-      emit(state.copyWith(
-        receipt: state.receipt?.copyWith(goods: items),
-      ));
+      emit(
+        state.copyWith(
+          receipt: state.receipt?.copyWith(goods: items),
+        ),
+      );
     } else {
       if (event.type == DiscountType.percent) {
         final persentDiscount = Discount(
@@ -170,9 +181,11 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
 
         items[event.index] =
             items[event.index].copyWith(discounts: [persentDiscount]);
-        emit(state.copyWith(
-          receipt: state.receipt?.copyWith(goods: items),
-        ));
+        emit(
+          state.copyWith(
+            receipt: state.receipt?.copyWith(goods: items),
+          ),
+        );
       } else if (event.type == DiscountType.fixed) {
         if ((discount) < items[event.index].good!.price!) {
           final cashDiscount = Discount(
@@ -183,9 +196,11 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
 
           items[event.index] =
               items[event.index].copyWith(discounts: [cashDiscount]);
-          emit(state.copyWith(
-            receipt: state.receipt?.copyWith(goods: items),
-          ));
+          emit(
+            state.copyWith(
+              receipt: state.receipt?.copyWith(goods: items),
+            ),
+          );
         }
       }
     }
@@ -194,9 +209,11 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   _addGeneralDiscount(ReceiptAddGeneralDiscountEvent event, emit) {
     final discount = event.discount ?? 0;
     if (discount <= 0) {
-      emit(state.copyWith(
-        receipt: state.receipt?.copyWith(discounts: []),
-      ));
+      emit(
+        state.copyWith(
+          receipt: state.receipt?.copyWith(discounts: []),
+        ),
+      );
     } else {
       if (event.type == DiscountType.percent) {
         final persentDiscount = Discount(
@@ -205,9 +222,11 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
           value: discount,
         );
 
-        emit(state.copyWith(
-          receipt: state.receipt?.copyWith(discounts: [persentDiscount]),
-        ));
+        emit(
+          state.copyWith(
+            receipt: state.receipt?.copyWith(discounts: [persentDiscount]),
+          ),
+        );
       } else if (event.type == DiscountType.fixed) {
         final sum = state.receipt?.info['sum'] ?? 0;
         if ((discount) < sum.toDouble()) {
@@ -217,9 +236,11 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
             value: discount,
           );
 
-          emit(state.copyWith(
-            receipt: state.receipt?.copyWith(discounts: [cashDiscount]),
-          ));
+          emit(
+            state.copyWith(
+              receipt: state.receipt?.copyWith(discounts: [cashDiscount]),
+            ),
+          );
         }
       }
     }
@@ -275,15 +296,13 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     final receipt = state.receipt?.copyWith(id: null);
 
     if (receipt != null) {
-      // final result = await _receiptRepository.add(receipt);
-
-      final result = true;
+      final result = await _receiptRepository.add(receipt);
 
       if (result != null) {
         emit(
           state.copyWith(
             receipt: Receipt(
-              id: '1083ad58-9c76-40af-b674-2ef15d470cd4',
+              id: result.id,
               payments: const [
                 ReceiptPayment(
                   label: 'Готівка',

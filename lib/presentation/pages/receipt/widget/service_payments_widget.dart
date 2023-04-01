@@ -1,4 +1,3 @@
-import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/data/checkbox/repository/payment_repository_impl.dart';
 import 'package:check_bloc/main.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
@@ -95,9 +94,11 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
                   context.read<ReceiptBloc>().add(ReceiptAddEvent());
                 },
                 style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.black),
-                    padding: MaterialStatePropertyAll(
-                        EdgeInsets.symmetric(vertical: 20))),
+                  backgroundColor: MaterialStatePropertyAll(Colors.black),
+                  padding: MaterialStatePropertyAll(
+                    EdgeInsets.symmetric(vertical: 20),
+                  ),
+                ),
                 child: const Text(
                   'Видати чек',
                   style: TextStyle(fontSize: 22, color: Colors.white),
@@ -255,10 +256,11 @@ class _CashInputWidget extends StatelessWidget {
   final Function updateCashSum;
   final double? currentCash;
   final Function isValid;
-  const _CashInputWidget(
-      {required this.updateCashSum,
-      required this.currentCash,
-      required this.isValid});
+  const _CashInputWidget({
+    required this.updateCashSum,
+    required this.currentCash,
+    required this.isValid,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,9 @@ class CashRegisterApiDataProvider {
         final body = jsonDecode(utf8.decode(response.bodyBytes));
         return CashRegister.fromJson(body);
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 }

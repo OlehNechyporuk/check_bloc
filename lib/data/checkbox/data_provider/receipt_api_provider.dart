@@ -25,13 +25,16 @@ class ReceiptApiProvider {
 
         return Receipt.fromJson(body);
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 
   Future<List<Receipt>?> receipts(String apiKey) async {
     var url = Uri.parse(
-        '${AppConstants.checkboxApiServer}receipts/search/?&desc=true');
+      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true',
+    );
     try {
       var response = await http.get(
         url,
@@ -51,7 +54,9 @@ class ReceiptApiProvider {
 
         return result.toList();
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 
@@ -66,7 +71,9 @@ class ReceiptApiProvider {
       if (response.statusCode == 200) {
         return response.body;
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 }

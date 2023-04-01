@@ -51,7 +51,9 @@ class LoginPage extends StatelessWidget {
                           Text(
                             state.errorText,
                             style: const TextStyle(
-                                fontSize: 14, color: Colors.red),
+                              fontSize: 14,
+                              color: Colors.red,
+                            ),
                           ),
                         const SizedBox(
                           height: 20,

@@ -20,6 +20,10 @@ class ProductRepositoryImpl extends ProductRepository {
     if (apiKey == null) throw 'Empty api key';
 
     return _apiDataProvider.getProudcts(
-        key: apiKey, limit: limit, offest: offset, query: searchQuery);
+      key: apiKey,
+      limit: limit,
+      offest: offset,
+      query: searchQuery,
+    );
   }
 }

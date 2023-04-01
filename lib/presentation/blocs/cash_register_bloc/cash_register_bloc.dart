@@ -10,7 +10,7 @@ class CashRegisterBloc extends Bloc<CashRegisterEvent, CashRegisterState> {
   final CashRegisterRepository _registerRepository;
 
   CashRegisterBloc(this._registerRepository)
-      : super(const CashRegisterState(null)) {
+      : super(const CashRegisterState.empty()) {
     on<CashRegisterLoadEvent>(_onLoad);
   }
 

@@ -22,10 +22,8 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
   }
 
   _showHtml(ReceiptShowHtmlEvent event, emit) async {
-    print(event.id);
-
     final html = await _receiptRepository.getHtml(event.id);
-    print(html);
-    emit(LoadedState(receipts: [], receipt: html));
+
+    emit(LoadedState(receipts: const [], receipt: html));
   }
 }

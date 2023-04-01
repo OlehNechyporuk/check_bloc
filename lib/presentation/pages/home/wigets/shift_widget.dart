@@ -159,103 +159,104 @@ _showRegisterShiftAction(BuildContext context, CashRegister? register) {
   final name = register?.fiscalNumber ?? '';
   final address = register?.address ?? '';
   showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Каса: $name'),
-          content: SizedBox(
-            height: 300,
-            child: Column(
-              children: [
-                Text(address),
-                const Divider(),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    context.pop();
-                    showCashInForm(context);
-                  },
-                  style: const ButtonStyle(
-                    minimumSize:
-                        MaterialStatePropertyAll(Size(double.maxFinite, 50)),
-                    side: MaterialStatePropertyAll(
-                      BorderSide(
-                        color: Colors.blue,
-                      ),
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Каса: $name'),
+        content: SizedBox(
+          height: 300,
+          child: Column(
+            children: [
+              Text(address),
+              const Divider(),
+              ElevatedButton.icon(
+                onPressed: () {
+                  context.pop();
+                  showCashInForm(context);
+                },
+                style: const ButtonStyle(
+                  minimumSize:
+                      MaterialStatePropertyAll(Size(double.maxFinite, 50)),
+                  side: MaterialStatePropertyAll(
+                    BorderSide(
+                      color: Colors.blue,
                     ),
                   ),
-                  label: const Text(
-                    'Внести готівку',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  icon: const Icon(Icons.arrow_upward_outlined),
                 ),
-                const SizedBox(
-                  height: 10,
+                label: const Text(
+                  'Внести готівку',
+                  style: TextStyle(fontSize: 18),
                 ),
-                OutlinedButton.icon(
-                  onPressed: () {
-                    context.pop();
-                    showCasOutForm(context);
-                  },
-                  style: const ButtonStyle(
-                    minimumSize:
-                        MaterialStatePropertyAll(Size(double.maxFinite, 50)),
-                    side: MaterialStatePropertyAll(
-                      BorderSide(
-                        color: Colors.blue,
-                      ),
+                icon: const Icon(Icons.arrow_upward_outlined),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              OutlinedButton.icon(
+                onPressed: () {
+                  context.pop();
+                  showCasOutForm(context);
+                },
+                style: const ButtonStyle(
+                  minimumSize:
+                      MaterialStatePropertyAll(Size(double.maxFinite, 50)),
+                  side: MaterialStatePropertyAll(
+                    BorderSide(
+                      color: Colors.blue,
                     ),
                   ),
-                  label: const Text(
-                    'Видати готівку',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  icon: const Icon(Icons.arrow_downward_outlined),
                 ),
-                const Divider(),
-                OutlinedButton(
-                  onPressed: () {},
-                  style: const ButtonStyle(
-                    minimumSize:
-                        MaterialStatePropertyAll(Size(double.maxFinite, 50)),
-                    side: MaterialStatePropertyAll(
-                      BorderSide(
-                        color: Colors.blue,
-                      ),
+                label: const Text(
+                  'Видати готівку',
+                  style: TextStyle(fontSize: 18),
+                ),
+                icon: const Icon(Icons.arrow_downward_outlined),
+              ),
+              const Divider(),
+              OutlinedButton(
+                onPressed: () {},
+                style: const ButtonStyle(
+                  minimumSize:
+                      MaterialStatePropertyAll(Size(double.maxFinite, 50)),
+                  side: MaterialStatePropertyAll(
+                    BorderSide(
+                      color: Colors.blue,
                     ),
                   ),
-                  child: const Text(
-                    'X-звіт',
-                    style: TextStyle(fontSize: 18),
-                  ),
                 ),
-                const SizedBox(
-                  height: 10,
+                child: const Text(
+                  'X-звіт',
+                  style: TextStyle(fontSize: 18),
                 ),
-                OutlinedButton(
-                  onPressed: () {
-                    context.pop();
-                    _showAlertCloseDialog(context);
-                  },
-                  style: const ButtonStyle(
-                    minimumSize:
-                        MaterialStatePropertyAll(Size(double.maxFinite, 50)),
-                    side: MaterialStatePropertyAll(
-                      BorderSide(
-                        color: Colors.red,
-                      ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  context.pop();
+                  _showAlertCloseDialog(context);
+                },
+                style: const ButtonStyle(
+                  minimumSize:
+                      MaterialStatePropertyAll(Size(double.maxFinite, 50)),
+                  side: MaterialStatePropertyAll(
+                    BorderSide(
+                      color: Colors.red,
                     ),
                   ),
-                  child: const Text(
-                    'Закрити зміну',
-                    style: TextStyle(color: Colors.red, fontSize: 18),
-                  ),
                 ),
-              ],
-            ),
+                child: const Text(
+                  'Закрити зміну',
+                  style: TextStyle(color: Colors.red, fontSize: 18),
+                ),
+              ),
+            ],
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 }
 
 _showAlertCloseDialog(BuildContext context) {
@@ -266,7 +267,10 @@ _showAlertCloseDialog(BuildContext context) {
           context.read<ShiftBloc>().state.shift?.balance?.balance.toDouble();
       return AlertDialog(
         titleTextStyle: const TextStyle(
-            fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+          fontSize: 18,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
         title: const Text('Підтвердження закриття зміни'),
         content: Column(
           mainAxisSize: MainAxisSize.min,

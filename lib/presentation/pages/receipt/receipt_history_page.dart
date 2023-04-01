@@ -64,9 +64,11 @@ class ReceiptRowWidget extends StatelessWidget {
         : 'Фіскальний номер: ${receipt?.fiscalCode}\n';
     return ListTile(
       title: Text(
-          '${receipt?.typeConvert} (${receipt?.payments?.first.label})  ${receipt?.totalSum?.toDouble().toUAH()} ₴'),
+        '${receipt?.typeConvert} (${receipt?.payments?.first.label})  ${receipt?.totalSum?.toDouble().toUAH()} ₴',
+      ),
       subtitle: Text(
-          '$fiscalCodeНомер зміни ${receipt?.shift?.serial}\nДата/час: ${receipt?.createdAt?.toLocalTime()}'),
+        '$fiscalCodeНомер зміни ${receipt?.shift?.serial}\nДата/час: ${receipt?.createdAt?.toLocalTime()}',
+      ),
       trailing: PopupMenuButton(
         elevation: 4,
         padding: EdgeInsets.zero,

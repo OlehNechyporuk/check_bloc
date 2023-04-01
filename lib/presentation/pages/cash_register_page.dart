@@ -28,27 +28,29 @@ class CashRegisterPage extends StatelessWidget {
               height: 20,
             ),
             BlocBuilder<CashRegisterFormBloc, CashRegisterFormState>(
-                builder: (context, state) {
-              return TextField(
-                controller:
-                    context.read<CashRegisterFormBloc>().state.controller,
-                decoration: const InputDecoration(
-                  labelText: 'Ключ ліцензії',
-                  border: OutlineInputBorder(),
-                ),
-              );
-            }),
+              builder: (context, state) {
+                return TextField(
+                  controller:
+                      context.read<CashRegisterFormBloc>().state.controller,
+                  decoration: const InputDecoration(
+                    labelText: 'Ключ ліцензії',
+                    border: OutlineInputBorder(),
+                  ),
+                );
+              },
+            ),
             const SizedBox(
               height: 20,
             ),
             ButtonWidget(
-                label: 'Зберегти',
-                onPressed: () {
-                  context
-                      .read<CashRegisterFormBloc>()
-                      .add(CashRegisterFormSubmitEvent());
-                  context.read<CashRegisterBloc>().add(CashRegisterLoadEvent());
-                })
+              label: 'Зберегти',
+              onPressed: () {
+                context
+                    .read<CashRegisterFormBloc>()
+                    .add(CashRegisterFormSubmitEvent());
+                context.read<CashRegisterBloc>().add(CashRegisterLoadEvent());
+              },
+            )
           ],
         ),
       ),
@@ -63,30 +65,31 @@ class _CashRegisterInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final register = context.watch<CashRegisterBloc>().state.cashRegister;
     return BlocBuilder<CashRegisterBloc, CashRegisterState>(
-        builder: (context, state) {
-      if (register == null) {
-        return const Text('Додайте ключ ліцензії каси');
-      } else {
-        return Column(
-          children: [
-            const Text(
-              'Каса:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+      builder: (context, state) {
+        if (register == null) {
+          return const Text('Додайте ключ ліцензії каси');
+        } else {
+          return Column(
+            children: [
+              const Text(
+                'Каса:',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(register.fiscalNumber ?? ''),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(register.address ?? ''),
-          ],
-        );
-      }
-    });
+              const SizedBox(
+                height: 10,
+              ),
+              Text(register.fiscalNumber ?? ''),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(register.address ?? ''),
+            ],
+          );
+        }
+      },
+    );
   }
 }

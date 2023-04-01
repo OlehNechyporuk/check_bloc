@@ -14,108 +14,110 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CashierBloc>().add(CashierLoadEvent());
     return Drawer(
-      child: ListView(children: [
-        const _Organization(),
-        const _CashierInfo(),
-        const ListTile(
-          title: Text(
-            'Операції',
-            style: TextStyle(fontSize: 22),
+      child: ListView(
+        children: [
+          const _Organization(),
+          const _CashierInfo(),
+          const ListTile(
+            title: Text(
+              'Операції',
+              style: TextStyle(fontSize: 22),
+            ),
           ),
-        ),
-        ListTile(
-          title: const Text(
-            'Продаж',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Продаж',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.arrow_circle_right_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              BlocProvider.of<BottomNavbarBloc>(context)
+                  .add(const BottomNavbarChangeTabEvent(0));
+            },
           ),
-          leading: const Icon(Icons.arrow_circle_right_outlined),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            BlocProvider.of<BottomNavbarBloc>(context)
-                .add(const BottomNavbarChangeTabEvent(0));
-          },
-        ),
-        ListTile(
-          title: const Text(
-            'Повернення',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Повернення',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.arrow_circle_left_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              BlocProvider.of<BottomNavbarBloc>(context)
+                  .add(const BottomNavbarChangeTabEvent(1));
+            },
           ),
-          leading: const Icon(Icons.arrow_circle_left_outlined),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            BlocProvider.of<BottomNavbarBloc>(context)
-                .add(const BottomNavbarChangeTabEvent(1));
-          },
-        ),
-        ListTile(
-          title: const Text(
-            'Внести готівку',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Внести готівку',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.arrow_upward_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              showCashInForm(context);
+            },
           ),
-          leading: const Icon(Icons.arrow_upward_outlined),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            showCashInForm(context);
-          },
-        ),
-        ListTile(
-          title: const Text(
-            'Видати готівку',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Видати готівку',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.arrow_downward_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              showCasOutForm(context);
+            },
           ),
-          leading: const Icon(Icons.arrow_downward_outlined),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            showCasOutForm(context);
-          },
-        ),
-        const ListTile(
-          title: Text(
-            'Каса',
-            style: TextStyle(fontSize: 22),
+          const ListTile(
+            title: Text(
+              'Каса',
+              style: TextStyle(fontSize: 22),
+            ),
           ),
-        ),
-        ListTile(
-          title: const Text(
-            'Налаштування',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Налаштування',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.settings),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              context.pushNamed(MainNavigationName.cashRegisterPage);
+            },
           ),
-          leading: const Icon(Icons.settings),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            context.pushNamed(MainNavigationName.cashRegisterPage);
-          },
-        ),
-        ListTile(
-          title: const Text(
-            'Історія чеків',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Історія чеків',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.receipt_long),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              context.pushNamed(MainNavigationName.receiptHistoryPage);
+            },
           ),
-          leading: const Icon(Icons.receipt_long),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            context.pushNamed(MainNavigationName.receiptHistoryPage);
-          },
-        ),
-        ListTile(
-          title: const Text(
-            'Робочі зміни',
-            style: TextStyle(fontSize: 16),
+          ListTile(
+            title: const Text(
+              'Робочі зміни',
+              style: TextStyle(fontSize: 16),
+            ),
+            leading: const Icon(Icons.people_alt),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.pop();
+              context.pushNamed(MainNavigationName.cashRegisterPage);
+            },
           ),
-          leading: const Icon(Icons.people_alt),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            context.pop();
-            context.pushNamed(MainNavigationName.cashRegisterPage);
-          },
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

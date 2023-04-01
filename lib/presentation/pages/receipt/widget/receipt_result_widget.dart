@@ -16,16 +16,17 @@ class ReceiptResultWidget extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: TextButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const DiscountFormWidget(),
-                );
-              },
-              child: const Text(
-                'Додати знижку',
-                style: TextStyle(fontSize: 16),
-              )),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const DiscountFormWidget(),
+              );
+            },
+            child: const Text(
+              'Додати знижку',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
         ),
         const SizedBox(height: 10),
         const TotalSumWidget(),
@@ -58,7 +59,9 @@ class TotalSumWidget extends StatelessWidget {
                 Text(
                   '${total?.info['sum']?.toUAH()} ₴',
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 if (total?.info['sum'] != 0)
                   IconButton(

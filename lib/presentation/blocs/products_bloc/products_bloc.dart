@@ -27,8 +27,12 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 
     final showLoadMoreButton = products.isNotEmpty;
 
-    emit(state.copyWith(
-        products: products, showLoadMoreButton: showLoadMoreButton));
+    emit(
+      state.copyWith(
+        products: products,
+        showLoadMoreButton: showLoadMoreButton,
+      ),
+    );
   }
 
   _searchProducts(ProductsSearchEvent event, emit) async {

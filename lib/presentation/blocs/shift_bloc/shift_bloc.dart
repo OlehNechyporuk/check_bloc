@@ -10,11 +10,13 @@ part 'shift_state.dart';
 class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   final ShiftRepository _repository;
   ShiftBloc(this._repository)
-      : super(ShiftState(
-          null,
-          TextEditingController(),
-          TextEditingController(),
-        )) {
+      : super(
+          ShiftState(
+            null,
+            TextEditingController(),
+            TextEditingController(),
+          ),
+        ) {
     on<ShiftInitialEvent>(_initial);
     on<ShiftOpenEvent>(_open);
     on<ShifCloseEvent>(_close);
@@ -49,8 +51,13 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _cashOut(ShifCashOutEvent event, emit) async {
-    var str = state.cashOutController?.text;
-    double sum = double.parse(str ?? '0');
+    String? str = state.cashOutController?.text;
+    if (str == null) {
+      return;
+    }
+
+    var sum = double.tryParse(str);
+    if (sum == null) return;
     if (sum <= 0) return;
 
     await _repository.cashOut(sum);

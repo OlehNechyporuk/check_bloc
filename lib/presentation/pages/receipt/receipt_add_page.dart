@@ -8,26 +8,27 @@ class ReceiptAddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Чек',
-            style: TextStyle(
-              color: Colors.black,
-            ),
+      appBar: AppBar(
+        title: const Text(
+          'Чек',
+          style: TextStyle(
+            color: Colors.black,
           ),
-          centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              ReceiptItemsWidget(),
-              SizedBox(
-                height: 20,
-              ),
-              ReceiptFormWidget(),
-            ],
-          ),
-        ));
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            ReceiptItemsWidget(),
+            SizedBox(
+              height: 20,
+            ),
+            ReceiptFormWidget(),
+          ],
+        ),
+      ),
+    );
   }
 }

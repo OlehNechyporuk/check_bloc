@@ -21,7 +21,9 @@ class CashierApiDataProvider {
         final body = jsonDecode(utf8.decode(response.bodyBytes));
         return Cashier.fromJson(body);
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 }

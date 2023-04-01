@@ -8,7 +8,9 @@ class CashierRepositoryImpl extends CashierRepositry {
   final CashierApiDataProvider _cashierApiDataProvider;
 
   const CashierRepositoryImpl(
-      this._sessionDataProvider, this._cashierApiDataProvider);
+    this._sessionDataProvider,
+    this._cashierApiDataProvider,
+  );
 
   @override
   Future<Cashier?> loadInfo() async {

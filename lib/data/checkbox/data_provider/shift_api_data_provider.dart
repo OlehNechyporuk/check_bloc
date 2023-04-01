@@ -24,7 +24,9 @@ class ShiftApiDataProvider {
         final body = jsonDecode(utf8.decode(response.bodyBytes));
         return Shift.fromJson(body);
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 
@@ -48,7 +50,9 @@ class ShiftApiDataProvider {
 
         return Shift.fromJson(body);
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return null;
   }
 
@@ -64,9 +68,11 @@ class ShiftApiDataProvider {
         },
       );
       if (response.statusCode == 200) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
+        // final body = jsonDecode(utf8.decode(response.bodyBytes));
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> cashReceiptService(String apiKey, ReceiptPayment payment) async {
@@ -82,8 +88,10 @@ class ShiftApiDataProvider {
         body: jsonEncode({'payment': payment}),
       );
       if (response.statusCode == 201) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
+        // final body = jsonDecode(utf8.decode(response.bodyBytes));
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -57,13 +57,15 @@ class _ProductRow extends StatelessWidget {
                     autofocus: false,
                     onChanged: (value) {
                       context.read<ReceiptBloc>().add(
-                          ReceiptUpdateGoodPriceEvent(double.tryParse(value)));
+                            ReceiptUpdateGoodPriceEvent(double.tryParse(value)),
+                          );
                     },
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(
-                          RegExp(r'^\d+\.?\d{0,2}')),
+                        RegExp(r'^\d+\.?\d{0,2}'),
+                      ),
                     ],
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),

@@ -8,7 +8,9 @@ class CashRegisterRepositoryImpl extends CashRegisterRepository {
   final CashRegisterApiDataProvider _cashRegisterApiDataProvider;
 
   const CashRegisterRepositoryImpl(
-      this._sessionDataProvider, this._cashRegisterApiDataProvider);
+    this._sessionDataProvider,
+    this._cashRegisterApiDataProvider,
+  );
 
   @override
   Future<void> daleteLicenseKey() async {

@@ -39,13 +39,13 @@ class PaymentRepositoryImpl extends PaymetnRepository {
     paymetns.add(payment);
 
     await _dataProvider.saveString(
-        PaymentDbKeys._payments, jsonEncode(paymetns));
+      PaymentDbKeys._payments,
+      jsonEncode(paymetns),
+    );
   }
 
   @override
-  Future<void> deletePayment(ReceiptPayment payment) async {
-    // TODO: implement deletePayment
-  }
+  Future<void> deletePayment(ReceiptPayment payment) async {}
 
   static PaymentType convertStringToEnum(type) {
     if (type == 'CASH') {

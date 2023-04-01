@@ -39,10 +39,12 @@ class DiscountFormBodyWidget extends StatelessWidget {
     List<Widget> items = [];
     if (childern != null) {
       for (var item in childern) {
-        items.add(ItemRowDiscountWidget(
-          item: item,
-          index: childern.indexOf(item),
-        ));
+        items.add(
+          ItemRowDiscountWidget(
+            item: item,
+            index: childern.indexOf(item),
+          ),
+        );
       }
     }
     return Column(

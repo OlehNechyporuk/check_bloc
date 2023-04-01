@@ -12,11 +12,13 @@ class ListWidget extends StatelessWidget {
     List<Widget> items = [];
     if (childern != null) {
       for (var item in childern) {
-        items.add(ItemRowWidget(
-          item: item,
-          index: childern.indexOf(item),
-          controller: TextEditingController(),
-        ));
+        items.add(
+          ItemRowWidget(
+            item: item,
+            index: childern.indexOf(item),
+            controller: TextEditingController(),
+          ),
+        );
       }
     }
     return Column(

@@ -1,17 +1,28 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'cash_register_bloc.dart';
 
 class CashRegisterState extends Equatable {
+  final bool isLoading;
   final CashRegister? cashRegister;
 
-  const CashRegisterState(this.cashRegister);
+  const CashRegisterState(
+    this.isLoading,
+    this.cashRegister,
+  );
 
   @override
   List<Object?> get props => [cashRegister];
 
+  const CashRegisterState.empty()
+      : isLoading = false,
+        cashRegister = null;
+
   CashRegisterState copyWith({
+    bool? isLoading,
     CashRegister? cashRegister,
   }) {
-    return CashRegisterState(cashRegister);
+    return CashRegisterState(
+      isLoading ?? this.isLoading,
+      cashRegister,
+    );
   }
 }

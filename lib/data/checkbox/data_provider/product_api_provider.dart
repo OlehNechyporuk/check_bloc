@@ -7,11 +7,12 @@ import 'package:http/http.dart' as http;
 class ProductApiDataProvider {
   const ProductApiDataProvider();
 
-  Future<List<Product>> getProudcts(
-      {required String key,
-      int limit = AppConstants.productsLimitPerPage,
-      int offest = 0,
-      String? query}) async {
+  Future<List<Product>> getProudcts({
+    required String key,
+    int limit = AppConstants.productsLimitPerPage,
+    int offest = 0,
+    String? query,
+  }) async {
     var params = '?limit=$limit&offset=$offest';
 
     if (query != null && query.isNotEmpty) {
@@ -38,7 +39,9 @@ class ProductApiDataProvider {
 
         return result.toList();
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
     return [];
   }
 }

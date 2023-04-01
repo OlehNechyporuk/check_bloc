@@ -98,8 +98,12 @@ class _QualityControls extends StatelessWidget {
               const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           prefixIcon: InkWell(
             onTap: () {
-              context.read<ReceiptBloc>().add(ReceiptUpdateQuantityEvent(
-                  quantity: -1, index: widget?.index));
+              context.read<ReceiptBloc>().add(
+                    ReceiptUpdateQuantityEvent(
+                      quantity: -1,
+                      index: widget?.index,
+                    ),
+                  );
               FocusScope.of(context).requestFocus(FocusNode());
             },
             child: const Icon(
@@ -109,8 +113,12 @@ class _QualityControls extends StatelessWidget {
           ),
           suffixIcon: InkWell(
             onTap: () {
-              context.read<ReceiptBloc>().add(ReceiptUpdateQuantityEvent(
-                  quantity: 1, index: widget?.index));
+              context.read<ReceiptBloc>().add(
+                    ReceiptUpdateQuantityEvent(
+                      quantity: 1,
+                      index: widget?.index,
+                    ),
+                  );
               FocusScope.of(context).requestFocus(FocusNode());
             },
             child: const Icon(
