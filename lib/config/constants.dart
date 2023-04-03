@@ -5,3 +5,5 @@ class AppConstants {
 
   static const int productsLimitPerPage = 30;
 }
+
+enum BlocStateStatus { initial, loading, success, failure }

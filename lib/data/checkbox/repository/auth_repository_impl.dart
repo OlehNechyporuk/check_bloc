@@ -1,6 +1,8 @@
+import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/data/checkbox/data_provider/auth_api_provider.dart';
 import 'package:check_bloc/data/checkbox/data_provider/session_data_provider.dart';
 import 'package:check_bloc/domain/repository/auth_repository.dart';
+import 'package:dartz/dartz.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final SessionDataProvider _dataProvider;
@@ -19,19 +21,18 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<bool> login(String login, String password) async {
+  Future<Either<Failure, bool>> login(String login, String password) async {
     if (login.isNotEmpty && password.isNotEmpty) {
-      final String token = await _apiProvider.login(login, password);
+      final result = await _apiProvider.login(login, password);
 
-      if (token.isNotEmpty) {
+      return result.fold((error) {
+        return left(error);
+      }, (token) async {
         await _dataProvider.saveApiKey(token);
-        return true;
-      }
-
-      return false;
+        return right(true);
+      });
     }
-
-    return false;
+    return left(Failure(FailureMessages.emptyLoginOrPassword));
   }
 
   @override

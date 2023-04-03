@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/config/router.dart';
-import 'package:check_bloc/data/checkbox/data_provider/auth_api_provider.dart';
 import 'package:check_bloc/domain/repository/auth_repository.dart';
 import 'package:check_bloc/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -24,11 +23,11 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
   }
 
   void _onUserNameChange(LoginFormUserNameChangeEvent event, emit) {
-    emit(state.copyWith(userName: event.inputName, errorText: ''));
+    emit(state.copyWith(userName: event.inputName));
   }
 
   void _onPasswordChange(LoginFormPasswordChangeEvent event, emit) {
-    emit(state.copyWith(password: event.inputPassword, errorText: ''));
+    emit(state.copyWith(password: event.inputPassword));
   }
 
   Future<void> _onSubmited(LoginFormSubmitEvent event, emit) async {
@@ -36,23 +35,35 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
       return;
     }
 
-    emit(state.copyWith(isSubmit: true));
+    emit(state.copyWith(isSubmit: true, status: BlocStateStatus.loading));
 
-    try {
-      final bool result =
-          await _repository.login(state.userName.trim(), state.password.trim());
+    final result =
+        await _repository.login(state.userName.trim(), state.password.trim());
 
-      if (result) {
-        router.goNamed(MainNavigationName.splashPage);
-        _authBloc.add(AutCheckEvent());
-      }
-      emit(state.copyWith(isSubmit: false, userName: '', password: ''));
-    } on AuthApiProviderIncorectLoginDataError catch (e) {
-      emit(state.copyWith(isSubmit: false, errorText: e.msg));
-    } on SocketException catch (_) {
-      emit(state.copyWith(isSubmit: false, errorText: 'Немає Інтернету'));
-    } catch (e) {
-      emit(state.copyWith(isSubmit: false));
-    }
+    result.fold(
+      (error) {
+        emit(
+          state.copyWith(
+            isSubmit: false,
+            userName: '',
+            password: '',
+            status: BlocStateStatus.failure,
+            errorText: error.message,
+          ),
+        );
+      },
+      (success) => {
+        router.goNamed(MainNavigationName.splashPage),
+        _authBloc.add(AutCheckEvent()),
+        emit(
+          state.copyWith(
+            isSubmit: false,
+            userName: '',
+            password: '',
+            status: BlocStateStatus.success,
+          ),
+        )
+      },
+    );
   }
 }

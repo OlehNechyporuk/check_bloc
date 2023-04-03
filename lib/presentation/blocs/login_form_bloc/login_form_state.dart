@@ -5,19 +5,22 @@ class LoginFormState extends Equatable {
   final String password;
   final bool isSubmit;
   final String errorText;
+  final BlocStateStatus status;
 
   const LoginFormState(
     this.userName,
     this.password,
     this.isSubmit,
     this.errorText,
+    this.status,
   );
 
   const LoginFormState.empty()
       : userName = '',
         password = '',
         isSubmit = false,
-        errorText = '';
+        errorText = '',
+        status = BlocStateStatus.initial;
 
   bool get canSubmit {
     if (userName.isEmpty || password.isEmpty) {
@@ -31,12 +34,14 @@ class LoginFormState extends Equatable {
     String? password,
     bool? isSubmit = false,
     String? errorText,
+    BlocStateStatus? status,
   }) {
     return LoginFormState(
       userName ?? this.userName,
       password ?? this.password,
       isSubmit ?? this.isSubmit,
       errorText ?? this.errorText,
+      status ?? this.status,
     );
   }
 
@@ -47,5 +52,6 @@ class LoginFormState extends Equatable {
         canSubmit,
         isSubmit,
         errorText,
+        status,
       ];
 }

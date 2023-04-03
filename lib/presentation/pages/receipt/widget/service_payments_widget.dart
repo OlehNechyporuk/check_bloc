@@ -91,7 +91,10 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
               width: double.maxFinite,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<ReceiptBloc>().add(ReceiptAddEvent());
+                  if (state.receipt?.goods != null &&
+                      state.receipt!.goods!.isNotEmpty) {
+                    context.read<ReceiptBloc>().add(ReceiptAddEvent());
+                  }
                 },
                 style: const ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(Colors.black),

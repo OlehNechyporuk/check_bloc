@@ -23,6 +23,7 @@ dependencies:
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.20
   webview_flutter: ^4.0.7
+  dartz: ^0.10.1
 
 
 dev_dependencies:

@@ -36,7 +36,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  initializeDateFormatting('uk', null);
+  initializeDateFormatting('uk');
   Bloc.observer = MyGlobalObserver();
   const app = MyApp();
   runApp(app);

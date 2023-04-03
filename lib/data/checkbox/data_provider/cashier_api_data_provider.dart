@@ -17,8 +17,10 @@ class CashierApiDataProvider {
           AppConstants.checkboxTokenName: 'Bearer $key',
         },
       );
+
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+
       if (response.statusCode == 200) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
         return Cashier.fromJson(body);
       }
     } catch (e) {

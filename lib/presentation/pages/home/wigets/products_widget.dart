@@ -1,3 +1,4 @@
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/domain/entity/product.dart';
 import 'package:check_bloc/main.dart';
 import 'package:check_bloc/presentation/blocs/products_bloc/products_bloc.dart';
@@ -11,30 +12,56 @@ class ProductsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductsBloc, ProductsState>(
-      builder: (context, state) {
-        return ListView.separated(
-          itemCount: state.products.length + 1,
-          separatorBuilder: (context, index) => const SizedBox(height: 15),
-          itemBuilder: (context, index) {
-            return index == state.products.length
-                ? const _LoadMoreButton()
-                : _ProductRow(state.products[index], index);
-          },
-        );
+    return BlocListener<ProductsBloc, ProductsState>(
+      listener: (context, state) {
+        if (state.status == BlocStateStatus.failure) {
+          if (state.errorText != null) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('${state.errorText}')));
+          }
+        }
       },
+      child: BlocBuilder<ProductsBloc, ProductsState>(
+        builder: (context, state) {
+          if (state.status == BlocStateStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state.status == BlocStateStatus.success) {
+            return state.products.isEmpty
+                ? const Center(
+                    child: Text('Не знайдено'),
+                  )
+                : ListView.separated(
+                    itemCount: state.products.length + 1,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 15),
+                    itemBuilder: (context, index) {
+                      return index == state.products.length
+                          ? const _LoadMoreButton()
+                          : _ProductRow(
+                              product: state.products[index],
+                            );
+                    },
+                  );
+          }
+
+          return const SizedBox();
+        },
+      ),
     );
   }
 }
 
 class _ProductRow extends StatelessWidget {
   final Product product;
-  final int index;
 
-  const _ProductRow(this.product, this.index);
+  const _ProductRow({required this.product});
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController(text: product.price?.toUAH());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +82,9 @@ class _ProductRow extends StatelessWidget {
                     autofocus: false,
                     onChanged: (value) {
                       context.read<ReceiptBloc>().add(
-                            ReceiptUpdateGoodPriceEvent(double.tryParse(value)),
+                            ReceiptUpdateGoodPriceEvent(
+                              double.tryParse(controller.text),
+                            ),
                           );
                     },
                     keyboardType:
@@ -71,7 +100,7 @@ class _ProductRow extends StatelessWidget {
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                     ),
-                    initialValue: product.price?.toUAH(),
+                    controller: controller,
                   ),
                 ),
                 IconButton(

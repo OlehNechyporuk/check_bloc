@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:check_bloc/presentation/blocs/products_bloc/products_bloc.dart';
 import 'package:check_bloc/presentation/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,20 +10,22 @@ class SearchProductWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Timer? timer;
     return Row(
       children: [
         Expanded(
-          child: BlocBuilder<ProductsBloc, ProductsState>(
-            builder: (context, state) {
-              return InputWidget(
-                onChanged: (value) => context
-                    .read<ProductsBloc>()
-                    .add(ProductsSearchEvent(value)),
-                label: 'Пошук',
-                prefixIcon: const Icon(Icons.search),
-                padding: const EdgeInsets.all(10),
-              );
+          child: InputWidget(
+            onChanged: (value) {
+              if (timer != null) {
+                timer?.cancel();
+              }
+              timer = Timer(const Duration(milliseconds: 400), () {
+                context.read<ProductsBloc>().add(ProductsSearchEvent(value));
+              });
             },
+            label: 'Пошук',
+            prefixIcon: const Icon(Icons.search),
+            padding: const EdgeInsets.all(10),
           ),
         ),
         const SizedBox(

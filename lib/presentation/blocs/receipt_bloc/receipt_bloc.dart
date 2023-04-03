@@ -69,8 +69,8 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
       quantity: 1,
     );
 
-    // ignore: unrelated_type_equality_checks
-    int find = items.indexWhere((element) => element.id == event.product.code);
+    int find =
+        items.indexWhere((element) => element.good?.code == event.product.code);
 
     if (find < 0) {
       items.add(newReciept);
