@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<CashierBloc>(
             create: (context) => CashierBloc(
               RepositoryProvider.of<CashierRepositoryImpl>(context),
-            ),
+            )..add(CashierLoadEvent()),
           ),
           BlocProvider<CashRegisterBloc>(
             create: (context) => CashRegisterBloc(

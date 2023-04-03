@@ -1,3 +1,4 @@
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:check_bloc/presentation/blocs/bottom_nav_bloc/bottom_navbar_bloc.dart';
@@ -12,7 +13,6 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CashierBloc>().add(CashierLoadEvent());
     return Drawer(
       child: ListView(
         children: [
@@ -128,11 +128,18 @@ class _Organization extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CashierBloc, CashierState>(
       builder: (context, state) {
-        final cashier = context.watch<CashierBloc>();
-        return ListTile(
-          title: Text(cashier.state.cashier?.organization?.title ?? ''),
-          subtitle: Text(cashier.state.cashier?.organization?.edrpou ?? ''),
-        );
+        if (state.status == BlocStateStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state.status == BlocStateStatus.success) {
+          return ListTile(
+            title: Text('${state.cashier?.organization?.title}'),
+            subtitle: Text('${state.cashier?.organization?.edrpou}'),
+          );
+        } else {
+          return const SizedBox();
+        }
       },
     );
   }
@@ -144,13 +151,22 @@ class _CashierInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CashierBloc, CashierState>(
       builder: (context, state) {
-        final cashier = context.watch<CashierBloc>();
-        return ListTile(
-          title: Text(cashier.state.cashier?.fullName ?? ''),
-          leading: const Icon(Icons.person),
-          trailing: const Icon(Icons.logout),
-          onTap: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
-        );
+        if (state.status == BlocStateStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state.status == BlocStateStatus.success) {
+          return ListTile(
+            title: Text('${state.cashier?.fullName}'),
+            leading: const Icon(Icons.person),
+            trailing: const Icon(Icons.logout),
+            onTap: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
+          );
+        } else {
+          return Center(
+            child: Text('${state.errorText}'),
+          );
+        }
       },
     );
   }
