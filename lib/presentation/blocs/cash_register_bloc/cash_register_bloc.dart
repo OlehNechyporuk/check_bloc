@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/domain/entity/cash_register.dart';
 import 'package:check_bloc/domain/repository/cash_register_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -15,8 +16,28 @@ class CashRegisterBloc extends Bloc<CashRegisterEvent, CashRegisterState> {
   }
 
   _onLoad(CashRegisterLoadEvent event, emit) async {
-    final CashRegister? cashRegister =
-        await _registerRepository.getCashRegisterInfo();
-    emit(state.copyWith(cashRegister: cashRegister));
+    emit(state.copyWith(status: BlocStateStatus.loading));
+
+    final result = await _registerRepository.info();
+
+    result.fold(
+      (error) => {
+        emit(
+          state.copyWith(
+            status: BlocStateStatus.failure,
+            errorText: error.message,
+          ),
+        )
+      },
+      (cashRegister) => {
+        emit(
+          state.copyWith(
+            cashRegister: cashRegister,
+            status: BlocStateStatus.success,
+            errorText: '',
+          ),
+        )
+      },
+    );
   }
 }

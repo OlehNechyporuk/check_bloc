@@ -1,28 +1,33 @@
 part of 'cash_register_bloc.dart';
 
 class CashRegisterState extends Equatable {
-  final bool isLoading;
   final CashRegister? cashRegister;
+  final BlocStateStatus status;
+  final String? errorText;
 
-  const CashRegisterState(
-    this.isLoading,
-    this.cashRegister,
-  );
+  const CashRegisterState({
+    required this.cashRegister,
+    required this.status,
+    required this.errorText,
+  });
 
   @override
-  List<Object?> get props => [cashRegister];
+  List<Object?> get props => [cashRegister, status, errorText];
 
   const CashRegisterState.empty()
-      : isLoading = false,
-        cashRegister = null;
+      : cashRegister = null,
+        status = BlocStateStatus.initial,
+        errorText = null;
 
   CashRegisterState copyWith({
-    bool? isLoading,
     CashRegister? cashRegister,
+    BlocStateStatus? status,
+    String? errorText,
   }) {
     return CashRegisterState(
-      isLoading ?? this.isLoading,
-      cashRegister,
+      cashRegister: cashRegister,
+      status: status ?? this.status,
+      errorText: errorText ?? this.errorText,
     );
   }
 }

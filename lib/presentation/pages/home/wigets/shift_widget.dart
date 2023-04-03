@@ -1,3 +1,4 @@
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/domain/entity/cash_register.dart';
 import 'package:check_bloc/main.dart';
@@ -15,8 +16,6 @@ class ShiftWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shift = context.watch<ShiftBloc>().state.shift;
-
     return Column(
       children: [
         Row(
@@ -27,7 +26,7 @@ class ShiftWidget extends StatelessWidget {
             ),
             BlocBuilder<ShiftBloc, ShiftState>(
               builder: (context, state) {
-                if (shift == null) {
+                if (state.shift == null) {
                   return const _ShiftClosed();
                 } else {
                   return const _OpenShift();
@@ -50,19 +49,30 @@ class _ShiftClosed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final register = context.watch<CashRegisterBloc>().state.cashRegister;
-    return ActionChip(
-      label: const Text('Закрита'),
-      labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
-      backgroundColor: Colors.red.shade400,
-      visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
-      elevation: 0,
-      onPressed: () {
-        if (register == null) {
-          _showEmptyRegisterKey(context);
-        } else {
-          _showOpenShiftAction(context, register);
+    return BlocBuilder<CashRegisterBloc, CashRegisterState>(
+      builder: (context, state) {
+        if (state.status == BlocStateStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
+        if (state.status == BlocStateStatus.success) {
+          return ActionChip(
+            label: const Text('Закрита'),
+            labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
+            backgroundColor: Colors.red.shade400,
+            visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
+            elevation: 0,
+            onPressed: () {
+              if (state.cashRegister == null) {
+                _showEmptyRegisterKey(context);
+              } else {
+                _showOpenShiftAction(context, state.cashRegister);
+              }
+            },
+          );
+        }
+        return const SizedBox();
       },
     );
   }
@@ -73,15 +83,14 @@ class _ShiftOpeningTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shift = context.watch<ShiftBloc>().state.shift;
     var formatter = DateFormat.yMd('uk').add_Hm();
 
     return BlocBuilder<ShiftBloc, ShiftState>(
       builder: (context, state) {
-        if (shift == null) {
+        if (state.shift == null) {
           return const SizedBox();
         } else {
-          var t = shift.openedAt ?? DateTime.now();
+          var t = state.shift?.openedAt ?? DateTime.now();
 
           return Text(formatter.format(t.toLocal()));
         }
