@@ -24,18 +24,25 @@ class ShiftWidget extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            BlocBuilder<ShiftBloc, ShiftState>(
-              builder: (context, state) {
-                if (state.shift == null) {
-                  return const _ShiftClosed();
-                } else {
-                  return const _OpenShift();
+            BlocListener<ShiftBloc, ShiftState>(
+              listener: (context, state) {
+                if (state.status == BlocStateStatus.failure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${state.errorText}')),
+                  );
                 }
               },
+              child: BlocBuilder<ShiftBloc, ShiftState>(
+                builder: (context, state) {
+                  if (state.shift == null) {
+                    return const _ShiftClosed();
+                  } else {
+                    return const _OpenShift();
+                  }
+                },
+              ),
             ),
-            const SizedBox(
-              width: 10,
-            ),
+            const SizedBox(),
           ],
         ),
         const _ShiftOpeningTime(),
@@ -332,78 +339,116 @@ showCashInForm(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AlertDialog(
-        title: const Text('Внести готівку'),
-        content: SizedBox(
-          height: 140,
-          child: Column(
-            children: [
-              TextField(
-                autofocus: true,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                controller: context.read<ShiftBloc>().state.cashInController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ButtonWidget(
-                label: 'Внести',
-                onPressed: () {
-                  context.pop();
-                  context.read<ShiftBloc>().add(ShifCashInEvent());
-                },
-              )
-            ],
-          ),
-        ),
-      );
+      return const CashInForm();
     },
   );
+}
+
+class CashInForm extends StatelessWidget {
+  const CashInForm({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String sum = '';
+
+    return AlertDialog(
+      title: const Text('Внести готівку'),
+      content: SizedBox(
+        height: 140,
+        child: Column(
+          children: [
+            TextField(
+              autofocus: true,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              ],
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Введіть суму',
+              ),
+              onChanged: (value) {
+                sum = value;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ButtonWidget(
+              label: 'Внести',
+              onPressed: () {
+                final result = double.tryParse(sum);
+                if (result != null && result > 0) {
+                  context.pop();
+                }
+                context.read<ShiftBloc>().add(ShifCashInEvent(result));
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 showCasOutForm(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AlertDialog(
-        title: const Text('Видати готівку'),
-        content: SizedBox(
-          height: 140,
-          child: Column(
-            children: [
-              TextField(
-                autofocus: true,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                controller: context.read<ShiftBloc>().state.cashOutController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ButtonWidget(
-                label: 'Видати',
-                onPressed: () {
-                  context.pop();
-                  context.read<ShiftBloc>().add(ShifCashOutEvent());
-                },
-              )
-            ],
-          ),
-        ),
-      );
+      return const CashOutForm();
     },
   );
+}
+
+class CashOutForm extends StatelessWidget {
+  const CashOutForm({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String sum = '';
+    return AlertDialog(
+      title: const Text('Видати готівку'),
+      content: SizedBox(
+        height: 140,
+        child: Column(
+          children: [
+            TextField(
+              autofocus: true,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              ],
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Введіть суму',
+              ),
+              onChanged: (value) {
+                sum = value;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ButtonWidget(
+              label: 'Видати',
+              onPressed: () {
+                final result = double.tryParse(sum);
+                if (result != null && result > 0) {
+                  context.pop();
+                }
+
+                context.read<ShiftBloc>().add(ShifCashOutEvent(result));
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }

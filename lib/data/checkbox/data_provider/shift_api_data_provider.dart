@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/core/failure.dart';
+import 'package:check_bloc/domain/entity/receipt.dart';
 import 'package:check_bloc/domain/entity/receipt_payment.dart';
 import 'package:check_bloc/domain/entity/shift.dart';
+import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class ShiftApiDataProvider {
   const ShiftApiDataProvider();
 
-  Future<Shift?> open(String apiKey, String licenceKey) async {
+  Future<Either<Failure, Shift>> open(String apiKey, String licenceKey) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}shifts');
 
     try {
@@ -20,17 +24,24 @@ class ShiftApiDataProvider {
           AppConstants.checkboxRegisterLicenseName: licenceKey,
         },
       );
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 202) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
-        return Shift.fromJson(body);
+        return right(Shift.fromJson(body));
+      } else {
+        return left(Failure('${body['message']}'));
       }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
-  Future<Shift?> get(String apiKey) async {
+  Future<Either<Failure, Shift>> get(String apiKey) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}cashier/shift');
 
     try {
@@ -41,22 +52,29 @@ class ShiftApiDataProvider {
           AppConstants.checkboxTokenName: 'Bearer $apiKey',
         },
       );
-      if (response.statusCode == 200) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
 
+      if (response.statusCode == 200 && body != null) {
+        return right(Shift.fromJson(body));
+      } else {
         if (body == null) {
-          return null;
+          return left(Failure(FailureMessages.shiftIsClosed));
+        } else {
+          return left(Failure('${body['message']}'));
         }
-
-        return Shift.fromJson(body);
       }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
-  Future<void> close(String apiKey) async {
+  Future<Either<Failure, Receipt>> close(String apiKey) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}shifts/close');
 
     try {
@@ -67,15 +85,28 @@ class ShiftApiDataProvider {
           AppConstants.checkboxTokenName: 'Bearer $apiKey',
         },
       );
-      if (response.statusCode == 200) {
-        // final body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      if (response.statusCode == 202) {
+        return left(Failure(FailureMessages.shiftIsClosed));
+      } else {
+        return left(Failure('${body['message']}'));
       }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> cashReceiptService(String apiKey, ReceiptPayment payment) async {
+  Future<Either<Failure, Receipt>> cashReceiptService(
+    String apiKey,
+    ReceiptPayment payment,
+  ) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}receipts/service');
 
     try {
@@ -87,9 +118,19 @@ class ShiftApiDataProvider {
         },
         body: jsonEncode({'payment': payment}),
       );
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+
       if (response.statusCode == 201) {
-        // final body = jsonDecode(utf8.decode(response.bodyBytes));
+        return right(Receipt.fromJson(body));
+      } else {
+        return left(Failure('${body['message']}'));
       }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
     } catch (e) {
       rethrow;
     }

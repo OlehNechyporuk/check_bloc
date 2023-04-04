@@ -14,7 +14,7 @@ class BalanceWidget extends StatelessWidget {
         const Text('Баланс'),
         BlocBuilder<ShiftBloc, ShiftState>(
           builder: (context, state) {
-            final balance = context.watch<ShiftBloc>().state.shift?.balance;
+            final balance = state.shift?.balance;
             return Text.rich(
               TextSpan(
                 text:

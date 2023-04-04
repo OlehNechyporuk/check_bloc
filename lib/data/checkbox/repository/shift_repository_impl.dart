@@ -1,8 +1,11 @@
+import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/data/checkbox/data_provider/session_data_provider.dart';
 import 'package:check_bloc/data/checkbox/data_provider/shift_api_data_provider.dart';
+import 'package:check_bloc/domain/entity/receipt.dart';
 import 'package:check_bloc/domain/entity/receipt_payment.dart';
 import 'package:check_bloc/domain/entity/shift.dart';
 import 'package:check_bloc/domain/repository/shift_repository.dart';
+import 'package:dartz/dartz.dart';
 
 class ShiftRepositoryImpl extends ShiftRepository {
   final SessionDataProvider _sessionDataProvider;
@@ -14,10 +17,10 @@ class ShiftRepositoryImpl extends ShiftRepository {
   );
 
   @override
-  Future<void> cashIn(double sum) async {
+  Future<Either<Failure, Receipt>> cashIn(double sum) async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
-      return;
+      return left(Failure(FailureMessages.emptyApiKey));
     }
     final payment = ReceiptPayment(
       type: 'CASH',
@@ -25,14 +28,14 @@ class ShiftRepositoryImpl extends ShiftRepository {
       label: 'Готівка',
     );
 
-    await _apiDataProvider.cashReceiptService(apiKey, payment);
+    return _apiDataProvider.cashReceiptService(apiKey, payment);
   }
 
   @override
-  Future<void> cashOut(double sum) async {
+  Future<Either<Failure, Receipt>> cashOut(double sum) async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
-      return;
+      return left(Failure(FailureMessages.emptyApiKey));
     }
 
     final payment = ReceiptPayment(
@@ -41,34 +44,35 @@ class ShiftRepositoryImpl extends ShiftRepository {
       label: 'Готівка',
     );
 
-    await _apiDataProvider.cashReceiptService(apiKey, payment);
+    return _apiDataProvider.cashReceiptService(apiKey, payment);
   }
 
   @override
-  Future<void> close() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
-    if (apiKey != null) {
-      await _apiDataProvider.close(apiKey);
-    }
-  }
-
-  @override
-  Future<Shift?> get() async {
+  Future<Either<Failure, Receipt>> close() async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
-      return null;
+      return left(Failure(FailureMessages.emptyApiKey));
+    }
+    return await _apiDataProvider.close(apiKey);
+  }
+
+  @override
+  Future<Either<Failure, Shift>> get() async {
+    final String? apiKey = await _sessionDataProvider.apiKey();
+    if (apiKey == null) {
+      return left(Failure(FailureMessages.emptyApiKey));
     }
 
     return _apiDataProvider.get(apiKey);
   }
 
   @override
-  Future<Shift?> open() async {
+  Future<Either<Failure, Shift>> open() async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     final String? licenceKey = await _sessionDataProvider.getRegisterKey();
 
     if (apiKey == null || licenceKey == null) {
-      return null;
+      return left(Failure(FailureMessages.emptyApiKey));
     }
 
     return _apiDataProvider.open(apiKey, licenceKey);

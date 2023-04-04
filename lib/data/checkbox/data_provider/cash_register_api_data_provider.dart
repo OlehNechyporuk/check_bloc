@@ -11,7 +11,9 @@ class CashRegisterApiDataProvider {
   const CashRegisterApiDataProvider();
 
   Future<Either<Failure, CashRegister>> getInfo(
-      String key, String licence) async {
+    String key,
+    String licence,
+  ) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}cash-registers/info');
 
     try {

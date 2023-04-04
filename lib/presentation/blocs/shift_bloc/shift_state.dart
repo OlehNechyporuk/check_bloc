@@ -1,25 +1,33 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'shift_bloc.dart';
 
 class ShiftState extends Equatable {
   final Shift? shift;
-  final TextEditingController? cashInController;
-  final TextEditingController? cashOutController;
+  final BlocStateStatus status;
+  final String? errorText;
 
-  const ShiftState(this.shift, this.cashInController, this.cashOutController);
+  const ShiftState({
+    required this.shift,
+    required this.status,
+    required this.errorText,
+  });
+
+  const ShiftState.empty()
+      : shift = null,
+        status = BlocStateStatus.initial,
+        errorText = null;
 
   @override
-  List<Object?> get props => [shift, cashInController, cashOutController];
+  List<Object?> get props => [shift, status, errorText];
 
   ShiftState copyWith({
     Shift? shift,
-    TextEditingController? cashInController,
-    TextEditingController? cashOutController,
+    BlocStateStatus? status,
+    String? errorText,
   }) {
     return ShiftState(
-      shift,
-      cashInController ?? this.cashInController,
-      cashOutController ?? this.cashOutController,
+      shift: shift,
+      status: status ?? this.status,
+      errorText: errorText,
     );
   }
 }

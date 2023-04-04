@@ -1,22 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/domain/entity/shift.dart';
 import 'package:check_bloc/domain/repository/shift_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 part 'shift_event.dart';
 part 'shift_state.dart';
 
 class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   final ShiftRepository _repository;
-  ShiftBloc(this._repository)
-      : super(
-          ShiftState(
-            null,
-            TextEditingController(),
-            TextEditingController(),
-          ),
-        ) {
+  ShiftBloc(this._repository) : super(const ShiftState.empty()) {
     on<ShiftInitialEvent>(_initial);
     on<ShiftOpenEvent>(_open);
     on<ShifCloseEvent>(_close);
@@ -25,51 +19,111 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _initial(ShiftInitialEvent event, emit) async {
-    final Shift? shift = await _repository.get();
-    emit(state.copyWith(shift: shift));
+    final result = await _repository.get();
+
+    result.fold(
+      (error) => emit(
+        state.copyWith(
+          errorText: error.message,
+          status: BlocStateStatus.failure,
+        ),
+      ),
+      (shift) => emit(
+        state.copyWith(
+          shift: shift,
+          status: BlocStateStatus.success,
+        ),
+      ),
+    );
   }
 
   _open(ShiftOpenEvent event, emit) async {
-    final Shift? shift = await _repository.open();
-    emit(state.copyWith(shift: shift));
+    emit(state.copyWith(status: BlocStateStatus.loading));
+
+    final result = await _repository.open();
+
+    result.fold(
+      (error) => emit(
+        state.copyWith(
+          status: BlocStateStatus.failure,
+          errorText: error.message,
+        ),
+      ),
+      (shift) => emit(
+        state.copyWith(
+          shift: shift,
+          status: BlocStateStatus.success,
+        ),
+      ),
+    );
   }
 
   _close(ShifCloseEvent event, emit) async {
-    await _repository.close();
-    emit(state.copyWith(shift: null));
+    state.copyWith(shift: null, status: BlocStateStatus.loading);
+    final result = await _repository.close();
+    result.fold(
+      (error) => emit(
+        state.copyWith(
+          errorText: error.message,
+          status: BlocStateStatus.failure,
+        ),
+      ),
+      (r) => emit(state.copyWith(status: BlocStateStatus.success)),
+    );
   }
 
   _cashIn(ShifCashInEvent event, emit) async {
-    var str = state.cashInController?.text;
-    double sum = double.parse(str ?? '0');
-    if (sum <= 0) return;
+    final double? sum = event.sum;
 
-    await _repository.cashIn(sum);
-    state.cashInController?.clear();
+    if (sum == null || sum <= 0) {
+      emit(
+        state.copyWith(
+          shift: state.shift,
+          status: BlocStateStatus.failure,
+          errorText: FailureMessages.emptySum,
+        ),
+      );
+    } else {
+      state.copyWith(shift: null, status: BlocStateStatus.loading);
 
-    add(ShiftInitialEvent());
+      final result = await _repository.cashIn(sum);
+
+      result.fold(
+        (error) => state.copyWith(
+          errorText: error.message,
+          status: BlocStateStatus.failure,
+        ),
+        (r) => add(ShiftInitialEvent()),
+      );
+    }
   }
 
   _cashOut(ShifCashOutEvent event, emit) async {
-    String? str = state.cashOutController?.text;
-    if (str == null) {
-      return;
+    final double? sum = event.sum;
+
+    if (sum == null || sum <= 0) {
+      emit(
+        state.copyWith(
+          status: BlocStateStatus.failure,
+          shift: state.shift,
+          errorText: FailureMessages.emptySum,
+        ),
+      );
+    } else {
+      state.copyWith(shift: null, status: BlocStateStatus.loading);
+
+      final result = await _repository.cashOut(sum);
+
+      result.fold(
+        (error) => emit(
+          state.copyWith(
+            shift: state.shift,
+            errorText: error.message,
+            status: BlocStateStatus.failure,
+          ),
+        ),
+        (r) => add(ShiftInitialEvent()),
+      );
     }
-
-    var sum = double.tryParse(str);
-    if (sum == null) return;
-    if (sum <= 0) return;
-
-    await _repository.cashOut(sum);
-    state.cashOutController?.clear();
-
-    add(ShiftInitialEvent());
-  }
-
-  @override
-  Future<void> close() {
-    state.cashInController?.dispose();
-    state.cashOutController?.dispose();
-    return super.close();
   }
 }

@@ -1,11 +1,14 @@
+import 'package:check_bloc/core/failure.dart';
+import 'package:check_bloc/domain/entity/receipt.dart';
 import 'package:check_bloc/domain/entity/shift.dart';
+import 'package:dartz/dartz.dart';
 
 abstract class ShiftRepository {
   const ShiftRepository();
 
-  Future<Shift?> open();
-  Future<Shift?> get();
-  Future<void> close();
-  Future<void> cashIn(double sum);
-  Future<void> cashOut(double sum);
+  Future<Either<Failure, Shift>> open();
+  Future<Either<Failure, Shift>> get();
+  Future<Either<Failure, Receipt>> close();
+  Future<Either<Failure, Receipt>> cashIn(double sum);
+  Future<Either<Failure, Receipt>> cashOut(double sum);
 }

@@ -74,8 +74,6 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   }
 
   _loadMoreProducts(ProductsLoadMoreEvent event, emit) async {
-    emit(state.copyWith(status: BlocStateStatus.loading));
-
     final offset = state.products.length;
 
     final result = await _productRepository.getProducts(offset: offset);
@@ -103,7 +101,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
             state.copyWith(
               products: [...state.products, ...products],
               status: BlocStateStatus.success,
-              showLoadMoreButton: false,
+              showLoadMoreButton: true,
             ),
           );
         }

@@ -13,6 +13,14 @@ class ShiftOpenEvent extends ShiftEvent {}
 
 class ShifCloseEvent extends ShiftEvent {}
 
-class ShifCashInEvent extends ShiftEvent {}
+class ShifCashInEvent extends ShiftEvent {
+  final double? sum;
 
-class ShifCashOutEvent extends ShiftEvent {}
+  const ShifCashInEvent(this.sum);
+}
+
+class ShifCashOutEvent extends ShiftEvent {
+  final double? sum;
+
+  const ShifCashOutEvent(this.sum);
+}
