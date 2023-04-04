@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/domain/entity/receipt.dart';
+import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class ReceiptApiProvider {
@@ -31,7 +34,7 @@ class ReceiptApiProvider {
     return null;
   }
 
-  Future<List<Receipt>?> receipts(String apiKey) async {
+  Future<Either<Failure, List<Receipt>>> receipts(String apiKey) async {
     var url = Uri.parse(
       '${AppConstants.checkboxApiServer}receipts/search/?&desc=true',
     );
@@ -44,20 +47,28 @@ class ReceiptApiProvider {
         },
       );
 
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+
       if (response.statusCode == 200) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
         final jsonReceipts = body['results'] as List;
 
         final result = jsonReceipts.map((e) {
           return Receipt.fromJson(e);
         });
 
-        return result.toList();
+        return right(result.toList());
+      } else {
+        return left(Failure('${body['message']}'));
       }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
   Future<String?> getHtml(String apiKey, String id) async {

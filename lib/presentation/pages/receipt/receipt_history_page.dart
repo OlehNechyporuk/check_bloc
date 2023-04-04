@@ -1,6 +1,7 @@
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/domain/entity/receipt.dart';
 import 'package:check_bloc/main.dart';
-import 'package:check_bloc/presentation/blocs/receipts_bloc/receipts_bloc.dart';
+import 'package:check_bloc/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/presentation/widgets/receipt_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,15 +32,14 @@ class ReceiptsListWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ReceiptsBloc>().add(ReceiptsLoadedEvent());
-
-    return BlocBuilder<ReceiptsBloc, ReceiptsState>(
+    context.read<ReceiptsHistoryBloc>().add(ReceiptsHistoryLoadedEvent());
+    return BlocBuilder<ReceiptsHistoryBloc, ReceiptsHistoryState>(
       builder: (context, state) {
-        if (state is InititalState) {
+        if (state.status == BlocStateStatus.loading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is LoadedState) {
+        } else if (state.status == BlocStateStatus.success) {
           return ListView.separated(
             itemCount: state.receipts?.length ?? 0,
             separatorBuilder: (context, index) => const Divider(),
