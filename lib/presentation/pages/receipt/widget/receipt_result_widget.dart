@@ -42,9 +42,8 @@ class TotalSumWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ReceiptBloc, ReceiptState>(
       builder: (context, state) {
-        final total = context.read<ReceiptBloc>().state.receipt;
-        final payment =
-            context.read<ReceiptBloc>().state.receipt?.payments?.first;
+        final total = state.receipt;
+        final payment = state.receipt?.payments?.first;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,

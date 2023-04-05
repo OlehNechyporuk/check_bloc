@@ -12,9 +12,11 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
   const ReceiptRepositoryImpl(this._sessionDataProvider, this._apiProvider);
 
   @override
-  Future<Receipt?> add(Receipt receipt) async {
+  Future<Either<Failure, Receipt>> add(Receipt receipt) async {
     final String? apiKey = await _sessionDataProvider.apiKey();
-    if (apiKey == null) throw 'Empty Api key';
+    if (apiKey == null) {
+      return left(Failure(FailureMessages.emptyApiKey));
+    }
 
     return _apiProvider.add(apiKey, receipt);
   }
@@ -27,12 +29,5 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
     }
 
     return _apiProvider.receipts(apiKey);
-  }
-
-  @override
-  Future<String?> getHtml(String id) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
-    if (apiKey == null) throw 'Empty Api key';
-    return _apiProvider.getHtml(apiKey, id);
   }
 }

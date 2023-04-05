@@ -63,23 +63,21 @@ class _ShiftClosed extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        if (state.status == BlocStateStatus.success) {
-          return ActionChip(
-            label: const Text('Закрита'),
-            labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
-            backgroundColor: Colors.red.shade400,
-            visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
-            elevation: 0,
-            onPressed: () {
-              if (state.cashRegister == null) {
-                _showEmptyRegisterKey(context);
-              } else {
-                _showOpenShiftAction(context, state.cashRegister);
-              }
-            },
-          );
-        }
-        return const SizedBox();
+
+        return ActionChip(
+          label: const Text('Закрита'),
+          labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
+          backgroundColor: Colors.red.shade400,
+          visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
+          elevation: 0,
+          onPressed: () {
+            if (state.cashRegister == null) {
+              _showEmptyRegisterKey(context);
+            } else {
+              _showOpenShiftAction(context, state.cashRegister);
+            }
+          },
+        );
       },
     );
   }
@@ -179,8 +177,7 @@ _showRegisterShiftAction(BuildContext context, CashRegister? register) {
     builder: (context) {
       return AlertDialog(
         title: Text('Каса: $name'),
-        content: SizedBox(
-          height: 300,
+        content: SingleChildScrollView(
           child: Column(
             children: [
               Text(address),

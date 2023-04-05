@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class ReceiptRepository {
   const ReceiptRepository();
-  Future<Receipt?> add(Receipt receipt);
+  Future<Either<Failure, Receipt>> add(Receipt receipt);
   Future<Either<Failure, List<Receipt>>> receipts();
-  Future<String?> getHtml(String id);
 }

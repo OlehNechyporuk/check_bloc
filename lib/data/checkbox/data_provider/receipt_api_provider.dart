@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class ReceiptApiProvider {
   const ReceiptApiProvider();
 
-  Future<Receipt?> add(String apiKey, Receipt receipt) async {
+  Future<Either<Failure, Receipt>> add(String apiKey, Receipt receipt) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}receipts/sell');
 
     try {
@@ -22,16 +22,21 @@ class ReceiptApiProvider {
         },
         body: jsonEncode(receipt),
       );
-
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 201) {
-        final body = jsonDecode(utf8.decode(response.bodyBytes));
-
-        return Receipt.fromJson(body);
+        return right(Receipt.fromJson(body));
+      } else {
+        return left(Failure('${body['message']}'));
       }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
   Future<Either<Failure, List<Receipt>>> receipts(String apiKey) async {

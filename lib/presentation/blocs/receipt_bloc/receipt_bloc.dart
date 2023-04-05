@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/domain/entity/discount.dart';
 import 'package:check_bloc/domain/entity/good.dart';
 import 'package:check_bloc/domain/entity/product.dart';
@@ -7,16 +8,14 @@ import 'package:check_bloc/domain/entity/receipt_item.dart';
 import 'package:check_bloc/domain/entity/receipt_payment.dart';
 import 'package:check_bloc/domain/repository/receipt_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 part 'receipt_event.dart';
 part 'receipt_state.dart';
 
 class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   final ReceiptRepository _receiptRepository;
-  ReceiptBloc(this._receiptRepository)
-      : super(const ReceiptState(null, null, null)) {
-    on<ReceiptInitialEvent>(_inital);
+  ReceiptBloc(this._receiptRepository) : super(const ReceiptState.empty()) {
+    on<ReceiptInitialEvent>(_intial);
     on<ReceiptAddGoodEvent>(_addGood);
     on<ReceiptUpdateGoodPriceEvent>(_updatePrice);
     on<ReceiptUpdateQuantityEvent>(_updateQuantity);
@@ -27,37 +26,21 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     on<ReceiptChangePaymentEvent>(_changePayment);
     on<ReceiptAddEvent>(_add);
   }
-  _inital(ReceiptInitialEvent event, emit) {
-    emit(
-      state.copyWith(
-        receipt: const Receipt(
-          payments: [
-            ReceiptPayment(
-              label: 'Готівка',
-              type: 'CASH',
-            )
-          ],
-          discounts: [],
-          bonuses: [],
-          rounding: true,
-        ),
-      ),
-    );
+
+  _intial(ReceiptInitialEvent event, emit) {
+    emit(const ReceiptState.empty());
   }
 
   _addGood(ReceiptAddGoodEvent event, emit) {
     final List<ReceiptItem> items = [];
-    final List<TextEditingController> controllers = [];
-    if (state.receipt == null) {
-      return;
-    }
 
     items.addAll(state.receipt?.goods ?? []);
 
     double? price = event.product.price;
+    final double? productPrice = state.productPrice;
 
-    if (state.price != null) {
-      price = state.price! * 100;
+    if (productPrice != null) {
+      price = productPrice * 100;
     }
 
     final newReciept = ReceiptItem(
@@ -74,7 +57,6 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
 
     if (find < 0) {
       items.add(newReciept);
-      controllers.add(TextEditingController());
     } else {
       final amount = items[find].quantity ?? 1;
 
@@ -84,21 +66,17 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     emit(
       state.copyWith(
         receipt: state.receipt?.copyWith(goods: items),
-        price: null,
+        productPrice: null,
       ),
     );
   }
 
   _updatePrice(ReceiptUpdateGoodPriceEvent event, emit) {
-    emit(state.copyWith(price: event.price));
+    emit(state.copyWith(productPrice: event.price));
   }
 
   _updateQuantity(ReceiptUpdateQuantityEvent event, emit) {
-    if (state.receipt?.goods == null) {
-      return;
-    }
-
-    if (event.index == null) {
+    if (state.receipt?.goods == null || event.index == null) {
       return;
     }
 
@@ -151,11 +129,7 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   }
 
   _clearItems(ReceiptClearItemsEvent event, emit) {
-    emit(
-      state.copyWith(
-        receipt: state.receipt?.copyWith(goods: [], discounts: []),
-      ),
-    );
+    emit(const ReceiptState.empty());
   }
 
   _addDiscountToProduct(ReceiptAddDiscountToProductEvent event, emit) {
@@ -293,30 +267,23 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   }
 
   _add(ReceiptAddEvent event, emit) async {
-    final receipt = state.receipt?.copyWith(id: null);
+    emit(state.copyWith(status: BlocStateStatus.loading));
 
-    if (receipt != null) {
-      final result = await _receiptRepository.add(receipt);
+    final result = await _receiptRepository.add(state.receipt!);
 
-      if (result != null) {
-        emit(
-          state.copyWith(
-            receipt: Receipt(
-              id: result.id,
-              payments: const [
-                ReceiptPayment(
-                  label: 'Готівка',
-                  type: 'CASH',
-                )
-              ],
-              discounts: const [],
-              bonuses: const [],
-              rounding: true,
-              goods: const [],
-            ),
-          ),
-        );
-      }
-    }
+    result.fold(
+      (error) => emit(
+        state.copyWith(
+          status: BlocStateStatus.failure,
+          errorText: error.message,
+        ),
+      ),
+      (receipt) => emit(
+        const ReceiptState.empty().copyWith(
+          lastReceiptId: receipt.id,
+          status: BlocStateStatus.success,
+        ),
+      ),
+    );
   }
 }

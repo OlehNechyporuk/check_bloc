@@ -19,7 +19,7 @@ class SearchProductWiget extends StatelessWidget {
               if (timer != null) {
                 timer?.cancel();
               }
-              timer = Timer(const Duration(milliseconds: 400), () {
+              timer = Timer(const Duration(milliseconds: 350), () {
                 context.read<ProductsBloc>().add(ProductsSearchEvent(value));
               });
             },

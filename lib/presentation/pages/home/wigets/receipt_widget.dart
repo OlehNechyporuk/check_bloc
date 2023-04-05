@@ -10,30 +10,26 @@ class ReceiptWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final receipt = context.watch<ReceiptBloc>().state.receipt;
-    return receipt == null
-        ? const SizedBox()
-        : BlocBuilder<ReceiptBloc, ReceiptState>(
-            builder: (context, state) {
-              return receipt.info['sum']! == 0
-                  ? const SizedBox()
-                  : ElevatedButton(
-                      onPressed: () {
-                        context.pushNamed(MainNavigationName.receiptAddPage);
-                      },
-                      style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                        ),
-                        backgroundColor: MaterialStatePropertyAll(Colors.black),
-                      ),
-                      child: Text(
-                        '${receipt.info['sum']?.toUAH()} ₴ ${receipt.info['total']?.toInt().toString()} од.',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 17),
-                      ),
-                    );
-            },
-          );
+    return BlocBuilder<ReceiptBloc, ReceiptState>(
+      builder: (context, state) {
+        return state.receipt?.info['sum']! == 0
+            ? const SizedBox()
+            : ElevatedButton(
+                onPressed: () {
+                  context.pushNamed(MainNavigationName.receiptAddPage);
+                },
+                style: const ButtonStyle(
+                  padding: MaterialStatePropertyAll(
+                    EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                  ),
+                  backgroundColor: MaterialStatePropertyAll(Colors.black),
+                ),
+                child: Text(
+                  '${state.receipt?.info['sum']?.toUAH()} ₴ ${state.receipt?.info['total']?.toInt().toString()} од.',
+                  style: const TextStyle(color: Colors.white, fontSize: 17),
+                ),
+              );
+      },
+    );
   }
 }

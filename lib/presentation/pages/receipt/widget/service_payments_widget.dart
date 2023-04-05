@@ -1,3 +1,4 @@
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/data/checkbox/repository/payment_repository_impl.dart';
 import 'package:check_bloc/main.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
@@ -30,14 +31,20 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
   }
 
   bool isValid(double total) {
-    final cash = currentCash;
-
-    if (cash == null) {
+    if (current == PaymentType.card) {
       return true;
-    }
+    } else if (current == PaymentType.cash) {
+      final cash = currentCash;
 
-    if ((cash) >= total) {
-      return true;
+      if (cash == null) {
+        return false;
+      }
+
+      if ((cash) >= total) {
+        return true;
+      }
+
+      return false;
     }
 
     return false;
@@ -55,62 +62,77 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReceiptBloc, ReceiptState>(
-      builder: (context, state) {
-        if (state.receipt?.id != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final id = state.receipt?.id;
-            if (id != null) {
-              showReceiptModal(context: context, id: id, goHome: true);
-            }
-          });
+    return BlocListener<ReceiptBloc, ReceiptState>(
+      listener: (context, state) {
+        if (state.status == BlocStateStatus.failure) {
+          if (state.errorText != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${state.errorText}'),
+              ),
+            );
+          }
         }
-
-        current = state.receipt?.payments?.first.convertStringToEnum ??
-            PaymentType.cash;
-
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _CashPaymentButton(current, updateCurrentButton),
-                _CardPaymentButton(current, updateCurrentButton),
-                _OtherPaymentButton(current, updateCurrentButton),
-              ],
-            ),
-            const SizedBox(height: 20),
-            if (current == PaymentType.cash)
-              _CashInputWidget(
-                updateCashSum: updateCashSum,
-                currentCash: currentCash,
-                isValid: isValid,
-              ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.maxFinite,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (state.receipt?.goods != null &&
-                      state.receipt!.goods!.isNotEmpty) {
-                    context.read<ReceiptBloc>().add(ReceiptAddEvent());
-                  }
-                },
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.black),
-                  padding: MaterialStatePropertyAll(
-                    EdgeInsets.symmetric(vertical: 20),
-                  ),
-                ),
-                child: const Text(
-                  'Видати чек',
-                  style: TextStyle(fontSize: 22, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        );
       },
+      child: BlocBuilder<ReceiptBloc, ReceiptState>(
+        builder: (context, state) {
+          if (state.lastReceiptId != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              final id = state.lastReceiptId;
+              if (id != null) {
+                showReceiptModal(context: context, id: id, goHome: true);
+              }
+            });
+          }
+
+          current = state.receipt?.payments?.first.convertStringToEnum ??
+              PaymentType.cash;
+
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _CashPaymentButton(current, updateCurrentButton),
+                  _CardPaymentButton(current, updateCurrentButton),
+                  _OtherPaymentButton(current, updateCurrentButton),
+                ],
+              ),
+              const SizedBox(height: 20),
+              if (current == PaymentType.cash)
+                _CashInputWidget(
+                  updateCashSum: updateCashSum,
+                  currentCash: currentCash,
+                  isValid: isValid,
+                ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.maxFinite,
+                child: state.status == BlocStateStatus.loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: isValid(state.receipt?.info['paid'] ?? 0)
+                            ? () {
+                                context
+                                    .read<ReceiptBloc>()
+                                    .add(ReceiptAddEvent());
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          disabledBackgroundColor: Colors.grey,
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                        ),
+                        child: const Text(
+                          'Видати чек',
+                          style: TextStyle(fontSize: 22, color: Colors.white),
+                        ),
+                      ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
