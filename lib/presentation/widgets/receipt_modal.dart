@@ -78,7 +78,8 @@ showReceiptModal({
                     onPressed: () async {
                       final response = await http.get(
                         Uri.parse(
-                            'https://api.checkbox.in.ua/api/v1/receipts/$id/pdf'),
+                          'https://api.checkbox.in.ua/api/v1/receipts/$id/pdf',
+                        ),
                       );
 
                       Share.shareXFiles([
