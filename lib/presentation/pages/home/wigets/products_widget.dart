@@ -35,8 +35,7 @@ class ProductsWidget extends StatelessWidget {
                   )
                 : ListView.separated(
                     itemCount: state.products.length + 1,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 15),
+                    separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) {
                       return index == state.products.length
                           ? const _LoadMoreButton()
@@ -110,7 +109,13 @@ class _ProductRow extends StatelessWidget {
                         .read<ReceiptBloc>()
                         .add(ReceiptAddGoodEvent(product));
                   },
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(
+                    Icons.add,
+                  ),
+                  enableFeedback: false,
+                  splashRadius: 0.01,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerRight,
                 )
               ],
             )
