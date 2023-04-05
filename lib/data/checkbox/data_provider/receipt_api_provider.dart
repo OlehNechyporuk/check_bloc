@@ -75,21 +75,4 @@ class ReceiptApiProvider {
       rethrow;
     }
   }
-
-  Future<String?> getHtml(String apiKey, String id) async {
-    var url = Uri.parse('${AppConstants.checkboxApiServer}receipts/$id/html');
-
-    try {
-      var response = await http.get(
-        url,
-      );
-
-      if (response.statusCode == 200) {
-        return response.body;
-      }
-    } catch (e) {
-      rethrow;
-    }
-    return null;
-  }
 }

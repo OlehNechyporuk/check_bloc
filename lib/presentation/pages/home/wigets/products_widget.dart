@@ -66,7 +66,7 @@ class _ProductRow extends StatelessWidget {
       children: [
         Text(
           product.name ?? '',
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 15),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,12 +109,19 @@ class _ProductRow extends StatelessWidget {
                         .read<ReceiptBloc>()
                         .add(ReceiptAddGoodEvent(product));
                   },
-                  icon: const Icon(
-                    Icons.add,
+                  icon: const ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    child: ColoredBox(
+                      color: Colors.grey,
+                      child: Icon(
+                        Icons.add,
+                      ),
+                    ),
                   ),
                   enableFeedback: false,
                   splashRadius: 0.01,
-                  padding: EdgeInsets.zero,
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(0),
                   alignment: Alignment.centerRight,
                 )
               ],
