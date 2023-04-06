@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/data/checkbox/data_provider/auth_api_provider.dart';
 import 'package:check_bloc/data/checkbox/data_provider/cash_register_api_data_provider.dart';
@@ -136,6 +137,8 @@ class MyApp extends StatelessWidget {
           BlocProvider<ReceiptBloc>(
             create: (context) => ReceiptBloc(
               RepositoryProvider.of<ReceiptRepositoryImpl>(context),
+              RepositoryProvider.of<ProductRepositoryImpl>(context),
+              AssetsAudioPlayer(),
             )..add(ReceiptInitialEvent()),
           ),
           BlocProvider(

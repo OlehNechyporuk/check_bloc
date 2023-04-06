@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:check_bloc/presentation/blocs/products_bloc/products_bloc.dart';
+import 'package:check_bloc/presentation/widgets/barcode_scanner_modal.dart';
 import 'package:check_bloc/presentation/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +35,12 @@ class SearchProductWiget extends StatelessWidget {
         IconButton(
           onPressed: () {},
           icon: const Icon(Icons.add),
+        ),
+        IconButton(
+          onPressed: () {
+            barcodeScannerModal(context: context);
+          },
+          icon: const Icon(Icons.qr_code),
         )
       ],
     );

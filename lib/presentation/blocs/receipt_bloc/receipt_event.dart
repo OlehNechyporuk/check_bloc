@@ -65,3 +65,9 @@ class ReceiptChangePaymentEvent extends ReceiptEvent {
 }
 
 class ReceiptAddEvent extends ReceiptEvent {}
+
+class ReceiptAddGoodByBarcodeEvent extends ReceiptEvent {
+  final String? barcode;
+
+  const ReceiptAddGoodByBarcodeEvent(this.barcode);
+}

@@ -23,6 +23,10 @@ class CashRegisterPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
+            TextButton(
+              onPressed: () async {},
+              child: const Icon(Icons.qr_code_scanner),
+            ),
             const _CashRegisterInfo(),
             const SizedBox(
               height: 20,

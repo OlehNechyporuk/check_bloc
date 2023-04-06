@@ -15,4 +15,5 @@ class FailureMessages {
   static const String emptyApiKey = 'Empty Api Key';
   static const String emptySum = 'Введіть суму';
   static const String shiftIsClosed = 'Зміна закрита';
+  static const String productNotFound = 'Не знайдено';
 }

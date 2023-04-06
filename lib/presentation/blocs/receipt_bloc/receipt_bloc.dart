@@ -1,11 +1,14 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:bloc/bloc.dart';
 import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/domain/entity/discount.dart';
 import 'package:check_bloc/domain/entity/good.dart';
 import 'package:check_bloc/domain/entity/product.dart';
 import 'package:check_bloc/domain/entity/receipt.dart';
 import 'package:check_bloc/domain/entity/receipt_item.dart';
 import 'package:check_bloc/domain/entity/receipt_payment.dart';
+import 'package:check_bloc/domain/repository/product_repository.dart';
 import 'package:check_bloc/domain/repository/receipt_repository.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,7 +17,17 @@ part 'receipt_state.dart';
 
 class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   final ReceiptRepository _receiptRepository;
-  ReceiptBloc(this._receiptRepository) : super(const ReceiptState.empty()) {
+  final ProductRepository _productRepository;
+  final AssetsAudioPlayer _audioPlayer;
+
+  ReceiptBloc(
+    this._receiptRepository,
+    this._productRepository,
+    this._audioPlayer,
+  ) : super(const ReceiptState.empty()) {
+    _audioPlayer.setVolume(0.4);
+    _audioPlayer.open(Audio('assets/audio/scanner-beep.mp3'), autoStart: false);
+
     on<ReceiptInitialEvent>(_intial);
     on<ReceiptAddGoodEvent>(_addGood);
     on<ReceiptUpdateGoodPriceEvent>(_updatePrice);
@@ -25,6 +38,13 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     on<ReceiptAddGeneralDiscountEvent>(_addGeneralDiscount);
     on<ReceiptChangePaymentEvent>(_changePayment);
     on<ReceiptAddEvent>(_add);
+    on<ReceiptAddGoodByBarcodeEvent>(_addGoodByBarcode);
+  }
+
+  @override
+  Future<void> close() async {
+    _audioPlayer.dispose();
+    super.close();
   }
 
   _intial(ReceiptInitialEvent event, emit) {
@@ -67,6 +87,8 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
       state.copyWith(
         receipt: state.receipt?.copyWith(goods: items),
         productPrice: null,
+        status: BlocStateStatus.success,
+        errorText: null,
       ),
     );
   }
@@ -285,5 +307,38 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
         ),
       ),
     );
+  }
+
+  _addGoodByBarcode(ReceiptAddGoodByBarcodeEvent event, emit) async {
+    final barcode = event.barcode;
+
+    if (barcode != null) {
+      final result = await _productRepository.getProducts(searchQuery: barcode);
+
+      result.fold(
+        (error) => {
+          emit(
+            state.copyWith(
+              errorText: error.message,
+              status: BlocStateStatus.failure,
+            ),
+          )
+        },
+        (products) async {
+          if (products.isNotEmpty) {
+            await _audioPlayer.play();
+            add(ReceiptAddGoodEvent(products.first));
+          } else {
+            emit(
+              state.copyWith(
+                errorText:
+                    '${FailureMessages.productNotFound} : ${event.barcode} ',
+                status: BlocStateStatus.failure,
+              ),
+            );
+          }
+        },
+      );
+    }
   }
 }
