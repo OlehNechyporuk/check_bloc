@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:check_bloc/presentation/blocs/products_bloc/products_bloc.dart';
 import 'package:check_bloc/presentation/widgets/barcode_scanner_modal.dart';
-import 'package:check_bloc/presentation/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +14,7 @@ class SearchProductWiget extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: InputWidget(
+          child: TextField(
             onChanged: (value) {
               if (timer != null) {
                 timer?.cancel();
@@ -24,9 +23,16 @@ class SearchProductWiget extends StatelessWidget {
                 context.read<ProductsBloc>().add(ProductsSearchEvent(value));
               });
             },
-            label: 'Пошук',
-            prefixIcon: const Icon(Icons.search),
-            padding: const EdgeInsets.all(10),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              label: Text('Пошук'),
+              prefixIcon: Icon(Icons.search),
+              contentPadding: EdgeInsets.zero,
+            ),
           ),
         ),
         const SizedBox(
@@ -35,12 +41,16 @@ class SearchProductWiget extends StatelessWidget {
         IconButton(
           onPressed: () {},
           icon: const Icon(Icons.add),
+          alignment: Alignment.centerRight,
         ),
         IconButton(
           onPressed: () {
             barcodeScannerModal(context: context);
           },
           icon: const Icon(Icons.qr_code),
+          padding: EdgeInsets.zero,
+          splashRadius: 0.1,
+          alignment: Alignment.centerRight,
         )
       ],
     );

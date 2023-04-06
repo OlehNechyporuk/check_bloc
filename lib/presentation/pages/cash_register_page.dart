@@ -3,6 +3,8 @@ import 'package:check_bloc/presentation/blocs/cash_register_form_bloc/cash_regis
 import 'package:check_bloc/presentation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class CashRegisterPage extends StatelessWidget {
   const CashRegisterPage({super.key});
@@ -23,10 +25,6 @@ class CashRegisterPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            TextButton(
-              onPressed: () async {},
-              child: const Icon(Icons.qr_code_scanner),
-            ),
             const _CashRegisterInfo(),
             const SizedBox(
               height: 20,
@@ -46,15 +44,60 @@ class CashRegisterPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ButtonWidget(
-              label: 'Зберегти',
-              onPressed: () {
-                context
-                    .read<CashRegisterFormBloc>()
-                    .add(CashRegisterFormSubmitEvent());
-                context.read<CashRegisterBloc>().add(CashRegisterLoadEvent());
-              },
-            )
+            Flexible(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ButtonWidget(
+                      label: 'Зберегти',
+                      onPressed: () {
+                        context
+                            .read<CashRegisterFormBloc>()
+                            .add(CashRegisterFormSubmitEvent());
+                        context
+                            .read<CashRegisterBloc>()
+                            .add(CashRegisterLoadEvent());
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  TextButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            insetPadding: const EdgeInsets.all(5),
+                            contentPadding: const EdgeInsets.all(2),
+                            content: SizedBox(
+                              height: 300,
+                              width: double.maxFinite,
+                              child: MobileScanner(
+                                onDetect: (capture) {
+                                  final List<Barcode> barcodes =
+                                      capture.barcodes;
+                                  for (final barcode in barcodes) {
+                                    if (barcode.rawValue != null) {
+                                      context
+                                          .read<CashRegisterFormBloc>()
+                                          .state
+                                          .controller
+                                          .text = barcode.rawValue!;
+                                      context.pop();
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const Icon(Icons.qr_code_scanner),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
