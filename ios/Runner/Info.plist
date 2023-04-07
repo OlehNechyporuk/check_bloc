@@ -49,9 +49,11 @@
 	<false/>
 	<key>com.apple.security.network.client</key>
 	<true/>
-<key>io.flutter.embedded_views_preview</key>
-<true/>
-<key>NSCameraUsageDescription</key>
-<string>This app needs camera access to scan QR codes</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan QR codes</string>
+	<key>FLTEnableImpeller</key>
+	<true/>
 </dict>
 </plist>
