@@ -6,4 +6,6 @@ abstract class ReceiptRepository {
   const ReceiptRepository();
   Future<Either<Failure, Receipt>> add(Receipt receipt);
   Future<Either<Failure, List<Receipt>>> receipts();
+  Future<Either<Failure, bool>> sendEmail(String receiptId, String email);
+  Future<Either<Failure, bool>> sendSms(String receiptId, String phone);
 }

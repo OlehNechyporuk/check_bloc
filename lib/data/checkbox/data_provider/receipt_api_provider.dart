@@ -75,4 +75,74 @@ class ReceiptApiProvider {
       rethrow;
     }
   }
+
+  Future<Either<Failure, bool>> sendEmail(
+    String apiKey,
+    String receiptId,
+    String email,
+  ) async {
+    var url =
+        Uri.parse('${AppConstants.checkboxApiServer}receipts/$receiptId/email');
+    try {
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          AppConstants.checkboxTokenName: 'Bearer $apiKey',
+        },
+        body: jsonEncode([email]),
+      );
+
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode == 200) {
+        return right(true);
+      } else {
+        return left(Failure('${body['message']}'));
+      }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Either<Failure, bool>> sendSms(
+    String apiKey,
+    String receiptId,
+    String phone,
+  ) async {
+    var url =
+        Uri.parse('${AppConstants.checkboxApiServer}receipts/$receiptId/sms');
+    try {
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          AppConstants.checkboxTokenName: 'Bearer $apiKey',
+        },
+        body: jsonEncode({'phone': phone}),
+      );
+
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode == 200) {
+        return right(true);
+      } else {
+        return left(Failure('${body['message']}'));
+      }
+    } on SocketException {
+      return left(Failure(FailureMessages.noInternetConnection));
+    } on HttpException catch (e) {
+      return left(Failure(e.message));
+    } on FormatException {
+      return left(Failure(FailureMessages.badResponseFormat));
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

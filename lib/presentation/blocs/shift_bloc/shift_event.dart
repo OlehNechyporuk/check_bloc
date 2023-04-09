@@ -9,6 +9,8 @@ abstract class ShiftEvent extends Equatable {
 
 class ShiftInitialEvent extends ShiftEvent {}
 
+class ShiftCurrentEvent extends ShiftEvent {}
+
 class ShiftOpenEvent extends ShiftEvent {}
 
 class ShifCloseEvent extends ShiftEvent {}

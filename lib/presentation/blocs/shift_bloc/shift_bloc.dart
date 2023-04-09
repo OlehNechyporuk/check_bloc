@@ -12,6 +12,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   final ShiftRepository _repository;
   ShiftBloc(this._repository) : super(const ShiftState.empty()) {
     on<ShiftInitialEvent>(_initial);
+    on<ShiftCurrentEvent>(_current);
     on<ShiftOpenEvent>(_open);
     on<ShifCloseEvent>(_close);
     on<ShifCashInEvent>(_cashIn);
@@ -19,6 +20,25 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _initial(ShiftInitialEvent event, emit) async {
+    final result = await _repository.get();
+
+    result.fold(
+      (error) => emit(
+        state.copyWith(
+          errorText: error.message,
+          status: BlocStateStatus.failure,
+        ),
+      ),
+      (shift) => emit(
+        state.copyWith(
+          shift: shift,
+          status: BlocStateStatus.success,
+        ),
+      ),
+    );
+  }
+
+  _current(ShiftCurrentEvent event, emit) async {
     final result = await _repository.get();
 
     result.fold(
@@ -93,7 +113,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
           errorText: error.message,
           status: BlocStateStatus.failure,
         ),
-        (r) => add(ShiftInitialEvent()),
+        (r) => add(ShiftCurrentEvent()),
       );
     }
   }
@@ -122,7 +142,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
             status: BlocStateStatus.failure,
           ),
         ),
-        (r) => add(ShiftInitialEvent()),
+        (r) => add(ShiftCurrentEvent()),
       );
     }
   }

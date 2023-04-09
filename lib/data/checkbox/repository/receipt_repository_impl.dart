@@ -30,4 +30,30 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
 
     return _apiProvider.receipts(apiKey);
   }
+
+  @override
+  Future<Either<Failure, bool>> sendEmail(
+    String receiptId,
+    String email,
+  ) async {
+    final String? apiKey = await _sessionDataProvider.apiKey();
+    if (apiKey == null) {
+      return left(Failure(FailureMessages.emptyApiKey));
+    }
+
+    return _apiProvider.sendEmail(apiKey, receiptId, email);
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendSms(
+    String receiptId,
+    String phone,
+  ) async {
+    final String? apiKey = await _sessionDataProvider.apiKey();
+    if (apiKey == null) {
+      return left(Failure(FailureMessages.emptyApiKey));
+    }
+
+    return _apiProvider.sendSms(apiKey, receiptId, phone);
+  }
 }

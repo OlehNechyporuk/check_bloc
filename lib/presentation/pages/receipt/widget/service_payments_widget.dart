@@ -81,6 +81,8 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
               final id = state.lastReceiptId;
               if (id != null) {
                 showReceiptModal(context: context, id: id, goHome: true);
+
+                context.read<ShiftBloc>().add(ShiftCurrentEvent());
               }
             });
           }

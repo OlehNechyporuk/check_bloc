@@ -1,7 +1,10 @@
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/domain/entity/receipt.dart';
 import 'package:check_bloc/main.dart';
+import 'package:check_bloc/presentation/blocs/cashier_bloc/cashier_bloc.dart';
 import 'package:check_bloc/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
+import 'package:check_bloc/presentation/pages/receipt/widget/show_send_email_form_modal.dart';
+import 'package:check_bloc/presentation/pages/receipt/widget/show_send_sms_form_modal.dart';
 import 'package:check_bloc/presentation/widgets/receipt_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +36,7 @@ class ReceiptsListWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ReceiptsHistoryBloc>().add(ReceiptsHistoryLoadedEvent());
+
     return BlocBuilder<ReceiptsHistoryBloc, ReceiptsHistoryState>(
       builder: (context, state) {
         if (state.status == BlocStateStatus.loading) {
@@ -92,7 +96,14 @@ class ReceiptRowWidget extends StatelessWidget {
             ),
           ),
           PopupMenuItem(
-            onTap: () {},
+            onTap: () {
+              final id = receipt?.id;
+              if (id != null) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showSendEmailFormModal(context: context, receiptid: id);
+                });
+              }
+            },
             child: Row(
               children: const [
                 Icon(Icons.send),
@@ -101,6 +112,30 @@ class ReceiptRowWidget extends StatelessWidget {
               ],
             ),
           ),
+          if (context
+                  .read<CashierBloc>()
+                  .state
+                  .cashier
+                  ?.organization
+                  ?.canSendSms ==
+              true)
+            PopupMenuItem(
+              onTap: () {
+                final id = receipt?.id;
+                if (id != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showSendSmsFormModal(context: context, receiptid: id);
+                  });
+                }
+              },
+              child: Row(
+                children: const [
+                  Icon(Icons.sms_sharp),
+                  SizedBox(width: 10),
+                  Text('Відправити на sms')
+                ],
+              ),
+            ),
           PopupMenuItem(
             onTap: () {},
             child: Row(

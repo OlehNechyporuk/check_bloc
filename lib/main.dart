@@ -28,6 +28,7 @@ import 'package:check_bloc/presentation/blocs/my_bloc_observer.dart';
 import 'package:check_bloc/presentation/blocs/payments_bloc/payments_bloc.dart';
 import 'package:check_bloc/presentation/blocs/products_bloc/products_bloc.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
+import 'package:check_bloc/presentation/blocs/receipt_delivery_bloc/receipt_delivery_bloc.dart';
 import 'package:check_bloc/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/presentation/blocs/shift_bloc/shift_bloc.dart';
 import 'package:flutter/material.dart';
@@ -148,6 +149,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<ReceiptsHistoryBloc>(
             create: (context) => ReceiptsHistoryBloc(
+              RepositoryProvider.of<ReceiptRepositoryImpl>(context),
+            ),
+          ),
+          BlocProvider<ReceiptDeliveryBloc>(
+            create: (context) => ReceiptDeliveryBloc(
               RepositoryProvider.of<ReceiptRepositoryImpl>(context),
             ),
           ),
