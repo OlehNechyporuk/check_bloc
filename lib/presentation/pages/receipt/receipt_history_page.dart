@@ -1,6 +1,6 @@
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/domain/entity/receipt.dart';
-import 'package:check_bloc/main.dart';
+import 'package:check_bloc/core/extesions.dart';
 import 'package:check_bloc/presentation/blocs/cashier_bloc/cashier_bloc.dart';
 import 'package:check_bloc/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/presentation/pages/receipt/widget/show_send_email_form_modal.dart';

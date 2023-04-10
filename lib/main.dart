@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/data/checkbox/data_provider/auth_api_provider.dart';
@@ -190,29 +188,5 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-extension DoubleExt on double {
-  String toUAH() {
-    return NumberFormat.simpleCurrency(
-      name: '',
-    ).format((this / 100));
-  }
-}
-
-extension DoubleRoundedExt on double {
-  String toRoundedUAH() {
-    num mod = pow(10.0, 1);
-    return NumberFormat.simpleCurrency(
-      name: '',
-    ).format((((this / 100) * mod).round().toDouble() / mod));
-  }
-}
-
-extension DateUkraine on DateTime {
-  String toLocalTime() {
-    var formatter = DateFormat.yMd('uk').add_Hms();
-    return formatter.format(toLocal());
   }
 }

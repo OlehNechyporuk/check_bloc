@@ -1,5 +1,5 @@
 import 'package:check_bloc/domain/entity/receipt_item.dart';
-import 'package:check_bloc/main.dart';
+import 'package:check_bloc/core/extesions.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,5 +1,5 @@
 import 'package:check_bloc/data/checkbox/repository/payment_repository_impl.dart';
-import 'package:check_bloc/main.dart';
+import 'package:check_bloc/core/extesions.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:check_bloc/presentation/pages/receipt/widget/discount_form_widget.dart';
 import 'package:flutter/material.dart';
