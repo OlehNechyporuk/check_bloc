@@ -3,10 +3,12 @@ import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:check_bloc/presentation/blocs/bottom_nav_bloc/bottom_navbar_bloc.dart';
 import 'package:check_bloc/presentation/blocs/cashier_bloc/cashier_bloc.dart';
-import 'package:check_bloc/presentation/pages/home/wigets/shift_widget.dart';
+import 'package:check_bloc/presentation/pages/home/wigets/show_cash_in_form_modal.dart';
+import 'package:check_bloc/presentation/pages/home/wigets/show_cash_out_form_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -18,16 +20,16 @@ class CustomDrawer extends StatelessWidget {
         children: [
           const _Organization(),
           const _CashierInfo(),
-          const ListTile(
+          ListTile(
             title: Text(
-              'Операції',
-              style: TextStyle(fontSize: 22),
+              '${AppLocalizations.of(context)?.opetations}',
+              style: const TextStyle(fontSize: 22),
             ),
           ),
           ListTile(
-            title: const Text(
-              'Продаж',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.sellNav}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.arrow_circle_right_outlined),
             trailing: const Icon(Icons.chevron_right),
@@ -38,9 +40,9 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text(
-              'Повернення',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.returnNav}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.arrow_circle_left_outlined),
             trailing: const Icon(Icons.chevron_right),
@@ -51,39 +53,39 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text(
-              'Внести готівку',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.cashIn}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.arrow_upward_outlined),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.pop();
-              showCashInForm(context);
+              showCashInFormModal(context);
             },
           ),
           ListTile(
-            title: const Text(
-              'Видати готівку',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.cashOut}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.arrow_downward_outlined),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.pop();
-              showCasOutForm(context);
+              showCasOutFormModal(context);
             },
           ),
-          const ListTile(
+          ListTile(
             title: Text(
-              'Каса',
-              style: TextStyle(fontSize: 22),
+              '${AppLocalizations.of(context)?.cashRegister}',
+              style: const TextStyle(fontSize: 22),
             ),
           ),
           ListTile(
-            title: const Text(
-              'Налаштування',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.cashRegisterSettings}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.settings),
             trailing: const Icon(Icons.chevron_right),
@@ -93,9 +95,9 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text(
-              'Історія чеків',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.receiptsHistory}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.receipt_long),
             trailing: const Icon(Icons.chevron_right),
@@ -105,9 +107,9 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text(
-              'Робочі зміни',
-              style: TextStyle(fontSize: 16),
+            title: Text(
+              '${AppLocalizations.of(context)?.workShifts}',
+              style: const TextStyle(fontSize: 16),
             ),
             leading: const Icon(Icons.people_alt),
             trailing: const Icon(Icons.chevron_right),

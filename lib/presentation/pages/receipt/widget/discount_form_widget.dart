@@ -4,6 +4,7 @@ import 'package:check_bloc/presentation/pages/receipt/widget/item_row_discount_w
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DiscountFormWidget extends StatelessWidget {
   const DiscountFormWidget({super.key});
@@ -12,7 +13,7 @@ class DiscountFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
-      title: const Text('Вкажіть розмір знижки'),
+      title: Text('${AppLocalizations.of(context)?.enterDiscountAmount}'),
       content: const SingleChildScrollView(child: DiscountFormBodyWidget()),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
@@ -20,9 +21,9 @@ class DiscountFormWidget extends StatelessWidget {
           onPressed: () {
             context.pop();
           },
-          child: const Text(
-            'Продовжити',
-            style: TextStyle(fontSize: 18),
+          child: Text(
+            '${AppLocalizations.of(context)?.continueLabel}',
+            style: const TextStyle(fontSize: 18),
           ),
         )
       ],

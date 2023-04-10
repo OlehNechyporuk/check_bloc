@@ -4,6 +4,7 @@ import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:check_bloc/presentation/pages/receipt/widget/discount_form_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReceiptResultWidget extends StatelessWidget {
   const ReceiptResultWidget({super.key});
@@ -22,9 +23,9 @@ class ReceiptResultWidget extends StatelessWidget {
                 builder: (context) => const DiscountFormWidget(),
               );
             },
-            child: const Text(
-              'Додати знижку',
-              style: TextStyle(fontSize: 16),
+            child: Text(
+              '${AppLocalizations.of(context)?.addDiscount}',
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         ),
@@ -48,9 +49,9 @@ class TotalSumWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Сума разом:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              '${AppLocalizations.of(context)?.totalAmount}:',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -75,16 +76,16 @@ class TotalSumWidget extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'До сплати:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              '${AppLocalizations.of(context)?.toBePaid}:',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 5,
             ),
             if (total?.info['discount'] != 0)
               Text(
-                'Знижка: ${total?.info['discount']?.toUAH()}',
+                '${AppLocalizations.of(context)?.discount}: ${total?.info['discount']?.toUAH()}',
                 style: const TextStyle(
                   fontSize: 16,
                 ),

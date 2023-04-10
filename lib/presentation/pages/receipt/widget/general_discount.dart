@@ -3,6 +3,7 @@ import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GeneralDiscount extends StatefulWidget {
   final Map<String, dynamic>? info;
@@ -81,7 +82,7 @@ class _GeneralDiscountState extends State<GeneralDiscount> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Знижка на чек: '),
+        Text('${AppLocalizations.of(context)?.generalReceiptDiscount}: '),
         _DiscountInput(
           discount: value,
           currentType: currentType,
@@ -116,7 +117,7 @@ class _DiscountInput extends StatelessWidget {
       width: 100,
       height: 44,
       child: TextFormField(
-        initialValue: discount?.toString() ?? '',
+        initialValue: '${discount?.toString()}',
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           errorStyle: const TextStyle(

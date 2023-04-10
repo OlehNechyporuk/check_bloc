@@ -1,7 +1,9 @@
+import 'package:check_bloc/config/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 showReceiptModal({
   required BuildContext context,
@@ -21,7 +23,7 @@ showReceiptModal({
           height: double.maxFinite,
           child: SingleChildScrollView(
             child: Image.network(
-              'https://api.checkbox.in.ua/api/v1/receipts/$id/$type',
+              '${AppConstants.checkboxApiServer}receipts/$id/$type',
               loadingBuilder: (context, child, loadingProgress) {
                 return loadingProgress == null
                     ? child
@@ -31,7 +33,9 @@ showReceiptModal({
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('Помилка, при загрузці чеку, спробуйте ще раз'),
+                    Text(
+                      '${AppLocalizations.of(context)?.pleaseTryUpdatingAgain}',
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -78,7 +82,7 @@ showReceiptModal({
                     onPressed: () async {
                       final response = await http.get(
                         Uri.parse(
-                          'https://api.checkbox.in.ua/api/v1/receipts/$id/pdf',
+                          '${AppConstants.checkboxApiServer}receipts/$id/pdf',
                         ),
                       );
 

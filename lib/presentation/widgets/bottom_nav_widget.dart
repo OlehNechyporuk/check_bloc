@@ -2,6 +2,7 @@ import 'package:check_bloc/presentation/blocs/bottom_nav_bloc/bottom_navbar_bloc
 import 'package:check_bloc/presentation/widgets/barcode_scanner_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomNavWidget extends StatelessWidget {
   final GlobalKey<ScaffoldState> drawerKey;
@@ -30,22 +31,22 @@ class BottomNavWidget extends StatelessWidget {
               }
             }
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.arrow_circle_right_outlined),
-              label: 'Продаж',
+              icon: const Icon(Icons.arrow_circle_right_outlined),
+              label: '${AppLocalizations.of(context)?.sellNav}',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.arrow_circle_left_outlined),
-              label: 'Повернення',
+              icon: const Icon(Icons.arrow_circle_left_outlined),
+              label: '${AppLocalizations.of(context)?.returnNav}',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code),
-              label: 'Сканнер',
+              icon: const Icon(Icons.qr_code),
+              label: '${AppLocalizations.of(context)?.scannerNav}',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.menu),
-              label: 'Меню',
+              icon: const Icon(Icons.menu),
+              label: '${AppLocalizations.of(context)?.menuNav}',
             ),
           ],
         );

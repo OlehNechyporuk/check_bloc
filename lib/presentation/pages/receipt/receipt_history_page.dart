@@ -52,7 +52,7 @@ class SearchControls extends StatelessWidget {
               Expanded(
                 child: IconButton(
                   onPressed: () async {
-                    final range = await showDateRangePicker(
+                    await showDateRangePicker(
                       locale: const Locale('uk'),
                       context: context,
                       firstDate: DateTime.utc(2023),

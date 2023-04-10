@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:check_bloc/presentation/blocs/products_bloc/products_bloc.dart';
-// import 'package:check_bloc/presentation/widgets/barcode_scanner_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchProductWiget extends StatelessWidget {
   const SearchProductWiget({super.key});
@@ -23,14 +22,14 @@ class SearchProductWiget extends StatelessWidget {
                 context.read<ProductsBloc>().add(ProductsSearchEvent(value));
               });
             },
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(5),
                 ),
               ),
-              label: Text('Пошук'),
-              prefixIcon: Icon(Icons.search),
+              label: Text('${AppLocalizations.of(context)?.searchLabel}'),
+              prefixIcon: const Icon(Icons.search),
               contentPadding: EdgeInsets.zero,
             ),
           ),
@@ -43,15 +42,6 @@ class SearchProductWiget extends StatelessWidget {
           icon: const Icon(Icons.add),
           alignment: Alignment.centerRight,
         ),
-        // IconButton(
-        //   onPressed: () {
-        //     barcodeScannerModal(context: context);
-        //   },
-        //   icon: const Icon(Icons.qr_code),
-        //   padding: EdgeInsets.zero,
-        //   splashRadius: 0.1,
-        //   alignment: Alignment.centerRight,
-        // )
       ],
     );
   }

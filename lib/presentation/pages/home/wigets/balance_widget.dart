@@ -2,6 +2,7 @@ import 'package:check_bloc/main.dart';
 import 'package:check_bloc/presentation/blocs/shift_bloc/shift_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BalanceWidget extends StatelessWidget {
   const BalanceWidget({super.key});
@@ -11,7 +12,7 @@ class BalanceWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Баланс'),
+        Text('${AppLocalizations.of(context)?.balance}'),
         BlocBuilder<ShiftBloc, ShiftState>(
           builder: (context, state) {
             final balance = state.shift?.balance;

@@ -1,5 +1,6 @@
 import 'package:check_bloc/presentation/pages/receipt/widget/service_payments_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReceiptFormWidget extends StatelessWidget {
   const ReceiptFormWidget({super.key});
@@ -12,21 +13,21 @@ class ReceiptFormWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
-        children: const [
-          SizedBox(
+        children: [
+          const SizedBox(
             height: 10,
           ),
           Center(
             child: Text(
-              'Тип оплати: ',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              '${AppLocalizations.of(context)?.paymentType}: ',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          ServicePaymentsWidget(),
-          SizedBox(
+          const ServicePaymentsWidget(),
+          const SizedBox(
             height: 20,
           ),
         ],

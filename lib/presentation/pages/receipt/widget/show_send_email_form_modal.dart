@@ -3,6 +3,7 @@ import 'package:check_bloc/presentation/blocs/receipt_delivery_bloc/receipt_deli
 import 'package:check_bloc/presentation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 showSendEmailFormModal({
   required BuildContext context,
@@ -28,13 +29,16 @@ class _EmailSendForm extends StatelessWidget {
           ReceiptDeliveryInitialEvent(),
         );
     return AlertDialog(
-      title: const Text('Відправити на e-mail'),
+      title: Text('${AppLocalizations.of(context)?.sendEmail}'),
       content: BlocListener<ReceiptDeliveryBloc, ReceiptDeliveryState>(
         listener: (context, state) {
           if (state.status == BlocStateStatus.failure) {
             if (state.errorText != null) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('${state.errorText}')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${state.errorText}'),
+                ),
+              );
             }
           }
         },
@@ -52,15 +56,15 @@ class _EmailSendForm extends StatelessWidget {
                 height: 50,
                 child: Center(
                   child: Row(
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.send,
                         color: Colors.green,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
-                        'Відправлено',
-                        style: TextStyle(color: Colors.green),
+                        '${AppLocalizations.of(context)?.sended}',
+                        style: const TextStyle(color: Colors.green),
                       )
                     ],
                   ),
@@ -76,9 +80,9 @@ class _EmailSendForm extends StatelessWidget {
                     onChanged: (value) {
                       email = value;
                     },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Вкажіть e-email',
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: '${AppLocalizations.of(context)?.enterEmail}',
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -90,7 +94,7 @@ class _EmailSendForm extends StatelessWidget {
                             );
                       }
                     },
-                    label: 'Відправити',
+                    label: '${AppLocalizations.of(context)?.sended}',
                   ),
                   const SizedBox(
                     height: 10,

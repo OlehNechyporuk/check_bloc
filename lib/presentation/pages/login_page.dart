@@ -3,6 +3,7 @@ import 'package:check_bloc/presentation/widgets/button_widget.dart';
 import 'package:check_bloc/presentation/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -22,7 +23,7 @@ class LoginPage extends StatelessWidget {
                 onChanged: (value) => context
                     .read<LoginFormBloc>()
                     .add(LoginFormUserNameChangeEvent(value)),
-                label: 'Логін касира',
+                label: '${AppLocalizations.of(context)?.loginLabel}',
                 suffixIcon: const Icon(Icons.person),
                 errorText: null,
               ),
@@ -33,7 +34,7 @@ class LoginPage extends StatelessWidget {
                 onChanged: (value) => context
                     .read<LoginFormBloc>()
                     .add(LoginFormPasswordChangeEvent(value)),
-                label: 'Пароль касира',
+                label: '${AppLocalizations.of(context)?.passwordLabel}',
                 obscureText: true,
                 suffixIcon: const Icon(Icons.lock),
               ),
@@ -64,7 +65,7 @@ class LoginPage extends StatelessWidget {
                                   .read<LoginFormBloc>()
                                   .add(const LoginFormSubmitEvent())
                               : null,
-                          label: 'Увійти',
+                          label: '${AppLocalizations.of(context)?.loginButton}',
                         ),
                       ],
                     );

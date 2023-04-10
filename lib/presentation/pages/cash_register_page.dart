@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CashRegisterPage extends StatelessWidget {
   const CashRegisterPage({super.key});
@@ -13,9 +14,9 @@ class CashRegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Налаштування каси',
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          '${AppLocalizations.of(context)?.cashRegisterSettings}',
+          style: const TextStyle(color: Colors.black),
         ),
         centerTitle: false,
       ),
@@ -34,9 +35,9 @@ class CashRegisterPage extends StatelessWidget {
                 return TextField(
                   controller:
                       context.read<CashRegisterFormBloc>().state.controller,
-                  decoration: const InputDecoration(
-                    labelText: 'Ключ ліцензії',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: '${AppLocalizations.of(context)?.licenseKey}',
+                    border: const OutlineInputBorder(),
                   ),
                 );
               },
@@ -49,7 +50,7 @@ class CashRegisterPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ButtonWidget(
-                      label: 'Зберегти',
+                      label: '${AppLocalizations.of(context)?.save}',
                       onPressed: () {
                         context
                             .read<CashRegisterFormBloc>()
@@ -114,13 +115,13 @@ class _CashRegisterInfo extends StatelessWidget {
     return BlocBuilder<CashRegisterBloc, CashRegisterState>(
       builder: (context, state) {
         if (register == null) {
-          return const Text('Додайте ключ ліцензії каси');
+          return Text('${AppLocalizations.of(context)?.addLicenseKey}');
         } else {
           return Column(
             children: [
-              const Text(
-                'Каса:',
-                style: TextStyle(
+              Text(
+                '${AppLocalizations.of(context)?.cashRegister}:',
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -128,11 +129,11 @@ class _CashRegisterInfo extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text(register.fiscalNumber ?? ''),
+              Text('${register.fiscalNumber}'),
               const SizedBox(
                 height: 5,
               ),
-              Text(register.address ?? ''),
+              Text('${register.address}'),
             ],
           );
         }

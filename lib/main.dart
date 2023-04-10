@@ -34,9 +34,11 @@ import 'package:check_bloc/presentation/blocs/shift_bloc/shift_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 void main() {
+  Intl.defaultLocale = 'uk';
   Bloc.observer = MyGlobalObserver();
   const app = MyApp();
   runApp(app);
@@ -167,6 +169,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
             routerConfig: router,
+            title: AppLocalizations.of(context)?.appTitle ?? '',
             theme: ThemeData(
               appBarTheme: const AppBarTheme(
                 color: Colors.white,
@@ -175,12 +178,13 @@ class MyApp extends StatelessWidget {
               ),
             ),
             localizationsDelegates: const [
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [
-              Locale('ukr', ''), // English, no country code
+              Locale('uk', ''), // English, no country code
             ],
           ),
         ),
