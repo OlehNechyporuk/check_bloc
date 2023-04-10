@@ -33,12 +33,10 @@ import 'package:check_bloc/presentation/blocs/receipts_history_bloc/receipts_his
 import 'package:check_bloc/presentation/blocs/shift_bloc/shift_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  initializeDateFormatting('uk');
   Bloc.observer = MyGlobalObserver();
   const app = MyApp();
   runApp(app);
@@ -176,6 +174,14 @@ class MyApp extends StatelessWidget {
                 iconTheme: IconThemeData(color: Colors.black),
               ),
             ),
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('ukr', ''), // English, no country code
+            ],
           ),
         ),
       ),

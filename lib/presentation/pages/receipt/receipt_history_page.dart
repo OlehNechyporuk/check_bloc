@@ -25,7 +25,71 @@ class ReceiptHistoryPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: const ReceiptsListWiget(),
+      body: Column(
+        children: const [
+          SearchControls(),
+          Expanded(
+            flex: 2,
+            child: ReceiptsListWiget(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SearchControls extends StatelessWidget {
+  const SearchControls({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            children: [
+              Expanded(
+                child: IconButton(
+                  onPressed: () async {
+                    final range = await showDateRangePicker(
+                      locale: const Locale('uk'),
+                      context: context,
+                      firstDate: DateTime.utc(2023),
+                      lastDate: DateTime.now(),
+                      builder: (context, child) => Theme(
+                        data: ThemeData(
+                          appBarTheme: const AppBarTheme(
+                            color: Colors.blue,
+                            elevation: 0,
+                          ),
+                        ),
+                        child: child!,
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.calendar_today),
+                ),
+              ),
+              const Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(4),
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code))
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+      ],
     );
   }
 }

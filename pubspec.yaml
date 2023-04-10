@@ -18,7 +18,9 @@ dependencies:
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
   http: ^0.13.5
-  intl: ^0.18.0
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
   flutter_secure_storage: ^8.0.0
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.20
@@ -26,8 +28,7 @@ dependencies:
   share_plus: ^6.3.1
   mobile_scanner: ^3.2.0
   assets_audio_player: ^3.0.6
-
-
+  
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +39,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  generate: true
   assets: 
     - assets/audio/scanner-beep.mp3
