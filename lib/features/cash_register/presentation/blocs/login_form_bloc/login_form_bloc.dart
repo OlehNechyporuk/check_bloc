@@ -54,7 +54,7 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
         );
       },
       (success) => {
-        router.goNamed(MainNavigationName.splashPage),
+        router.goNamed(CashRegisterNavigationName.splashPage),
         _authBloc.add(AutCheckEvent()),
         emit(
           state.copyWith(

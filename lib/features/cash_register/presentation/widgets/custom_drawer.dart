@@ -92,7 +92,7 @@ class CustomDrawer extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.pop();
-              context.pushNamed(MainNavigationName.cashRegisterPage);
+              context.pushNamed(CashRegisterNavigationName.cashRegisterPage);
             },
           ),
           ListTile(
@@ -104,7 +104,7 @@ class CustomDrawer extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.pop();
-              context.pushNamed(MainNavigationName.receiptHistoryPage);
+              context.pushNamed(CashRegisterNavigationName.receiptHistoryPage);
             },
           ),
           ListTile(
@@ -116,7 +116,7 @@ class CustomDrawer extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.pop();
-              context.pushNamed(MainNavigationName.cashRegisterPage);
+              context.pushNamed(CashRegisterNavigationName.cashRegisterPage);
             },
           ),
         ],

@@ -1,8 +1,8 @@
 {
     "appTitle": "СуперКаса",
     "splashPageText": "Super check App",
-    "loginLabel":"Логін касира",
-    "passwordLabel":"Пароль касира",
+    "loginLabel":"Логін",
+    "passwordLabel":"Пароль",
     "loginButton":"Увійти",
     "balance": "Баланс",
     "shift": "Зміна",

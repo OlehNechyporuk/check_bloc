@@ -62,9 +62,9 @@ class LoginPage extends StatelessWidget {
                         ),
                         ButtonWidget(
                           onPressed: state.canSubmit
-                              ? () => context
-                                  .read<LoginFormBloc>()
-                                  .add(const LoginFormSubmitEvent())
+                              ? () => context.read<LoginFormBloc>().add(
+                                    const LoginFormSubmitEvent(),
+                                  )
                               : null,
                           label: '${AppLocalizations.of(context)?.loginButton}',
                         ),

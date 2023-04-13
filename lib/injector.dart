@@ -1,5 +1,29 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:check_bloc/features/crm/data/data_provider/auth_crm_provider.dart';
+import 'package:check_bloc/features/crm/domain/usecase/auth/check_user_auth_status_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/auth/login_auth_crm_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/auth/logout_auth_crm_use_case.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/auth_crm_bloc/auth_crm_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/auth_api_provider.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/cash_register_api_data_provider.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/cashier_api_data_provider.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/db_shared_preferences.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/product_api_provider.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/receipt_api_provider.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/session_data_provider.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/shift_api_data_provider.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/auth_repository_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/cash_register_repository_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/cashier_repositpry_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/payment_repository_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/product_repository_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/receipt_repository_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/shift_repository_impl.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/auth_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/cash_register_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/cashier_repository.dart';
@@ -7,6 +31,8 @@ import 'package:check_bloc/features/cash_register/domain/repository/payment_repo
 import 'package:check_bloc/features/cash_register/domain/repository/product_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/receipt_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/shift_repository.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/cash_register/get_cash_register_info_use_case.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/bottom_nav_bloc/bottom_navbar_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/cash_register_bloc/cash_register_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/cash_register_form_bloc/cash_register_form_bloc.dart';
@@ -18,27 +44,8 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_blo
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_delivery_bloc/receipt_delivery_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/auth_api_provider.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/cash_register_api_data_provider.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/cashier_api_data_provider.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/db_shared_preferences.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/product_api_provider.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/session_data_provider.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/shift_api_data_provider.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/auth_repository_impl.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/cash_register_repository_impl.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/cashier_repositpry_impl.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/payment_repository_impl.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/product_repository_impl.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/receipt_repository_impl.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/shift_repository_impl.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/cash_register/get_cash_register_info_use_case.dart';
-import 'package:check_bloc/features/cash_register/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:check_bloc/features/crm/data/repository/auth_repository_impl.dart';
+import 'package:check_bloc/features/crm/domain/repository/auth_repository_crm.dart';
 
 final sl = GetIt.instance;
 
@@ -51,6 +58,7 @@ Future<void> initializeDI() async {
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton<AssetsAudioPlayer>(() => AssetsAudioPlayer());
 
+  //CASHREGISTER
   //data providers
   sl.registerLazySingleton<SessionDataProvider>(
     () => SessionDataProvider(sl()),
@@ -118,4 +126,27 @@ Future<void> initializeDI() async {
   sl.registerFactory<ReceiptDeliveryBloc>(() => ReceiptDeliveryBloc(sl()));
   sl.registerFactory<ReceiptsHistoryBloc>(() => ReceiptsHistoryBloc(sl()));
   sl.registerFactory<ShiftBloc>(() => ShiftBloc(sl()));
+
+  //CRM
+  //data providers
+  sl.registerLazySingleton<AuthCrmProvider>(() => AuthCrmProvider(sl()));
+
+  //repositories
+  sl.registerLazySingleton<AuthRepositoryCrm>(
+    () => AuthRepositoryCrmImpl(sl(), sl()),
+  );
+
+  //use cases
+  sl.registerLazySingleton<CheckUserAuthStatusUseCase>(
+    () => CheckUserAuthStatusUseCase(sl()),
+  );
+  sl.registerLazySingleton<LoginAuthCrmUseCase>(
+    () => LoginAuthCrmUseCase(sl()),
+  );
+  sl.registerLazySingleton<LogoutAuthCrmUseCase>(
+    () => LogoutAuthCrmUseCase(sl()),
+  );
+
+  //blocs
+  sl.registerFactory<AuthCrmBloc>(() => AuthCrmBloc(sl(), sl(), sl()));
 }

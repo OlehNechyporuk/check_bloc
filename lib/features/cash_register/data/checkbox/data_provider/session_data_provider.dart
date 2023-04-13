@@ -3,6 +3,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 abstract class SessionDataProviderKeys {
   static const _apiKey = 'api_access_token';
   static const _registerKey = 'checkbox_register_key';
+
+  static const _crmApiKey = 'crm_api_access_token';
 }
 
 class SessionDataProvider {
@@ -32,5 +34,17 @@ class SessionDataProvider {
 
   Future<void> removeRegisterKey() async {
     await _storage.delete(key: SessionDataProviderKeys._registerKey);
+  }
+
+  Future<String?> crmApiKey() async {
+    return await _storage.read(key: SessionDataProviderKeys._crmApiKey);
+  }
+
+  Future<void> saveCrmApiKey(String token) async {
+    await _storage.write(key: SessionDataProviderKeys._crmApiKey, value: token);
+  }
+
+  Future<void> removeCrmApiKey() async {
+    await _storage.delete(key: SessionDataProviderKeys._crmApiKey);
   }
 }

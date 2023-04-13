@@ -4,9 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 
+import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/config/router.dart';
-import 'package:check_bloc/injector.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/bottom_nav_bloc/bottom_navbar_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/cash_register_bloc/cash_register_bloc.dart';
@@ -20,6 +20,8 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_blo
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_delivery_bloc/receipt_delivery_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/auth_crm_bloc/auth_crm_bloc.dart';
+import 'package:check_bloc/injector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,19 +76,39 @@ class MyApp extends StatelessWidget {
         BlocProvider<ReceiptDeliveryBloc>(
           create: (context) => sl(),
         ),
+
+        //crm
+        BlocProvider<AuthCrmBloc>(
+          create: (context) => sl()..add(AuthCrmCheckEvent()),
+        ),
       ],
-      child: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthSuccess) {
-            router.pushReplacementNamed(MainNavigationName.homePage);
-          } else {
-            router.goNamed(MainNavigationName.loginPage);
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AuthCrmBloc, AuthCrmState>(
+            listener: (context, state) {
+              if (state.status == BlocStateStatus.success) {
+                router
+                    .pushReplacementNamed(CashRegisterNavigationName.homePage);
+              } else {
+                router.goNamed(MainNavigationName.authCrm);
+              }
+            },
+          ),
+          // BlocListener<AuthBloc, AuthState>(
+          //   listener: (context, state) {
+          //     if (state is AuthSuccess) {
+          //       router
+          //           .pushReplacementNamed(CashRegisterNavigationName.homePage);
+          //     } else {
+          //       router.goNamed(CashRegisterNavigationName.loginPage);
+          //     }
+          //   },
+          // ),
+        ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: router,
-          title: '${AppLocalizations.of(context)?.appTitle}',
+          title: '//${AppLocalizations.of(context)?.appTitle}',
           theme: ThemeData(
             appBarTheme: const AppBarTheme(
               color: Colors.white,

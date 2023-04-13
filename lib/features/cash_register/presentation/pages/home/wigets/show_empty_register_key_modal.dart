@@ -15,7 +15,7 @@ showEmptyRegisterKeyModal(BuildContext context) {
           ElevatedButton(
             onPressed: () {
               context.pop();
-              context.pushNamed(MainNavigationName.cashRegisterPage);
+              context.pushNamed(CashRegisterNavigationName.cashRegisterPage);
             },
             child: Text('${AppLocalizations.of(context)?.specify}'),
           )

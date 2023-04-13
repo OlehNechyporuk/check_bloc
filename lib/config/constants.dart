@@ -4,6 +4,8 @@ class AppConstants {
   static const String checkboxRegisterLicenseName = 'X-License-Key';
 
   static const int productsLimitPerPage = 30;
+
+  static const String crmApiServer = 'https://api.avi-shop.com';
 }
 
 enum BlocStateStatus { initial, loading, success, failure }
