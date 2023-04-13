@@ -3,20 +3,25 @@ import 'dart:io';
 
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
-import 'package:check_bloc/domain/entity/receipt.dart';
-import 'package:check_bloc/domain/entity/receipt_payment.dart';
-import 'package:check_bloc/domain/entity/shift.dart';
+import 'package:check_bloc/data/checkbox/models/receipt_model.dart';
+import 'package:check_bloc/data/checkbox/models/receipt_payment_model.dart';
+import 'package:check_bloc/data/checkbox/models/shift_model.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class ShiftApiDataProvider {
-  const ShiftApiDataProvider();
+  final http.Client _client;
+  const ShiftApiDataProvider(this._client);
 
-  Future<Either<Failure, Shift>> open(String apiKey, String licenceKey) async {
+  Future<Either<Failure, ShiftModel>> open(
+    String apiKey,
+    String licenceKey,
+  ) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}shifts');
 
     try {
-      var response = await http.post(
+      var response = await _client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -26,7 +31,7 @@ class ShiftApiDataProvider {
       );
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 202) {
-        return right(Shift.fromJson(body));
+        return right(ShiftModel.fromJson(body));
       } else {
         return left(Failure('${body['message']}'));
       }
@@ -41,11 +46,11 @@ class ShiftApiDataProvider {
     }
   }
 
-  Future<Either<Failure, Shift>> get(String apiKey) async {
+  Future<Either<Failure, ShiftModel>> get(String apiKey) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}cashier/shift');
 
     try {
-      var response = await http.get(
+      var response = await _client.get(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -55,7 +60,7 @@ class ShiftApiDataProvider {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
       if (response.statusCode == 200 && body != null) {
-        return right(Shift.fromJson(body));
+        return right(ShiftModel.fromJson(body));
       } else {
         if (body == null) {
           return left(Failure(FailureMessages.shiftIsClosed));
@@ -74,11 +79,11 @@ class ShiftApiDataProvider {
     }
   }
 
-  Future<Either<Failure, Receipt>> close(String apiKey) async {
+  Future<Either<Failure, ReceiptModel>> close(String apiKey) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}shifts/close');
 
     try {
-      var response = await http.post(
+      var response = await _client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -103,14 +108,14 @@ class ShiftApiDataProvider {
     }
   }
 
-  Future<Either<Failure, Receipt>> cashReceiptService(
+  Future<Either<Failure, ReceiptModel>> cashReceiptService(
     String apiKey,
-    ReceiptPayment payment,
+    ReceiptPaymentModel payment,
   ) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}receipts/service');
 
     try {
-      final response = await http.post(
+      final response = await _client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -121,7 +126,7 @@ class ShiftApiDataProvider {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
       if (response.statusCode == 201) {
-        return right(Receipt.fromJson(body));
+        return right(ReceiptModel.fromJson(body));
       } else {
         return left(Failure('${body['message']}'));
       }

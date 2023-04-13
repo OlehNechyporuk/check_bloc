@@ -1,5 +1,5 @@
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
-import 'package:check_bloc/presentation/pages/receipt/widget/general_discount.dart';
+// import 'package:check_bloc/presentation/pages/receipt/widget/general_discount.dart';
 import 'package:check_bloc/presentation/pages/receipt/widget/item_row_discount_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,9 +36,9 @@ class DiscountFormBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final childern = context.watch<ReceiptBloc>().state.receipt?.goods;
+    final childern = context.watch<ReceiptBloc>().state.receipt.goods;
     List<Widget> items = [];
-    if (childern != null) {
+    if (childern.isEmpty) {
       for (var item in childern) {
         items.add(
           ItemRowDiscountWidget(
@@ -51,7 +51,7 @@ class DiscountFormBodyWidget extends StatelessWidget {
     return Column(
       children: [
         ...items,
-        GeneralDiscount(info: context.read<ReceiptBloc>().state.receipt?.info),
+        // GeneralDiscount(info: context.read<ReceiptBloc>().state.receipt?.info),
       ],
     );
   }

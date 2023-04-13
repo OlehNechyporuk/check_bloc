@@ -1,6 +1,5 @@
 import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/domain/entity/receipt.dart';
-import 'package:check_bloc/core/extesions.dart';
+import 'package:check_bloc/domain/entity/receipt_entity.dart';
 import 'package:check_bloc/presentation/blocs/cashier_bloc/cashier_bloc.dart';
 import 'package:check_bloc/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/presentation/pages/receipt/widget/show_send_email_form_modal.dart';
@@ -122,21 +121,23 @@ class ReceiptsListWiget extends StatelessWidget {
 }
 
 class ReceiptRowWidget extends StatelessWidget {
-  final Receipt? receipt;
+  final ReceiptEntity? receipt;
   const ReceiptRowWidget({super.key, this.receipt});
 
   @override
   Widget build(BuildContext context) {
-    final fiscalCode = receipt?.fiscalCode == null
-        ? ''
-        : 'Фіскальний номер: ${receipt?.fiscalCode}\n';
+    // final fiscalCode = receipt?.fiscalCode == null
+    //     ? ''
+    //     : 'Фіскальний номер: ${receipt?.fiscalCode}\n';
     return ListTile(
-      title: Text(
-        '${receipt?.typeConvert} (${receipt?.payments?.first.label})  ${receipt?.totalSum?.toDouble().toUAH()} ₴',
+      title: const Text(
+        ''
+        // '${receipt?.typeConvert} (${receipt?.payments?.first.label})  ${receipt?.totalSum?.toDouble().toUAH()} ₴',
+        ,
       ),
-      subtitle: Text(
-        '$fiscalCodeНомер зміни ${receipt?.shift?.serial}\nДата/час: ${receipt?.createdAt?.toLocalTime()}',
-      ),
+      // subtitle: Text(
+      //   // '$fiscalCodeНомер зміни ${receipt?.shift?.serial}\nДата/час: ${receipt?.createdAt?.toLocalTime()}',
+      // ),
       trailing: PopupMenuButton(
         elevation: 4,
         padding: EdgeInsets.zero,
@@ -181,7 +182,7 @@ class ReceiptRowWidget extends StatelessWidget {
                   .state
                   .cashier
                   ?.organization
-                  ?.canSendSms ==
+                  .canSendSms ==
               true)
             PopupMenuItem(
               onTap: () {

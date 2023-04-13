@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/domain/entity/receipt.dart';
-import 'package:check_bloc/domain/repository/receipt_repository.dart';
 import 'package:equatable/equatable.dart';
+
+import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/domain/entity/receipt_entity.dart';
+import 'package:check_bloc/domain/repository/receipt_repository.dart';
 
 part 'receipts_history_event.dart';
 part 'receipts_history_state.dart';

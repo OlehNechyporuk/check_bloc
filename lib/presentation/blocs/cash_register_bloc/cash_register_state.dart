@@ -1,7 +1,7 @@
 part of 'cash_register_bloc.dart';
 
 class CashRegisterState extends Equatable {
-  final CashRegister? cashRegister;
+  final CashRegisterEntity? cashRegister;
   final BlocStateStatus status;
   final String? errorText;
 
@@ -20,7 +20,7 @@ class CashRegisterState extends Equatable {
         errorText = null;
 
   CashRegisterState copyWith({
-    CashRegister? cashRegister,
+    CashRegisterEntity? cashRegister,
     BlocStateStatus? status,
     String? errorText,
   }) {

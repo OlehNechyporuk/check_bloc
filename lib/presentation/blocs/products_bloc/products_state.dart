@@ -1,7 +1,7 @@
 part of 'products_bloc.dart';
 
 class ProductsState extends Equatable {
-  final List<Product> products;
+  final List<ProductEntity> products;
   final bool showLoadMoreButton;
   final String? errorText;
   final BlocStateStatus status;
@@ -23,7 +23,7 @@ class ProductsState extends Equatable {
   List<Object> get props => [products, showLoadMoreButton, status];
 
   ProductsState copyWith({
-    List<Product>? products,
+    List<ProductEntity>? products,
     bool? showLoadMoreButton = true,
     String? errorText,
     BlocStateStatus? status,

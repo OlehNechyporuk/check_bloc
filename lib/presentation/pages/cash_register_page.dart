@@ -129,7 +129,7 @@ class _CashRegisterInfo extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text('${register.fiscalNumber}'),
+              Text(register.fiscalNumber),
               const SizedBox(
                 height: 5,
               ),

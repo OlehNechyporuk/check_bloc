@@ -3,17 +3,19 @@ import 'dart:io';
 
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
-import 'package:check_bloc/domain/entity/cashier.dart';
+import 'package:check_bloc/data/checkbox/models/cashier_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class CashierApiDataProvider {
-  const CashierApiDataProvider();
+  final http.Client _client;
 
-  Future<Either<Failure, Cashier>> getInfo(String key) async {
+  const CashierApiDataProvider(this._client);
+
+  Future<Either<Failure, CashierModel>> getInfo(String key) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}cashier/me');
     try {
-      var response = await http.get(
+      var response = await _client.get(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -24,7 +26,7 @@ class CashierApiDataProvider {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
       if (response.statusCode == 200) {
-        return right(Cashier.fromJson(body));
+        return right(CashierModel.fromJson(body));
       } else {
         return left(
           Failure(

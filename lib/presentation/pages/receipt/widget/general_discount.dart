@@ -1,4 +1,4 @@
-import 'package:check_bloc/domain/entity/discount.dart';
+import 'package:check_bloc/domain/entity/discount_entity.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,15 +67,14 @@ class _GeneralDiscountState extends State<GeneralDiscount> {
 
   @override
   Widget build(BuildContext context) {
-    final discounts =
-        context.read<ReceiptBloc>().state.receipt?.discounts ?? [];
+    final discounts = context.read<ReceiptBloc>().state.receipt.discounts;
 
     if (discounts.isNotEmpty) {
-      type = discounts.first.discountMode;
+      // type = discounts.first.discountMode;
       if (type == DiscountType.fixed) {
-        value = discounts.first.value?.toDouble() ?? 0;
+        value = discounts.first.value.toDouble();
       } else {
-        value = discounts.first.value?.toDouble();
+        value = discounts.first.value.toDouble();
       }
     }
 

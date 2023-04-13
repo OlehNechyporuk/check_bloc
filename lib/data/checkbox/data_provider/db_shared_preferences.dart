@@ -1,15 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DbSharedPreferences {
-  SharedPreferences? _prefs;
+  final SharedPreferences? _prefs;
 
-  DbSharedPreferences() {
-    load();
-  }
-
-  load() async {
-    _prefs = await SharedPreferences.getInstance();
-  }
+  const DbSharedPreferences(this._prefs);
 
   Future<void> saveString(String key, String value) async {
     _prefs?.setString(key, value);

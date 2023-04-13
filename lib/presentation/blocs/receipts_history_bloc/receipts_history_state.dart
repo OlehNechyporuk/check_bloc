@@ -1,7 +1,7 @@
 part of 'receipts_history_bloc.dart';
 
 class ReceiptsHistoryState extends Equatable {
-  final List<Receipt>? receipts;
+  final List<ReceiptEntity>? receipts;
   final String? receiptId;
   final BlocStateStatus status;
   final String? errorText;
@@ -23,7 +23,7 @@ class ReceiptsHistoryState extends Equatable {
   List<Object?> get props => [receipts, receiptId, status, errorText];
 
   ReceiptsHistoryState copyWith({
-    List<Receipt>? receipts,
+    List<ReceiptEntity>? receipts,
     String? receiptId,
     BlocStateStatus? status,
     String? errorText,

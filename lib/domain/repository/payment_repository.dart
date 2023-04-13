@@ -1,10 +1,10 @@
-import 'package:check_bloc/domain/entity/receipt_payment.dart';
+import 'package:check_bloc/domain/entity/receipt_payment_entity.dart';
 
-abstract class PaymetnRepository {
-  const PaymetnRepository();
+abstract class PaymentRepository {
+  const PaymentRepository();
 
-  Future<List<ReceiptPayment>> getPayments();
+  Future<List<ReceiptPaymentEntity>> getPayments();
 
-  Future<void> addPayment(ReceiptPayment payment);
-  Future<void> deletePayment(ReceiptPayment payment);
+  Future<void> addPayment(ReceiptPaymentEntity payment);
+  Future<void> deletePayment(ReceiptPaymentEntity payment);
 }

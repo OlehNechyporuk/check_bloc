@@ -1,29 +1,29 @@
-import 'package:check_bloc/domain/entity/product.dart';
 import 'package:check_bloc/core/extesions.dart';
+import 'package:check_bloc/domain/entity/product_entity.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductRowWidget extends StatelessWidget {
-  final Product product;
+  final ProductEntity product;
 
   const ProductRowWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    final controller = TextEditingController(text: product.price?.toUAH());
+    final controller = TextEditingController(text: product.price.toUAH());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${product.name}',
+          product.name,
           style: const TextStyle(fontSize: 15),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${product.code}'),
+            Text(product.code),
             Row(
               children: [
                 SizedBox(

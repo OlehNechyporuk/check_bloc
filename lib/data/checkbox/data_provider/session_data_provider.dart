@@ -6,8 +6,9 @@ abstract class SessionDataProviderKeys {
 }
 
 class SessionDataProvider {
-  const SessionDataProvider();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage _storage;
+
+  const SessionDataProvider(this._storage);
 
   Future<String?> apiKey() async {
     return await _storage.read(key: SessionDataProviderKeys._apiKey);

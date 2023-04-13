@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/domain/entity/cash_register.dart';
+import 'package:check_bloc/domain/entity/cash_register_entity.dart';
 import 'package:check_bloc/domain/repository/cash_register_repository.dart';
 import 'package:equatable/equatable.dart';
 

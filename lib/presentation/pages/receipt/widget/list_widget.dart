@@ -8,9 +8,9 @@ class ListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final childern = context.watch<ReceiptBloc>().state.receipt?.goods;
+    final childern = context.watch<ReceiptBloc>().state.receipt.goods;
     List<Widget> items = [];
-    if (childern != null) {
+    if (childern.isEmpty) {
       for (var item in childern) {
         items.add(
           ItemRowWidget(

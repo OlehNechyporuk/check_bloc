@@ -10,7 +10,7 @@ showCloseShiftModal(BuildContext context) {
     context: context,
     builder: (context) {
       final balance =
-          context.read<ShiftBloc>().state.shift?.balance?.balance.toDouble();
+          context.read<ShiftBloc>().state.shift?.balance.balance.toDouble();
       return AlertDialog(
         titleTextStyle: const TextStyle(
           fontSize: 18,

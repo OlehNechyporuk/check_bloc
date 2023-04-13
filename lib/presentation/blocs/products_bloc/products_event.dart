@@ -15,7 +15,7 @@ class ProductsSearchEvent extends ProductsEvent {
 }
 
 class ProductsSearchLoadedEvent extends ProductsEvent {
-  final List<Product> products;
+  final List<ProductEntity> products;
   const ProductsSearchLoadedEvent(this.products);
 }
 

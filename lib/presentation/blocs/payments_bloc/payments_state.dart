@@ -1,7 +1,7 @@
 part of 'payments_bloc.dart';
 
 class PaymentsState extends Equatable {
-  final List<ReceiptPayment> payments;
+  final List<ReceiptPaymentEntity> payments;
 
   const PaymentsState(this.payments);
 
@@ -9,7 +9,7 @@ class PaymentsState extends Equatable {
   List<Object> get props => [payments];
 
   PaymentsState copyWith({
-    List<ReceiptPayment>? payments,
+    List<ReceiptPaymentEntity>? payments,
   }) {
     return PaymentsState(
       payments ?? this.payments,

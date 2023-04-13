@@ -3,21 +3,23 @@ import 'dart:io';
 
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
-import 'package:check_bloc/domain/entity/cash_register.dart';
+import 'package:check_bloc/data/checkbox/models/cash_register_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class CashRegisterApiDataProvider {
-  const CashRegisterApiDataProvider();
+  final http.Client _client;
 
-  Future<Either<Failure, CashRegister>> getInfo(
+  const CashRegisterApiDataProvider(this._client);
+
+  Future<Either<Failure, CashRegisterModel>> getInfo(
     String key,
     String licence,
   ) async {
     var url = Uri.parse('${AppConstants.checkboxApiServer}cash-registers/info');
 
     try {
-      var response = await http.get(
+      var response = await _client.get(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -27,7 +29,7 @@ class CashRegisterApiDataProvider {
       );
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 200) {
-        return right(CashRegister.fromJson(body));
+        return right(CashRegisterModel.fromJson(body));
       } else {
         return left(Failure('${body['message']}}'));
       }

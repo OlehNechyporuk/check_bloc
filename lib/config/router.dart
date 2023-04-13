@@ -1,3 +1,5 @@
+import 'package:go_router/go_router.dart';
+
 import 'package:check_bloc/config/main_navigation_name.dart';
 import 'package:check_bloc/presentation/pages/cash_register_page.dart';
 import 'package:check_bloc/presentation/pages/home/home_page.dart';
@@ -5,7 +7,6 @@ import 'package:check_bloc/presentation/pages/login_page.dart';
 import 'package:check_bloc/presentation/pages/receipt/receipt_add_page.dart';
 import 'package:check_bloc/presentation/pages/receipt/receipt_history_page.dart';
 import 'package:check_bloc/presentation/pages/splash_page.dart';
-import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
   debugLogDiagnostics: false,

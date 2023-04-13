@@ -87,8 +87,8 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
             });
           }
 
-          current = state.receipt?.payments?.first.convertStringToEnum ??
-              PaymentType.cash;
+          // current = state.receipt?.payments?.first.convertStringToEnum ??
+          //     PaymentType.cash;
 
           return Column(
             children: [
@@ -108,29 +108,29 @@ class _ServicePaymentsWidgetState extends State<ServicePaymentsWidget> {
                   isValid: isValid,
                 ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.maxFinite,
-                child: state.status == BlocStateStatus.loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: isValid(state.receipt?.info['paid'] ?? 0)
-                            ? () {
-                                context
-                                    .read<ReceiptBloc>()
-                                    .add(ReceiptAddEvent());
-                              }
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          disabledBackgroundColor: Colors.grey,
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                        ),
-                        child: const Text(
-                          'Видати чек',
-                          style: TextStyle(fontSize: 22, color: Colors.white),
-                        ),
-                      ),
-              ),
+              // SizedBox(
+              //   width: double.maxFinite,
+              //   child: state.status == BlocStateStatus.loading
+              //       ? const Center(child: CircularProgressIndicator())
+              //       : ElevatedButton(
+              //           onPressed: isValid(state.receipt?.info['paid'] ?? 0)
+              //               ? () {
+              //                   context
+              //                       .read<ReceiptBloc>()
+              //                       .add(ReceiptAddEvent());
+              //                 }
+              //               : null,
+              //           style: ElevatedButton.styleFrom(
+              //             backgroundColor: Colors.black,
+              //             disabledBackgroundColor: Colors.grey,
+              //             padding: const EdgeInsets.symmetric(vertical: 20),
+              //           ),
+              //           child: const Text(
+              //             'Видати чек',
+              //             style: TextStyle(fontSize: 22, color: Colors.white),
+              //           ),
+              //         ),
+              // ),
             ],
           );
         },
@@ -291,9 +291,9 @@ class _CashInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = context.read<ReceiptBloc>().state.receipt?.info['paid'] ?? 0;
-    final balance =
-        context.read<ShiftBloc>().state.shift?.balance?.balance ?? 0;
+    // final total = context.read<ReceiptBloc>().state.receipt?.info['paid'] ?? 0;
+    final balance = context.read<ShiftBloc>().state.shift?.balance.balance ?? 0;
+    const total = 0;
 
     return Column(
       children: [
@@ -329,15 +329,15 @@ class _CashInputWidget extends StatelessWidget {
             height: 10,
           ),
         if (currentCash != null && currentCash! >= total)
-          Text(
-            'Решта: ${(total - (currentCash ?? 0)).abs().toRoundedUAH()} ₴',
-            style: const TextStyle(fontSize: 17),
-          ),
-        if (currentCash != null && (total - currentCash!).abs() > balance)
-          Text(
-            'Недостатньо готівки, баланс: ${balance.toDouble().toUAH()} ₴',
-            style: const TextStyle(color: Colors.red),
-          ),
+          // Text(
+          //   'Решта: ${(total - (currentCash ?? 0)).abs().toRoundedUAH()} ₴',
+          //   style: const TextStyle(fontSize: 17),
+          // ),
+          if (currentCash != null && (total - currentCash!).abs() > balance)
+            Text(
+              'Недостатньо готівки, баланс: ${balance.toDouble().toUAH()} ₴',
+              style: const TextStyle(color: Colors.red),
+            ),
       ],
     );
   }

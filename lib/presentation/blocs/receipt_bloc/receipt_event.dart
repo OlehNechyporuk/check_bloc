@@ -10,7 +10,7 @@ abstract class ReceiptEvent extends Equatable {
 class ReceiptInitialEvent extends ReceiptEvent {}
 
 class ReceiptAddGoodEvent extends ReceiptEvent {
-  final Product product;
+  final ProductEntity product;
 
   const ReceiptAddGoodEvent(this.product);
 }

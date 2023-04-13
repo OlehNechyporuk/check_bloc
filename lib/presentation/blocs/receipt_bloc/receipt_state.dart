@@ -1,7 +1,7 @@
 part of 'receipt_bloc.dart';
 
 class ReceiptState extends Equatable {
-  final Receipt? receipt;
+  final ReceiptEntity receipt;
   final double? productPrice;
   final double? productQuantity;
   final BlocStateStatus status;
@@ -18,18 +18,7 @@ class ReceiptState extends Equatable {
   });
 
   const ReceiptState.empty()
-      : receipt = const Receipt(
-          payments: [
-            ReceiptPayment(
-              label: 'Готівка',
-              type: 'CASH',
-            )
-          ],
-          goods: [],
-          discounts: [],
-          bonuses: [],
-          rounding: true,
-        ),
+      : receipt = const ReceiptEntity.empty(),
         productPrice = null,
         productQuantity = null,
         status = BlocStateStatus.initial,
@@ -47,7 +36,7 @@ class ReceiptState extends Equatable {
       ];
 
   ReceiptState copyWith({
-    Receipt? receipt,
+    ReceiptEntity? receipt,
     double? productPrice,
     double? productQuantity,
     BlocStateStatus? status,

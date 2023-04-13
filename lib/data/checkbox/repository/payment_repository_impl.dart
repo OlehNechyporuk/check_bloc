@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:check_bloc/data/checkbox/data_provider/db_shared_preferences.dart';
-import 'package:check_bloc/domain/entity/receipt_payment.dart';
+import 'package:check_bloc/domain/entity/receipt_payment_entity.dart';
 import 'package:check_bloc/domain/repository/payment_repository.dart';
 
 abstract class PaymentDbKeys {
@@ -11,17 +11,17 @@ abstract class PaymentDbKeys {
 enum PaymentType { cash, card, cashless }
 
 const _defaultPayments = [
-  ReceiptPayment(label: 'Готівка', type: 'CASH'),
-  ReceiptPayment(label: 'Картка', type: 'CARD'),
+  ReceiptPaymentEntity(label: 'Готівка', type: 'CASH', value: null),
+  ReceiptPaymentEntity(label: 'Картка', type: 'CARD', value: null),
 ];
 
-class PaymentRepositoryImpl extends PaymetnRepository {
+class PaymentRepositoryImpl extends PaymentRepository {
   final DbSharedPreferences _dataProvider;
 
   const PaymentRepositoryImpl(this._dataProvider);
 
   @override
-  Future<List<ReceiptPayment>> getPayments() async {
+  Future<List<ReceiptPaymentEntity>> getPayments() async {
     String? jsonPayments =
         await _dataProvider.getString(PaymentDbKeys._payments);
 
@@ -33,19 +33,19 @@ class PaymentRepositoryImpl extends PaymetnRepository {
   }
 
   @override
-  Future<void> addPayment(ReceiptPayment payment) async {
-    final paymetns = [];
+  Future<void> addPayment(ReceiptPaymentEntity payment) async {
+    final payments = [];
 
-    paymetns.add(payment);
+    payments.add(payment);
 
     await _dataProvider.saveString(
       PaymentDbKeys._payments,
-      jsonEncode(paymetns),
+      jsonEncode(payments),
     );
   }
 
   @override
-  Future<void> deletePayment(ReceiptPayment payment) async {}
+  Future<void> deletePayment(ReceiptPaymentEntity payment) async {}
 
   static PaymentType convertStringToEnum(type) {
     if (type == 'CASH') {

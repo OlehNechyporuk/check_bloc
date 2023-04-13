@@ -1,9 +1,9 @@
 import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/data/checkbox/data_provider/session_data_provider.dart';
 import 'package:check_bloc/data/checkbox/data_provider/shift_api_data_provider.dart';
-import 'package:check_bloc/domain/entity/receipt.dart';
-import 'package:check_bloc/domain/entity/receipt_payment.dart';
-import 'package:check_bloc/domain/entity/shift.dart';
+import 'package:check_bloc/data/checkbox/models/receipt_payment_model.dart';
+import 'package:check_bloc/domain/entity/receipt_entity.dart';
+import 'package:check_bloc/domain/entity/shift_entity.dart';
 import 'package:check_bloc/domain/repository/shift_repository.dart';
 import 'package:dartz/dartz.dart';
 
@@ -17,12 +17,12 @@ class ShiftRepositoryImpl extends ShiftRepository {
   );
 
   @override
-  Future<Either<Failure, Receipt>> cashIn(double sum) async {
+  Future<Either<Failure, ReceiptEntity>> cashIn(double sum) async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
-    final payment = ReceiptPayment(
+    final payment = ReceiptPaymentModel(
       type: 'CASH',
       value: (sum * 100).toInt(),
       label: 'Готівка',
@@ -32,13 +32,13 @@ class ShiftRepositoryImpl extends ShiftRepository {
   }
 
   @override
-  Future<Either<Failure, Receipt>> cashOut(double sum) async {
+  Future<Either<Failure, ReceiptEntity>> cashOut(double sum) async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
 
-    final payment = ReceiptPayment(
+    final payment = ReceiptPaymentModel(
       type: 'CASH',
       value: (sum * -100).toInt(),
       label: 'Готівка',
@@ -48,7 +48,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
   }
 
   @override
-  Future<Either<Failure, Receipt>> close() async {
+  Future<Either<Failure, ReceiptEntity>> close() async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
@@ -57,7 +57,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
   }
 
   @override
-  Future<Either<Failure, Shift>> get() async {
+  Future<Either<Failure, ShiftEntity>> get() async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
@@ -67,7 +67,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
   }
 
   @override
-  Future<Either<Failure, Shift>> open() async {
+  Future<Either<Failure, ShiftEntity>> open() async {
     final String? apiKey = await _sessionDataProvider.apiKey();
     final String? licenceKey = await _sessionDataProvider.getRegisterKey();
 

@@ -3,14 +3,17 @@ import 'dart:io';
 
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
-import 'package:check_bloc/domain/entity/product.dart';
+import 'package:check_bloc/data/checkbox/models/product_model.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class ProductApiDataProvider {
-  const ProductApiDataProvider();
+  final http.Client _client;
 
-  Future<Either<Failure, List<Product>>> getProudcts({
+  const ProductApiDataProvider(this._client);
+
+  Future<Either<Failure, List<ProductModel>>> getProudcts({
     required String key,
     int limit = AppConstants.productsLimitPerPage,
     int offest = 0,
@@ -24,7 +27,7 @@ class ProductApiDataProvider {
 
     try {
       var url = Uri.parse('${AppConstants.checkboxApiServer}goods$params');
-      var response = await http.get(
+      var response = await _client.get(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -38,7 +41,7 @@ class ProductApiDataProvider {
         final jsonProducts = body['results'] as List;
 
         final result = jsonProducts.map((e) {
-          return Product.fromJson(e);
+          return ProductModel.fromJson(e);
         });
 
         return right(result.toList());

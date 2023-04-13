@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
-import 'package:check_bloc/domain/entity/shift.dart';
+import 'package:check_bloc/domain/entity/shift_entity.dart';
 import 'package:check_bloc/domain/repository/shift_repository.dart';
 import 'package:equatable/equatable.dart';
 

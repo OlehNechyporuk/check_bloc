@@ -9,12 +9,15 @@ import 'package:http/http.dart' as http;
 abstract class AuthApiProviderError {}
 
 class AuthApiProvider {
-  const AuthApiProvider();
+  final http.Client _client;
+
+  const AuthApiProvider(this._client);
+
   Future<Either<Failure, String>> login(String login, String password) async {
     try {
       var url = Uri.parse('${AppConstants.checkboxApiServer}cashier/signin');
 
-      var response = await http.post(
+      var response = await _client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',

@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/domain/entity/product.dart';
-import 'package:check_bloc/domain/repository/product_repository.dart';
+import 'package:check_bloc/domain/entity/product_entity.dart';
 import 'package:equatable/equatable.dart';
+
+import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/domain/repository/product_repository.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';

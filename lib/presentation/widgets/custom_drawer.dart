@@ -136,8 +136,8 @@ class _Organization extends StatelessWidget {
           );
         } else if (state.status == BlocStateStatus.success) {
           return ListTile(
-            title: Text('${state.cashier?.organization?.title}'),
-            subtitle: Text('${state.cashier?.organization?.edrpou}'),
+            title: Text('${state.cashier?.organization.title}'),
+            subtitle: Text('${state.cashier?.organization.edrpou}'),
           );
         } else {
           return const SizedBox();

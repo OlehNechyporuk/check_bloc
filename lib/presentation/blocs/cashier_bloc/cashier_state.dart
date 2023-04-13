@@ -1,7 +1,7 @@
 part of 'cashier_bloc.dart';
 
 class CashierState extends Equatable {
-  final Cashier? cashier;
+  final CashierEntity? cashier;
   final BlocStateStatus status;
   final String? errorText;
 
@@ -20,7 +20,7 @@ class CashierState extends Equatable {
   List<Object?> get props => [cashier, status, errorText];
 
   CashierState copyWith({
-    Cashier? cashier,
+    CashierEntity? cashier,
     BlocStateStatus? status,
     String? errorText,
   }) {

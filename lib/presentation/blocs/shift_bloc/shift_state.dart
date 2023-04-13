@@ -1,7 +1,7 @@
 part of 'shift_bloc.dart';
 
 class ShiftState extends Equatable {
-  final Shift? shift;
+  final ShiftEntity? shift;
   final BlocStateStatus status;
   final String? errorText;
 
@@ -20,7 +20,7 @@ class ShiftState extends Equatable {
   List<Object?> get props => [shift, status, errorText];
 
   ShiftState copyWith({
-    Shift? shift,
+    ShiftEntity? shift,
     BlocStateStatus? status,
     String? errorText,
   }) {

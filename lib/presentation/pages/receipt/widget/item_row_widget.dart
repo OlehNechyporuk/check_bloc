@@ -1,12 +1,12 @@
-import 'package:check_bloc/domain/entity/receipt_item.dart';
 import 'package:check_bloc/core/extesions.dart';
+import 'package:check_bloc/domain/entity/receipt_item_entity.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemRowWidget extends StatefulWidget {
-  final ReceiptItem item;
+  final ReceiptItemEntity item;
   final int index;
   final TextEditingController controller;
 
@@ -33,7 +33,7 @@ class ItemRowWidgetState extends State<ItemRowWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _Title(title: '${widget.item.good?.name}'),
+        _Title(title: widget.item.good.name),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +81,7 @@ class _QualityControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     widget?.controller.text =
-        '${context.read<ReceiptBloc>().state.receipt?.goods?[widget!.index].quantity}';
+        '${context.read<ReceiptBloc>().state.receipt.goods[widget!.index].quantity}';
     widget?.controller.selection =
         TextSelection.collapsed(offset: widget!.controller.text.length);
     return SizedBox(
@@ -154,14 +154,15 @@ class _PriceWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          'x ${widget.item.good?.price?.toUAH()} ₴',
+          'x ${widget.item.good.price.toUAH()} ₴',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
         ),
         BlocBuilder<ReceiptBloc, ReceiptState>(
           builder: (context, state) {
-            return Text(
-              '${widget.item.total.toUAH()} ₴',
-              style: const TextStyle(fontSize: 15),
+            return const Text(
+              '',
+              // '${widget.item.total.toUAH()} ₴',
+              style: TextStyle(fontSize: 15),
             );
           },
         ),

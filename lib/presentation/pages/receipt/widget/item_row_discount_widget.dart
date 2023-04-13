@@ -1,13 +1,13 @@
-import 'package:check_bloc/domain/entity/discount.dart';
-import 'package:check_bloc/domain/entity/receipt_item.dart';
 import 'package:check_bloc/core/extesions.dart';
+import 'package:check_bloc/domain/entity/discount_entity.dart';
+import 'package:check_bloc/domain/entity/receipt_item_entity.dart';
 import 'package:check_bloc/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemRowDiscountWidget extends StatefulWidget {
-  final ReceiptItem item;
+  final ReceiptItemEntity item;
   final int index;
 
   const ItemRowDiscountWidget({
@@ -61,7 +61,7 @@ class ItemRowDiscountWidgetState extends State<ItemRowDiscountWidget> {
         return false;
       }
     } else if (type == DiscountType.fixed) {
-      final price = widget.item.good?.price ?? 0;
+      final price = widget.item.good.price;
 
       if ((val * 100) >= price) {
         return false;
@@ -77,23 +77,23 @@ class ItemRowDiscountWidgetState extends State<ItemRowDiscountWidget> {
             .read<ReceiptBloc>()
             .state
             .receipt
-            ?.goods?[widget.index]
+            .goods[widget.index]
             .discounts ??
         [];
 
     if (discounts.isNotEmpty) {
-      type = discounts.first.discountMode;
+      // type = discounts.first.discountMode;
       if (type == DiscountType.fixed) {
-        value = discounts.first.value?.toDouble() ?? 0;
+        value = discounts.first.value.toDouble();
       } else {
-        value = discounts.first.value?.toDouble();
+        value = discounts.first.value.toDouble();
       }
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _Title(title: '${widget.item.good?.name}'),
+        _Title(title: widget.item.good.name),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,7 +203,7 @@ class _PriceWidget extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Text(
-        '${widget.item.good?.price?.toUAH()} ₴',
+        '${widget.item.good.price.toUAH()} ₴',
         style: const TextStyle(
           fontSize: 16,
           overflow: TextOverflow.ellipsis,
