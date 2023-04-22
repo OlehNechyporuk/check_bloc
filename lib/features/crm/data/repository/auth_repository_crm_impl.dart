@@ -1,4 +1,4 @@
-import 'package:check_bloc/features/crm/data/data_provider/auth_crm_provider.dart';
+import 'package:check_bloc/features/crm/data/data_provider/auth_crm_data_provider.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:check_bloc/core/failure.dart';
@@ -6,7 +6,7 @@ import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/se
 import 'package:check_bloc/features/crm/domain/repository/auth_repository_crm.dart';
 
 class AuthRepositoryCrmImpl extends AuthRepositoryCrm {
-  final AuthCrmProvider _authCrmProvider;
+  final AuthCrmDataProvider _authCrmProvider;
   final SessionDataProvider _dataProvider;
 
   const AuthRepositoryCrmImpl(this._authCrmProvider, this._dataProvider);

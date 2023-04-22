@@ -29,13 +29,17 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
     setState(() {});
   }
 
+  submit(BuildContext context) {
+    context.read<AuthCrmBloc>().add(
+          AuthCrmLoginEvent(
+            login: loginController.text,
+            password: passwordController.text,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    submit() {
-      context.read<AuthCrmBloc>().add(AuthCrmLoginEvent(
-          login: loginController.text, password: passwordController.text));
-    }
-
     return BlocListener<AuthCrmBloc, AuthCrmState>(
       listener: (context, state) {
         if (state.status == BlocStateStatus.failure &&
@@ -61,7 +65,7 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
                   TextField(
                     controller: loginController,
                     onChanged: (value) => update(),
-                    onSubmitted: canSubmit ? (value) => submit() : null,
+                    onSubmitted: canSubmit ? (value) => submit(context) : null,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       hintText: '${AppLocalizations.of(context)?.loginLabel}',
@@ -74,7 +78,7 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
                   TextField(
                     controller: passwordController,
                     onChanged: (value) => update(),
-                    onSubmitted: canSubmit ? (value) => submit() : null,
+                    onSubmitted: canSubmit ? (value) => submit(context) : null,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
@@ -94,7 +98,7 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
                         child: ElevatedButton(
                           onPressed: canSubmit &&
                                   state.status != BlocStateStatus.loading
-                              ? submit
+                              ? submit(context)
                               : null,
                           child: state.status == BlocStateStatus.loading
                               ? const Center(child: CircularProgressIndicator())

@@ -38,8 +38,11 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
 
     emit(state.copyWith(isSubmit: true, status: BlocStateStatus.loading));
 
-    final result =
-        await _repository.login(state.userName.trim(), state.password.trim());
+    final result = await _repository.login(
+      state.userName.trim(),
+      state.password.trim(),
+      event.cashRegisterId,
+    );
 
     result.fold(
       (error) {
@@ -54,8 +57,8 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
         );
       },
       (success) => {
-        router.goNamed(CashRegisterNavigationName.splashPage),
-        _authBloc.add(AutCheckEvent()),
+        router.goNamed(CashRegisterNavigationName.splashPageCashRegister),
+        _authBloc.add(AutCheckEvent(event.cashRegisterId)),
         emit(
           state.copyWith(
             isSubmit: false,

@@ -14,7 +14,7 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
 
   @override
   Future<Either<Failure, ReceiptEntity>> add(ReceiptEntity receipt) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -24,7 +24,7 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
 
   @override
   Future<Either<Failure, List<ReceiptEntity>>> receipts() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -37,7 +37,7 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
     String receiptId,
     String email,
   ) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -50,7 +50,7 @@ class ReceiptRepositoryImpl extends ReceiptRepository {
     String receiptId,
     String phone,
   ) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }

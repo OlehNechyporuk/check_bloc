@@ -18,5 +18,7 @@ class LoginFormPasswordChangeEvent extends LoginFormEvent {
 }
 
 class LoginFormSubmitEvent extends LoginFormEvent {
-  const LoginFormSubmitEvent();
+  final String cashRegisterId;
+
+  const LoginFormSubmitEvent(this.cashRegisterId);
 }

@@ -4,7 +4,11 @@ import 'package:dartz/dartz.dart';
 abstract class AuthRepository {
   const AuthRepository();
 
-  Future<Either<Failure, bool>> login(String login, String password);
-  Future<void> logout();
-  Future<bool> checkAuth();
+  Future<Either<Failure, bool>> login(
+    String login,
+    String password,
+    String cashRegisterId,
+  );
+  Future<void> logout(String cashRegisterId);
+  Future<bool> checkAuth(String cashRegisterId);
 }

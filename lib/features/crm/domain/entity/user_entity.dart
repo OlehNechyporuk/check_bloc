@@ -7,19 +7,19 @@ class UserEntity extends Equatable {
   final String? firstName;
   final String? middleName;
   final String? lastName;
-  final String roles;
+  final List<String> roles;
   final int status;
   final DateTime created;
-  final String avatar;
+  final String? avatar;
   final bool verified;
 
   const UserEntity({
     required this.id,
     required this.email,
-    this.phone,
-    this.firstName,
-    this.middleName,
-    this.lastName,
+    required this.phone,
+    required this.firstName,
+    required this.middleName,
+    required this.lastName,
     required this.roles,
     required this.status,
     required this.created,

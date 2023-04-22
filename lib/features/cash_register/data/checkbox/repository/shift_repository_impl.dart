@@ -19,7 +19,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
 
   @override
   Future<Either<Failure, ReceiptEntity>> cashIn(double sum) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -34,7 +34,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
 
   @override
   Future<Either<Failure, ReceiptEntity>> cashOut(double sum) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -50,7 +50,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
 
   @override
   Future<Either<Failure, ReceiptEntity>> close() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -59,7 +59,7 @@ class ShiftRepositoryImpl extends ShiftRepository {
 
   @override
   Future<Either<Failure, ShiftEntity>> get() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));
     }
@@ -69,8 +69,9 @@ class ShiftRepositoryImpl extends ShiftRepository {
 
   @override
   Future<Either<Failure, ShiftEntity>> open() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
-    final String? licenceKey = await _sessionDataProvider.getRegisterKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
+    final String? licenceKey =
+        await _sessionDataProvider.getRegisterKey('todo');
 
     if (apiKey == null || licenceKey == null) {
       return left(Failure(FailureMessages.emptyApiKey));

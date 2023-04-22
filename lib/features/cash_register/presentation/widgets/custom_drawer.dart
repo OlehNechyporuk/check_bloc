@@ -163,7 +163,7 @@ class _CashierInfo extends StatelessWidget {
             title: Text('${state.cashier?.fullName}'),
             leading: const Icon(Icons.person),
             trailing: const Icon(Icons.logout),
-            onTap: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
+            onTap: () => context.read<AuthBloc>().add(AuthLogoutEvent('2')),
           );
         } else {
           return Center(

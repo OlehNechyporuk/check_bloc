@@ -1,3 +1,6 @@
+import 'package:check_bloc/features/crm/presentation/blocs/add_cash_register_crm_bloc/add_cash_register_crm_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/cash_register_crm_bloc/cash_register_crm_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/user_crm_bloc/user_crm_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -22,6 +25,7 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_hi
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
 import 'package:check_bloc/features/crm/presentation/blocs/auth_crm_bloc/auth_crm_bloc.dart';
 import 'package:check_bloc/injector.dart';
+import 'package:check_bloc/theme/theme_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +45,7 @@ class MyApp extends StatelessWidget {
       providers: [
         //cash_register/features
         BlocProvider<AuthBloc>(
-          create: (context) => sl()..add(AutCheckEvent()),
+          create: (context) => sl(),
         ),
         BlocProvider<BottomNavbarBloc>(
           create: (context) => sl(),
@@ -81,41 +85,33 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthCrmBloc>(
           create: (context) => sl()..add(AuthCrmCheckEvent()),
         ),
+        BlocProvider<UserCrmBloc>(
+          create: (context) => sl()..add(UserCrmLoadedEvent()),
+        ),
+        BlocProvider<CashRegisterCrmBloc>(
+          create: (context) => sl()..add(CashRegisterCrmLoadedListEvent()),
+        ),
+        BlocProvider<AddCashRegisterCrmBloc>(
+          create: (context) => sl(),
+        ),
       ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<AuthCrmBloc, AuthCrmState>(
             listener: (context, state) {
               if (state.status == BlocStateStatus.success) {
-                router
-                    .pushReplacementNamed(CashRegisterNavigationName.homePage);
+                router.pushReplacementNamed(MainNavigationName.dashboarCrm);
               } else {
                 router.goNamed(MainNavigationName.authCrm);
               }
             },
           ),
-          // BlocListener<AuthBloc, AuthState>(
-          //   listener: (context, state) {
-          //     if (state is AuthSuccess) {
-          //       router
-          //           .pushReplacementNamed(CashRegisterNavigationName.homePage);
-          //     } else {
-          //       router.goNamed(CashRegisterNavigationName.loginPage);
-          //     }
-          //   },
-          // ),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: router,
-          title: '//${AppLocalizations.of(context)?.appTitle}',
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              color: Colors.white,
-              elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
-            ),
-          ),
+          title: '${AppLocalizations.of(context)?.appTitle}',
+          theme: lightTheme,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

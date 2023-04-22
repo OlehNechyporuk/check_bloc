@@ -1,9 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:check_bloc/features/crm/data/data_provider/auth_crm_provider.dart';
-import 'package:check_bloc/features/crm/domain/usecase/auth/check_user_auth_status_use_case.dart';
-import 'package:check_bloc/features/crm/domain/usecase/auth/login_auth_crm_use_case.dart';
-import 'package:check_bloc/features/crm/domain/usecase/auth/logout_auth_crm_use_case.dart';
-import 'package:check_bloc/features/crm/presentation/blocs/auth_crm_bloc/auth_crm_bloc.dart';
+import 'package:check_bloc/features/crm/domain/usecase/cash_register/add_cash_register_crm_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/cash_register/get_cash_register_crm_type_use_case.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/add_cash_register_crm_bloc/add_cash_register_crm_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/cash_register_crm_bloc/cash_register_crm_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -44,8 +43,22 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_blo
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_delivery_bloc/receipt_delivery_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
-import 'package:check_bloc/features/crm/data/repository/auth_repository_impl.dart';
+import 'package:check_bloc/features/crm/data/data_provider/auth_crm_data_provider.dart';
+import 'package:check_bloc/features/crm/data/data_provider/cash_register_crm_data_provider.dart';
+import 'package:check_bloc/features/crm/data/data_provider/user_crm_data_provider.dart';
+import 'package:check_bloc/features/crm/data/repository/auth_repository_crm_impl.dart';
+import 'package:check_bloc/features/crm/data/repository/cash_register_crm_repository_impl.dart';
+import 'package:check_bloc/features/crm/data/repository/user_repository_crm_impl.dart';
 import 'package:check_bloc/features/crm/domain/repository/auth_repository_crm.dart';
+import 'package:check_bloc/features/crm/domain/repository/cash_register_crm_repository.dart';
+import 'package:check_bloc/features/crm/domain/repository/user_repository_crm.dart';
+import 'package:check_bloc/features/crm/domain/usecase/auth/check_user_auth_status_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/auth/login_auth_crm_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/auth/logout_auth_crm_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/cash_register/get_cash_register_crm_use_case.dart';
+import 'package:check_bloc/features/crm/domain/usecase/user/get_user_use_case.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/auth_crm_bloc/auth_crm_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/user_crm_bloc/user_crm_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -129,11 +142,25 @@ Future<void> initializeDI() async {
 
   //CRM
   //data providers
-  sl.registerLazySingleton<AuthCrmProvider>(() => AuthCrmProvider(sl()));
+  sl.registerLazySingleton<AuthCrmDataProvider>(
+    () => AuthCrmDataProvider(sl()),
+  );
+  sl.registerLazySingleton<UserCrmDataProvider>(
+    () => UserCrmDataProvider(sl()),
+  );
+  sl.registerLazySingleton<CashRegisterCrmDataProvider>(
+    () => CashRegisterCrmDataProvider(sl()),
+  );
 
   //repositories
   sl.registerLazySingleton<AuthRepositoryCrm>(
     () => AuthRepositoryCrmImpl(sl(), sl()),
+  );
+  sl.registerLazySingleton<UserRepositoryCrm>(
+    () => UserRepositoryCrmImpl(sl(), sl()),
+  );
+  sl.registerLazySingleton<CashRegisterCrmRepository>(
+    () => CashRegisterCrmRepositoryImpl(sl(), sl()),
   );
 
   //use cases
@@ -146,7 +173,26 @@ Future<void> initializeDI() async {
   sl.registerLazySingleton<LogoutAuthCrmUseCase>(
     () => LogoutAuthCrmUseCase(sl()),
   );
+  sl.registerLazySingleton<GetUserUseCase>(
+    () => GetUserUseCase(sl()),
+  );
+  sl.registerLazySingleton<GetCashRegistersCrmUseCase>(
+    () => GetCashRegistersCrmUseCase(sl()),
+  );
+  sl.registerLazySingleton<GetCashRegisterCrmTypeUseCase>(
+    () => GetCashRegisterCrmTypeUseCase(sl()),
+  );
+  sl.registerLazySingleton<AddCashRegisterCrmUseCase>(
+    () => AddCashRegisterCrmUseCase(sl()),
+  );
 
   //blocs
   sl.registerFactory<AuthCrmBloc>(() => AuthCrmBloc(sl(), sl(), sl()));
+  sl.registerFactory<UserCrmBloc>(() => UserCrmBloc(sl()));
+  sl.registerFactory<CashRegisterCrmBloc>(
+    () => CashRegisterCrmBloc(sl(), sl()),
+  );
+  sl.registerFactory<AddCashRegisterCrmBloc>(
+    () => AddCashRegisterCrmBloc(sl()),
+  );
 }

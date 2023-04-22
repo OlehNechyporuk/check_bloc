@@ -9,6 +9,10 @@ class UserModel extends UserEntity {
   const UserModel({
     required super.id,
     required super.email,
+    required super.phone,
+    required super.firstName,
+    required super.middleName,
+    required super.lastName,
     required super.roles,
     required super.status,
     required super.created,

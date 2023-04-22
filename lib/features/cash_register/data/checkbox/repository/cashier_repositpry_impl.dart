@@ -16,7 +16,7 @@ class CashierRepositoryImpl extends CashierRepository {
 
   @override
   Future<Either<Failure, CashierEntity>> info() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
     if (apiKey == null) return left(Failure('Empty Api key'));
     return _cashierApiDataProvider.getInfo(apiKey);
   }

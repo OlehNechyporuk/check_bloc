@@ -6,10 +6,10 @@ import 'package:check_bloc/core/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
-class AuthCrmProvider {
+class AuthCrmDataProvider {
   final http.Client _client;
 
-  const AuthCrmProvider(this._client);
+  const AuthCrmDataProvider(this._client);
 
   Future<Either<Failure, String>> login(String login, String password) async {
     await Future.delayed(Duration(seconds: 2));

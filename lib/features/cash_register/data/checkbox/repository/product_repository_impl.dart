@@ -19,7 +19,7 @@ class ProductRepositoryImpl extends ProductRepository {
     int offset = 0,
     String? searchQuery,
   }) async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('tod');
     if (apiKey == null) throw 'Empty api key';
 
     return _apiDataProvider.getProudcts(

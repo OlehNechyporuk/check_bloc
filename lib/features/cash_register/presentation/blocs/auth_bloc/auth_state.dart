@@ -1,14 +1,28 @@
 part of 'auth_bloc.dart';
 
-abstract class AuthState extends Equatable {
-  const AuthState();
+class AuthState extends Equatable {
+  final String? cashRegisterId;
+  final BlocStateStatus status;
+
+  const AuthState({
+    required this.cashRegisterId,
+    required this.status,
+  });
+
+  const AuthState.empty()
+      : cashRegisterId = null,
+        status = BlocStateStatus.initial;
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [cashRegisterId, status];
+
+  AuthState copyWith({
+    String? cashRegisterId,
+    BlocStateStatus? status,
+  }) {
+    return AuthState(
+      cashRegisterId: cashRegisterId,
+      status: status ?? this.status,
+    );
+  }
 }
-
-class AuthInitial extends AuthState {}
-
-class AuthSuccess extends AuthState {}
-
-class AuthFailState extends AuthState {}

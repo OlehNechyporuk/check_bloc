@@ -17,13 +17,13 @@ class CashRegisterRepositoryImpl extends CashRegisterRepository {
 
   @override
   Future<void> daleteLicenseKey() async {
-    await _sessionDataProvider.removeRegisterKey();
+    await _sessionDataProvider.removeRegisterKey('todo');
   }
 
   @override
   Future<Either<Failure, CashRegisterEntity>> info() async {
-    final String? apiKey = await _sessionDataProvider.apiKey();
-    final String? licenceKey = await _sessionDataProvider.getRegisterKey();
+    final String? apiKey = await _sessionDataProvider.apiKey('todo');
+    final String? licenceKey = await _sessionDataProvider.getRegisterKey('tod');
 
     if (apiKey == null || licenceKey == null) {
       return left(Failure('Empty apikey or licenceKey'));
@@ -33,11 +33,11 @@ class CashRegisterRepositoryImpl extends CashRegisterRepository {
 
   @override
   Future<String?> getLicenseKey() async {
-    return await _sessionDataProvider.getRegisterKey();
+    return await _sessionDataProvider.getRegisterKey('todo');
   }
 
   @override
   Future<void> saveLicenseKey(String key) async {
-    await _sessionDataProvider.saveRegisterKey(key);
+    await _sessionDataProvider.saveRegisterKey(key, 'todo');
   }
 }
