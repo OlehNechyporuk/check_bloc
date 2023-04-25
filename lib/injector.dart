@@ -220,7 +220,7 @@ void initCheckbox() {
   );
 }
 
-void disposeCheckbox() {
+void disposeCashRegisterBlocs() {
   sl.unregister<AuthRepository>();
   sl.unregister<CashRegisterRepository>();
   sl.unregister<CashierRepository>();
