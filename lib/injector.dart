@@ -1,15 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/shift_repository_checkbox_impl.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/auth/change_current_cash_register_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/auth/check_auth_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/auth/login_cash_register_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/auth/logout_cash_register_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/cashier/get_cashier_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_in_shift_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_out_shift_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/shift/close_shift_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/shift/get_shift_use_case.dart';
-import 'package:check_bloc/features/cash_register/domain/usecases/shift/open_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/load_more_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/search_products_use_case.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +15,7 @@ import 'package:check_bloc/features/cash_register/data/checkbox/repository/cashi
 import 'package:check_bloc/features/cash_register/data/checkbox/repository/payment_repository_checkbox_impl.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/repository/product_repository_checkbox_impl.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/repository/receipt_repository_checkbox_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/shift_repository_checkbox_impl.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/auth_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/cash_register_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/cashier_repository.dart';
@@ -31,7 +23,18 @@ import 'package:check_bloc/features/cash_register/domain/repository/payment_repo
 import 'package:check_bloc/features/cash_register/domain/repository/product_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/receipt_repository.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/shift_repository.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/auth/change_current_cash_register_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/auth/check_auth_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/auth/login_cash_register_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/auth/logout_cash_register_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/cash_register/get_cash_register_info_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/cashier/get_cashier_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/get_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_in_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_out_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/close_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/get_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/open_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/bottom_nav_bloc/bottom_navbar_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/cash_register_bloc/cash_register_bloc.dart';
@@ -124,6 +127,13 @@ Future<void> initializeDI() async {
     () => CashOutShiftUseCase(sl()),
   );
   sl.registerLazySingleton<GetCashierUseCase>(() => GetCashierUseCase(sl()));
+  sl.registerLazySingleton<GetProductsUseCase>(() => GetProductsUseCase(sl()));
+  sl.registerLazySingleton<LoadMoreProductsUseCase>(
+    () => LoadMoreProductsUseCase(sl()),
+  );
+  sl.registerLazySingleton<SearchProductsUseCase>(
+    () => SearchProductsUseCase(sl()),
+  );
 
   //blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));
@@ -133,7 +143,7 @@ Future<void> initializeDI() async {
   sl.registerFactory<CashierBloc>(() => CashierBloc(sl()));
   sl.registerFactory<LoginFormBloc>(() => LoginFormBloc(sl()));
   sl.registerFactory<PaymentsBloc>(() => PaymentsBloc(sl()));
-  sl.registerFactory<ProductsBloc>(() => ProductsBloc(sl()));
+  sl.registerFactory<ProductsBloc>(() => ProductsBloc(sl(), sl(), sl()));
   sl.registerFactory<ReceiptBloc>(() => ReceiptBloc(sl(), sl(), sl()));
   sl.registerFactory<ReceiptDeliveryBloc>(() => ReceiptDeliveryBloc(sl()));
   sl.registerFactory<ReceiptsHistoryBloc>(() => ReceiptsHistoryBloc(sl()));

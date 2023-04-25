@@ -1,17 +1,26 @@
 import 'package:bloc/bloc.dart';
-import 'package:check_bloc/features/cash_register/domain/entity/product_entity.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/features/cash_register/domain/repository/product_repository.dart';
+import 'package:check_bloc/core/usecases/usecase.dart';
+import 'package:check_bloc/features/cash_register/domain/entity/product_entity.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/get_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/load_more_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/search_products_use_case.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  final ProductRepository _productRepository;
+  final GetProductsUseCase _getProductsUseCase;
+  final SearchProductsUseCase _searchProductsUseCase;
+  final LoadMoreProductsUseCase _loadMoreProductsUseCase;
 
-  ProductsBloc(this._productRepository) : super(const ProductsState.empty()) {
+  ProductsBloc(
+    this._getProductsUseCase,
+    this._searchProductsUseCase,
+    this._loadMoreProductsUseCase,
+  ) : super(const ProductsState.empty()) {
     on<ProductsLoadedEvent>(_loadProducts);
     on<ProductsSearchEvent>(_searchProducts);
     on<ProductsLoadMoreEvent>(_loadMoreProducts);
@@ -20,7 +29,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   _loadProducts(ProductsLoadedEvent event, emit) async {
     emit(state.copyWith(status: BlocStateStatus.loading));
 
-    final result = await _productRepository.getProducts();
+    final result = await _getProductsUseCase(NoParams());
+
     result.fold(
       (error) => {
         emit(
@@ -47,7 +57,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     final query = event.query?.trim();
 
     if (query != null && query.isNotEmpty) {
-      final result = await _productRepository.getProducts(searchQuery: query);
+      final result = await _searchProductsUseCase(SearchProductsParams(query));
 
       result.fold(
         (error) => {
@@ -77,7 +87,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   _loadMoreProducts(ProductsLoadMoreEvent event, emit) async {
     final offset = state.products.length;
 
-    final result = await _productRepository.getProducts(offset: offset);
+    final result =
+        await _loadMoreProductsUseCase(LoadMoreProductsParams(offset));
 
     result.fold(
       (error) => {
