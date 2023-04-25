@@ -1,15 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/features/cash_register/domain/repository/receipt_repository.dart';
 import 'package:equatable/equatable.dart';
+
+import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_email_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_sms_use_case.dart';
 
 part 'receipt_delivery_event.dart';
 part 'receipt_delivery_state.dart';
 
 class ReceiptDeliveryBloc
     extends Bloc<ReceiptDeliveryEvent, ReceiptDeliveryState> {
-  final ReceiptRepository _receiptRepository;
-  ReceiptDeliveryBloc(this._receiptRepository)
+  final SendEmailUseCase _sendEmailUseCase;
+  final SendSmsUseCase _sendSmsUseCase;
+  ReceiptDeliveryBloc(this._sendEmailUseCase, this._sendSmsUseCase)
       : super(const ReceiptDeliveryState.empty()) {
     on<ReceiptDeliveryInitialEvent>(_initial);
     on<ReceiptDeliverySendEmailEvent>(_sendEmail);
@@ -24,7 +27,7 @@ class ReceiptDeliveryBloc
     emit(state.copyWith(status: BlocStateStatus.loading));
 
     final result =
-        await _receiptRepository.sendEmail(event.receiptId, event.email);
+        await _sendEmailUseCase(SendEmailParams(event.receiptId, event.email));
 
     result.fold(
       (error) => emit(
@@ -51,7 +54,7 @@ class ReceiptDeliveryBloc
     emit(state.copyWith(status: BlocStateStatus.loading));
 
     final result =
-        await _receiptRepository.sendSms(event.receiptId, event.phone);
+        await _sendSmsUseCase(SendSmsParams(event.receiptId, event.phone));
 
     result.fold(
       (error) => emit(

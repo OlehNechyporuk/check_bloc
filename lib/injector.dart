@@ -1,6 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/products/load_more_products_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/products/search_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_email_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_sms_use_case.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -134,6 +136,8 @@ Future<void> initializeDI() async {
   sl.registerLazySingleton<SearchProductsUseCase>(
     () => SearchProductsUseCase(sl()),
   );
+  sl.registerLazySingleton<SendEmailUseCase>(() => SendEmailUseCase(sl()));
+  sl.registerLazySingleton<SendSmsUseCase>(() => SendSmsUseCase(sl()));
 
   //blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));
@@ -145,7 +149,9 @@ Future<void> initializeDI() async {
   sl.registerFactory<PaymentsBloc>(() => PaymentsBloc(sl()));
   sl.registerFactory<ProductsBloc>(() => ProductsBloc(sl(), sl(), sl()));
   sl.registerFactory<ReceiptBloc>(() => ReceiptBloc(sl(), sl(), sl()));
-  sl.registerFactory<ReceiptDeliveryBloc>(() => ReceiptDeliveryBloc(sl()));
+  sl.registerFactory<ReceiptDeliveryBloc>(
+    () => ReceiptDeliveryBloc(sl(), sl()),
+  );
   sl.registerFactory<ReceiptsHistoryBloc>(() => ReceiptsHistoryBloc(sl()));
   sl.registerFactory<ShiftBloc>(() => ShiftBloc(sl(), sl(), sl(), sl(), sl()));
 
