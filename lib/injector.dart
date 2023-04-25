@@ -3,6 +3,7 @@ import 'package:check_bloc/features/cash_register/domain/usecases/products/load_
 import 'package:check_bloc/features/cash_register/domain/usecases/products/search_products_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_email_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_sms_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt_history/get_receipts_use_case.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -138,6 +139,7 @@ Future<void> initializeDI() async {
   );
   sl.registerLazySingleton<SendEmailUseCase>(() => SendEmailUseCase(sl()));
   sl.registerLazySingleton<SendSmsUseCase>(() => SendSmsUseCase(sl()));
+  sl.registerLazySingleton<GetReceiptsUseCase>(() => GetReceiptsUseCase(sl()));
 
   //blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));
