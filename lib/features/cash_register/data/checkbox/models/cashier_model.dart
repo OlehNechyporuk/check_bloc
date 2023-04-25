@@ -8,7 +8,7 @@ part 'cashier_model.g.dart';
 @JsonSerializable()
 class CashierModel extends CashierEntity {
   @JsonKey(name: 'organization')
-  final OrganaizationModel organizationModel;
+  final OrganaizationModel? organizationModel;
 
   const CashierModel({
     required super.id,

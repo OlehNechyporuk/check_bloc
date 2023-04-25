@@ -183,7 +183,7 @@ class ReceiptRowWidget extends StatelessWidget {
                   .state
                   .cashier
                   ?.organization
-                  .canSendSms ==
+                  ?.canSendSms ==
               true)
             PopupMenuItem(
               onTap: () {

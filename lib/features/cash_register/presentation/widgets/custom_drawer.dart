@@ -137,8 +137,8 @@ class _Organization extends StatelessWidget {
           );
         } else if (state.status == BlocStateStatus.success) {
           return ListTile(
-            title: Text('${state.cashier?.organization.title}'),
-            subtitle: Text('${state.cashier?.organization.edrpou}'),
+            title: Text('${state.cashier?.organization?.title}'),
+            subtitle: Text('${state.cashier?.organization?.edrpou}'),
           );
         } else {
           return const SizedBox();
@@ -163,7 +163,10 @@ class _CashierInfo extends StatelessWidget {
             title: Text('${state.cashier?.fullName}'),
             leading: const Icon(Icons.person),
             trailing: const Icon(Icons.logout),
-            onTap: () => context.read<AuthBloc>().add(AuthLogoutEvent('2')),
+            onTap: () {
+              context.read<AuthBloc>().add(const AuthLogoutEvent());
+              context.goNamed(MainNavigationName.dashboarCrm);
+            },
           );
         } else {
           return Center(

@@ -8,10 +8,10 @@ class ShiftEntity extends Equatable {
   final String id;
   final int serial;
   final String status;
-  final DateTime openedAt;
+  final DateTime? openedAt;
   final DateTime? closedAt;
   final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
   final BalanceEntity balance;
   final CashRegisterEntity cashRegister;
   final CashierEntity? cashier;

@@ -1,16 +1,33 @@
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_in_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_out_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/close_shift_use_case.dart';
+import 'package:equatable/equatable.dart';
+
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
+import 'package:check_bloc/core/usecases/usecase.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/shift_entity.dart';
-import 'package:check_bloc/features/cash_register/domain/repository/shift_repository.dart';
-import 'package:equatable/equatable.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/get_shift_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/shift/open_shift_use_case.dart';
 
 part 'shift_event.dart';
 part 'shift_state.dart';
 
 class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
-  final ShiftRepository _repository;
-  ShiftBloc(this._repository) : super(const ShiftState.empty()) {
+  final OpenShiftUseCase _openShiftUseCase;
+  final GetShiftUseCase _getShiftUseCase;
+  final CloseShiftUseCase _closeShiftUseCase;
+  final CashInShiftUseCase _cashInShiftUseCase;
+  final CashOutShiftUseCase _cashOutShiftUseCase;
+
+  ShiftBloc(
+    this._openShiftUseCase,
+    this._getShiftUseCase,
+    this._closeShiftUseCase,
+    this._cashInShiftUseCase,
+    this._cashOutShiftUseCase,
+  ) : super(const ShiftState.empty()) {
     on<ShiftInitialEvent>(_initial);
     on<ShiftCurrentEvent>(_current);
     on<ShiftOpenEvent>(_open);
@@ -20,7 +37,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _initial(ShiftInitialEvent event, emit) async {
-    final result = await _repository.get();
+    final result = await _getShiftUseCase(NoParams());
 
     result.fold(
       (error) => emit(
@@ -39,7 +56,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _current(ShiftCurrentEvent event, emit) async {
-    final result = await _repository.get();
+    final result = await _getShiftUseCase(NoParams());
 
     result.fold(
       (error) => emit(
@@ -60,7 +77,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   _open(ShiftOpenEvent event, emit) async {
     emit(state.copyWith(status: BlocStateStatus.loading));
 
-    final result = await _repository.open();
+    final result = await _openShiftUseCase(NoParams());
 
     result.fold(
       (error) => emit(
@@ -80,7 +97,9 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
 
   _close(ShifCloseEvent event, emit) async {
     state.copyWith(shift: null, status: BlocStateStatus.loading);
-    final result = await _repository.close();
+
+    final result = await _closeShiftUseCase(NoParams());
+
     result.fold(
       (error) => emit(
         state.copyWith(
@@ -106,7 +125,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
     } else {
       state.copyWith(shift: null, status: BlocStateStatus.loading);
 
-      final result = await _repository.cashIn(sum);
+      final result = await _cashInShiftUseCase(ShiftServiceCashInParams(sum));
 
       result.fold(
         (error) => state.copyWith(
@@ -132,7 +151,7 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
     } else {
       state.copyWith(shift: null, status: BlocStateStatus.loading);
 
-      final result = await _repository.cashOut(sum);
+      final result = await _cashOutShiftUseCase(ShiftServiceCashOutParams(sum));
 
       result.fold(
         (error) => emit(

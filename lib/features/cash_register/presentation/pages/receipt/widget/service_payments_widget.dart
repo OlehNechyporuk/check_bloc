@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/extesions.dart';
-import 'package:check_bloc/features/cash_register/data/checkbox/repository/payment_repository_impl.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/repository/payment_repository_checkbox_impl.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_bloc/receipt_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/widgets/receipt_modal.dart';

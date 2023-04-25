@@ -13,11 +13,11 @@ class ReceiptEntity extends Equatable {
   final int totalSum;
   final int totalPayment;
   final int totalRest;
-  final int roundSum;
+  final int? roundSum;
   final List<DiscountEntity> discounts;
   final List<BonusEntity> bonuses;
   final List<ReceiptPaymentEntity> payments;
-  final bool rounding;
+  final bool? rounding;
   final String? fiscalCode;
   final DateTime? fiscalDate;
   final DateTime? deliveredAt;

@@ -7,8 +7,7 @@ abstract class AuthRepository {
   Future<Either<Failure, bool>> login(
     String login,
     String password,
-    String cashRegisterId,
   );
-  Future<void> logout(String cashRegisterId);
-  Future<bool> checkAuth(String cashRegisterId);
+  Future<void> logout();
+  Future<bool> checkAuth();
 }

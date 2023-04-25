@@ -79,14 +79,17 @@ class CashRegisterCrmList extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   title: Text(register.title),
                   subtitle: Text(register.type.title),
-                  onTap: () => context.goNamed(
-                    CashRegisterNavigationName.splashPageCashRegister,
-                    params: {
-                      'type': '${register.type.id}',
-                      'title': register.type.title,
-                      'cash_register': '${register.id}'
-                    },
-                  ),
+                  onTap: () {
+                    context.goNamed(
+                      CashRegisterNavigationName.splashPageCashRegister,
+                      params: {
+                        'type': '${register.type.id}',
+                        'title': register.type.title,
+                        'cash_register': '${register.id}',
+                        'crm_title': register.title
+                      },
+                    );
+                  },
                 ),
               );
             }

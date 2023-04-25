@@ -15,15 +15,15 @@ const _defaultPayments = [
   ReceiptPaymentEntity(label: 'Картка', type: 'CARD', value: null),
 ];
 
-class PaymentRepositoryImpl extends PaymentRepository {
-  final DbSharedPreferences _dataProvider;
+class PaymentRepositoryCheckboxImpl extends PaymentRepository {
+  final DbSharedPreferences _dbSharedPreferences;
 
-  const PaymentRepositoryImpl(this._dataProvider);
+  const PaymentRepositoryCheckboxImpl(this._dbSharedPreferences);
 
   @override
   Future<List<ReceiptPaymentEntity>> getPayments() async {
     String? jsonPayments =
-        await _dataProvider.getString(PaymentDbKeys._payments);
+        await _dbSharedPreferences.getString(PaymentDbKeys._payments);
 
     if (jsonPayments != null) {
       if (jsonPayments.isNotEmpty) {}
@@ -38,7 +38,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
     payments.add(payment);
 
-    await _dataProvider.saveString(
+    await _dbSharedPreferences.saveString(
       PaymentDbKeys._payments,
       jsonEncode(payments),
     );

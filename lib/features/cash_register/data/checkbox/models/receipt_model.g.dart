@@ -17,7 +17,7 @@ ReceiptModel _$ReceiptModelFromJson(Map<String, dynamic> json) => ReceiptModel(
       totalSum: json['total_sum'] as int,
       totalPayment: json['total_payment'] as int,
       totalRest: json['total_rest'] as int,
-      roundSum: json['round_sum'] as int,
+      roundSum: json['round_sum'] as int?,
       discountsModel: (json['discounts'] as List<dynamic>?)
               ?.map((e) => DiscountModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -31,7 +31,7 @@ ReceiptModel _$ReceiptModelFromJson(Map<String, dynamic> json) => ReceiptModel(
                   ReceiptPaymentModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      rounding: json['rounding'] as bool,
+      rounding: json['rounding'] as bool?,
       fiscalCode: json['fiscal_code'] as String?,
       fiscalDate: json['fiscal_date'] == null
           ? null

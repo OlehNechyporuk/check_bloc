@@ -1,23 +1,18 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/auth/login_cash_register_use_case.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/config/main_navigation_name.dart';
-import 'package:check_bloc/config/router.dart';
-import 'package:check_bloc/features/cash_register/domain/repository/auth_repository.dart';
-import 'package:check_bloc/features/cash_register/presentation/blocs/auth_bloc/auth_bloc.dart';
 
 part 'login_form_event.dart';
 part 'login_form_state.dart';
 
 class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
-  final AuthBloc _authBloc;
-  final AuthRepository _repository;
+  final LoginCashRegisterUseCase _registerUseCase;
 
-  LoginFormBloc(this._authBloc, this._repository)
-      : super(const LoginFormState.empty()) {
+  LoginFormBloc(this._registerUseCase) : super(const LoginFormState.empty()) {
     on<LoginFormUserNameChangeEvent>(_onUserNameChange);
     on<LoginFormPasswordChangeEvent>(_onPasswordChange);
     on<LoginFormSubmitEvent>(_onSubmited);
@@ -38,10 +33,11 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
 
     emit(state.copyWith(isSubmit: true, status: BlocStateStatus.loading));
 
-    final result = await _repository.login(
-      state.userName.trim(),
-      state.password.trim(),
-      event.cashRegisterId,
+    final result = await _registerUseCase(
+      AuthCashRegisterParams(
+        state.userName.trim(),
+        state.password.trim(),
+      ),
     );
 
     result.fold(
@@ -57,8 +53,6 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
         );
       },
       (success) => {
-        router.goNamed(CashRegisterNavigationName.splashPageCashRegister),
-        _authBloc.add(AutCheckEvent(event.cashRegisterId)),
         emit(
           state.copyWith(
             isSubmit: false,

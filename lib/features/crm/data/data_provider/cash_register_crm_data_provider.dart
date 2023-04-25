@@ -48,6 +48,16 @@ class CashRegisterCrmDataProvider {
       "logo": "Checkbox",
       "status": "ON"
     }
+      },
+       {
+        "id" : 2,
+        "title" : "Тестова 2",
+        "type" : {
+      "id": 2,
+      "title": "CustomCheck",
+      "logo": "CustomCheck",
+      "status": "ON"
+    }
       }
     ]''';
 

@@ -16,4 +16,5 @@ class FailureMessages {
   static const String emptySum = 'Введіть суму';
   static const String shiftIsClosed = 'Зміна закрита';
   static const String productNotFound = 'Не знайдено';
+  static const String unauthorized = 'Неавторизований';
 }

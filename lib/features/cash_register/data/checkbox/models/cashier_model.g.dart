@@ -19,8 +19,10 @@ CashierModel _$CashierModelFromJson(Map<String, dynamic> json) => CashierModel(
           ? null
           : DateTime.parse(json['certificate_end'] as String),
       blocked: json['blocked'] as String?,
-      organizationModel: OrganaizationModel.fromJson(
-          json['organization'] as Map<String, dynamic>),
+      organizationModel: json['organization'] == null
+          ? null
+          : OrganaizationModel.fromJson(
+              json['organization'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CashierModelToJson(CashierModel instance) =>

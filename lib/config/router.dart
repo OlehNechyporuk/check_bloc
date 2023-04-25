@@ -18,19 +18,16 @@ final router = GoRouter(
   routes: [
     //cash register
     GoRoute(
-      path: '/splash_page_cash_register:type&:title&:cash_register',
+      path: '/splash_page_cash_register:type&:title&:cash_register&:crm_title',
       name: CashRegisterNavigationName.splashPageCashRegister,
       builder: (context, state) => SplashPageCashRegister(
         type: state.params['type'],
         title: state.params['title'],
         cashRegisterId: state.params['cash_register'],
+        crmRegisterTitle: state.params['crm_title'],
       ),
     ),
-    GoRoute(
-      path: '/login',
-      name: CashRegisterNavigationName.loginPage,
-      builder: (context, state) => const LoginPage(),
-    ),
+
     GoRoute(
       path: '/home',
       name: CashRegisterNavigationName.homePage,
@@ -73,6 +70,16 @@ final router = GoRouter(
           path: 'add_cash_register_crm',
           name: MainNavigationName.addCashRegisterCrm,
           builder: (context, state) => const AddCashRegisterPage(),
+        ),
+        GoRoute(
+          path: 'login:type&:title&:cash_register&:crm_title',
+          name: CashRegisterNavigationName.loginPage,
+          builder: (context, state) => LoginPage(
+            type: state.params['type'],
+            title: state.params['title'],
+            cashRegisterId: state.params['cash_register'] ?? '',
+            crmRegisterTitle: state.params['crm_title'] ?? '',
+          ),
         ),
       ],
     ),

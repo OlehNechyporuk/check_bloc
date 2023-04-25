@@ -7,12 +7,13 @@ abstract class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AutCheckEvent extends AuthEvent {
-  final String cashRegisterId;
-  const AutCheckEvent(this.cashRegisterId);
-}
+class AutCheckEvent extends AuthEvent {}
 
 class AuthLogoutEvent extends AuthEvent {
+  const AuthLogoutEvent();
+}
+
+class AuthChangeCurrentCashRegisterEvent extends AuthEvent {
   final String cashRegisterId;
-  const AuthLogoutEvent(this.cashRegisterId);
+  const AuthChangeCurrentCashRegisterEvent(this.cashRegisterId);
 }

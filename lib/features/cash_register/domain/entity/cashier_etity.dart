@@ -12,7 +12,7 @@ class CashierEntity extends Equatable {
   final DateTime updatedAt;
   final DateTime? certificateEnd;
   final String? blocked;
-  final OrganizationEntity organization;
+  final OrganizationEntity? organization;
 
   const CashierEntity({
     required this.id,

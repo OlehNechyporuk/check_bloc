@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 abstract class SessionDataProviderKeys {
   static const _apiKey = 'api_access_token';
   static const _registerKey = 'checkbox_register_key';
+  static const _currentCashRegisterId = 'current_cash_register_id';
 
   static const _crmApiKey = 'crm_api_access_token';
 }
@@ -12,40 +13,99 @@ class SessionDataProvider {
 
   const SessionDataProvider(this._storage);
 
-  Future<String?> apiKey(String cashRegisterId) async {
-    return await _storage.read(
-      key: '${SessionDataProviderKeys._apiKey}_$cashRegisterId',
+  Future<void> saveCurrentCashRegister(String cashRegisterId) async {
+    await _storage.write(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+      value: cashRegisterId,
     );
   }
 
-  Future<void> saveApiKey(String token, String cashRegisterId) async {
+  Future<String?> getCurrentCashRegisterId() async {
+    return await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+  }
+
+  Future<String> apiKey() async {
+    final currentCashRegisteId = await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+
+    if (currentCashRegisteId == null) {
+      throw 'Error empty current cash register';
+    }
+
+    final key = await _storage.read(
+      key: '${SessionDataProviderKeys._apiKey}_$currentCashRegisteId',
+    );
+
+    if (key == null) {
+      throw 'Empty api key';
+    }
+
+    return key;
+  }
+
+  Future<void> saveApiKey(String token) async {
+    final currentCashRegisteId = await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+
+    if (currentCashRegisteId == null) {
+      throw 'Error empty current cash register';
+    }
     await _storage.write(
-      key: '${SessionDataProviderKeys._apiKey}_$cashRegisterId',
+      key: '${SessionDataProviderKeys._apiKey}_$currentCashRegisteId',
       value: token,
     );
   }
 
-  Future<void> removeApiKey(String cashRegisterId) async {
+  Future<void> removeApiKey() async {
+    final currentCashRegisteId = await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+    if (currentCashRegisteId == null) {
+      throw 'Error empty current cash register';
+    }
     await _storage.delete(
-      key: '${SessionDataProviderKeys._apiKey}_$cashRegisterId',
+      key: '${SessionDataProviderKeys._apiKey}_$currentCashRegisteId',
     );
   }
 
-  Future<String?> getRegisterKey(String cashRegisterId) async {
+  Future<String?> getRegisterKey() async {
+    final currentCashRegisteId = await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+    if (currentCashRegisteId == null) {
+      throw 'Error empty current cash register';
+    }
     return await _storage.read(
-      key: '${SessionDataProviderKeys._registerKey}_$cashRegisterId',
+      key: '${SessionDataProviderKeys._registerKey}_$currentCashRegisteId',
     );
   }
 
-  Future<void> saveRegisterKey(String key, String cashRegisterId) async {
+  Future<void> saveRegisterKey(String key) async {
+    final currentCashRegisteId = await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+    if (currentCashRegisteId == null) {
+      throw 'Error empty current cash register';
+    }
     await _storage.write(
-        key: '${SessionDataProviderKeys._registerKey}_$cashRegisterId',
-        value: key);
+      key: '${SessionDataProviderKeys._registerKey}_$currentCashRegisteId',
+      value: key,
+    );
   }
 
-  Future<void> removeRegisterKey(String cashRegisterId) async {
+  Future<void> removeRegisterKey() async {
+    final currentCashRegisteId = await _storage.read(
+      key: SessionDataProviderKeys._currentCashRegisterId,
+    );
+    if (currentCashRegisteId == null) {
+      throw 'Error empty current cash register';
+    }
     await _storage.delete(
-      key: '${SessionDataProviderKeys._registerKey}_$cashRegisterId',
+      key: '${SessionDataProviderKeys._registerKey}_$currentCashRegisteId',
     );
   }
 
