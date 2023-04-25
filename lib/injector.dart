@@ -4,6 +4,7 @@ import 'package:check_bloc/features/cash_register/domain/usecases/auth/change_cu
 import 'package:check_bloc/features/cash_register/domain/usecases/auth/check_auth_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/auth/login_cash_register_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/auth/logout_cash_register_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/cashier/get_cashier_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_in_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_out_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/close_shift_use_case.dart';
@@ -122,6 +123,7 @@ Future<void> initializeDI() async {
   sl.registerLazySingleton<CashOutShiftUseCase>(
     () => CashOutShiftUseCase(sl()),
   );
+  sl.registerLazySingleton<GetCashierUseCase>(() => GetCashierUseCase(sl()));
 
   //blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));

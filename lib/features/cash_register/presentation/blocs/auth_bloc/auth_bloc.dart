@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final CheckAuthCashRegisterUseCase _authCashRegisterUseCase;
   final ChangeCurrentCashRegisterUseCase _changeCurrentCashRegisterUseCase;
   final LogoutCashRegisteruseCase _logoutCashRegisteruseCase;
+
   AuthBloc(
     this._authCashRegisterUseCase,
     this._changeCurrentCashRegisterUseCase,
