@@ -1,28 +1,40 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/discount_entity.dart';
-import 'package:check_bloc/features/cash_register/domain/entity/good_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/product_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_item_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_payment_entity.dart';
-import 'package:check_bloc/features/cash_register/domain/repository/product_repository.dart';
-import 'package:check_bloc/features/cash_register/domain/repository/receipt_repository.dart';
-import 'package:equatable/equatable.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/products/search_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_discount_to_product_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_product_quantity_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_product_to_receipt_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_receipt_discount_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_receipt_use_case.dart';
 
 part 'receipt_event.dart';
 part 'receipt_state.dart';
 
 class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
-  final ReceiptRepository _receiptRepository;
-  final ProductRepository _productRepository;
+  final AddProductToReceiptUseCase _addProductToReceiptUseCase;
+  final AddProductQuantityUseCase _addProductQuantityUseCase;
+  final SearchProductsUseCase _searchProductsUseCase;
+  final AddDiscountToProductUseCase _addDiscountToProductUseCase;
+  final AddReceiptDiscountUseCase _addReceiptDiscountUseCase;
+  final AddReceiptUseCase _addReceiptUseCase;
   final AssetsAudioPlayer _audioPlayer;
 
   ReceiptBloc(
-    this._receiptRepository,
-    this._productRepository,
+    this._addProductToReceiptUseCase,
+    this._addProductQuantityUseCase,
+    this._searchProductsUseCase,
+    this._addDiscountToProductUseCase,
+    this._addReceiptDiscountUseCase,
+    this._addReceiptUseCase,
     this._audioPlayer,
   ) : super(const ReceiptState.empty()) {
     _audioPlayer.setVolume(0.4);
@@ -51,7 +63,7 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     emit(const ReceiptState.empty());
   }
 
-  _addGood(ReceiptAddGoodEvent event, emit) {
+  _addGood(ReceiptAddGoodEvent event, emit) async {
     final List<ReceiptItemEntity> items = [];
 
     items.addAll(state.receipt.goods);
@@ -63,48 +75,38 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
       price = productPrice * 100;
     }
 
-    final newReciept = ReceiptItemEntity(
-      id: null,
-      good: GoodEntity(
-        code: event.product.code,
-        name: event.product.name,
-        barcode: '${event.product.barcode}',
-        exciseBarcode: '',
-        exciseBarcodes: const [''],
+    final result = await _addProductToReceiptUseCase(
+      AddProductToReceiptParams(
+        items: items,
+        product: event.product,
         price: price,
-        tax: const [0],
-        uktzed: '',
-      ),
-      quantity: 1,
-      discounts: const [],
-    );
-
-    int find =
-        items.indexWhere((element) => element.good.code == event.product.code);
-
-    if (find < 0) {
-      items.add(newReciept);
-    } else {
-      final amount = items[find].quantity;
-
-      items[find] = items[find].copyWith(quantity: amount + 1);
-    }
-
-    emit(
-      state.copyWith(
-        receipt: state.receipt.copyWith(goods: items),
-        productPrice: null,
-        status: BlocStateStatus.success,
-        errorText: null,
       ),
     );
+
+    result.fold((error) {
+      emit(
+        state.copyWith(
+          status: BlocStateStatus.failure,
+          errorText: error.message,
+        ),
+      );
+    }, (items) {
+      emit(
+        state.copyWith(
+          receipt: state.receipt.copyWith(goods: items),
+          productPrice: null,
+          status: BlocStateStatus.success,
+          errorText: null,
+        ),
+      );
+    });
   }
 
   _updatePrice(ReceiptUpdateGoodPriceEvent event, emit) {
     emit(state.copyWith(productPrice: event.price));
   }
 
-  _updateQuantity(ReceiptUpdateQuantityEvent event, emit) {
+  _updateQuantity(ReceiptUpdateQuantityEvent event, emit) async {
     if (state.receipt.goods.isEmpty || event.index == null) {
       return;
     }
@@ -112,32 +114,23 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     List<ReceiptItemEntity> items = [];
     items.addAll(state.receipt.goods);
 
-    final item = items[event.index!];
-    final current = item.quantity;
-
-    int newAmount = 1;
-
-    if (event.quantity == null) {
-      newAmount = 0;
-    } else if (event.quantity != 1 && event.quantity != -1) {
-      newAmount = event.quantity ?? 1;
-    } else {
-      newAmount = current + event.quantity!;
-    }
-
-    if (newAmount <= 0) {
-      newAmount = 1;
-    }
-
-    items[event.index!] = items[event.index!].copyWith(quantity: newAmount);
-
-    emit(
-      state.copyWith(
-        receipt: state.receipt.copyWith(
-          goods: items,
-        ),
+    final result = await _addProductQuantityUseCase(
+      AddProductQuantityParams(
+        items: items,
+        index: event.index!,
+        quantity: event.quantity,
       ),
     );
+
+    result.fold((l) => null, (items) {
+      emit(
+        state.copyWith(
+          receipt: state.receipt.copyWith(
+            goods: items,
+          ),
+        ),
+      );
+    });
   }
 
   _deleteItem(ReceiptDeleteItemEvent event, emit) {
@@ -161,89 +154,60 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     emit(const ReceiptState.empty());
   }
 
-  _addDiscountToProduct(ReceiptAddDiscountToProductEvent event, emit) {
+  _addDiscountToProduct(ReceiptAddDiscountToProductEvent event, emit) async {
     final List<ReceiptItemEntity> items = [];
     items.addAll(state.receipt.goods);
 
     final discount = event.discount ?? 0;
 
-    if (discount <= 0) {
-      items[event.index] = items[event.index].copyWith(discounts: []);
+    final result = await _addDiscountToProductUseCase(
+      AddDiscountToProductParams(
+        items: items,
+        index: event.index,
+        type: event.type,
+        discount: discount,
+      ),
+    );
+
+    result.fold((error) {
       emit(
         state.copyWith(
-          receipt: state.receipt.copyWith(goods: items),
+          status: BlocStateStatus.failure,
+          errorText: error.message,
         ),
       );
-    } else {
-      if (event.type == DiscountType.percent) {
-        final persentDiscount = DiscountEntity(
-          type: 'DISCOUNT',
-          mode: 'PERCENT',
-          value: discount,
-        );
-
-        items[event.index] =
-            items[event.index].copyWith(discounts: [persentDiscount]);
-        emit(
-          state.copyWith(
-            receipt: state.receipt.copyWith(goods: items),
-          ),
-        );
-      } else if (event.type == DiscountType.fixed) {
-        if ((discount) < items[event.index].good.price) {
-          final cashDiscount = DiscountEntity(
-            type: 'DISCOUNT',
-            mode: 'CASH',
-            value: discount,
-          );
-
-          items[event.index] =
-              items[event.index].copyWith(discounts: [cashDiscount]);
-          emit(
-            state.copyWith(
-              receipt: state.receipt.copyWith(goods: items),
-            ),
-          );
-        }
-      }
-    }
+    }, (items) {
+      emit(state.receipt.copyWith(goods: items));
+    });
   }
 
-  _addGeneralDiscount(ReceiptAddGeneralDiscountEvent event, emit) {
+  _addGeneralDiscount(ReceiptAddGeneralDiscountEvent event, emit) async {
     final discount = event.discount ?? 0;
-    if (discount <= 0) {
+    final type = event.type ?? DiscountType.fixed;
+
+    final result = await _addReceiptDiscountUseCase(
+      AddReceiptDiscountParams(
+        receipt: state.receipt,
+        type: type,
+        discount: discount,
+      ),
+    );
+
+    result.fold((error) {
       emit(
         state.copyWith(
-          receipt: state.receipt.copyWith(discounts: []),
+          status: BlocStateStatus.failure,
+          errorText: error.message,
         ),
       );
-    } else {
-      if (event.type == DiscountType.percent) {
-        final persentDiscount = DiscountEntity(
-          type: 'DISCOUNT',
-          mode: 'PERCENT',
-          value: discount,
-        );
-
-        emit(
-          state.copyWith(
-            receipt: state.receipt.copyWith(discounts: [persentDiscount]),
-          ),
-        );
-      } else if (event.type == DiscountType.fixed) {
-        final cashDiscount = DiscountEntity(
-          type: 'DISCOUNT',
-          mode: 'CASH',
-          value: discount,
-        );
-
-        emit(
-          state.copyWith(
-            receipt: state.receipt.copyWith(discounts: [cashDiscount]),
-          ),
-        );
-      }
-    }
+    }, (receipt) {
+      emit(
+        state.copyWith(
+          receipt: receipt,
+          status: BlocStateStatus.success,
+        ),
+      );
+    });
   }
 
   _changePayment(ReceiptChangePaymentEvent event, emit) {
@@ -296,7 +260,8 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   _add(ReceiptAddEvent event, emit) async {
     emit(state.copyWith(status: BlocStateStatus.loading));
 
-    final result = await _receiptRepository.add(state.receipt);
+    final result =
+        await _addReceiptUseCase(AddReceiptParams(receipt: state.receipt));
 
     result.fold(
       (error) => emit(
@@ -318,7 +283,8 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     final barcode = event.barcode;
 
     if (barcode != null) {
-      final result = await _productRepository.getProducts(searchQuery: barcode);
+      final result =
+          await _searchProductsUseCase(SearchProductsParams(barcode));
 
       result.fold(
         (error) => {

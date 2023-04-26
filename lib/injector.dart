@@ -1,6 +1,11 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/products/load_more_products_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/products/search_products_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_discount_to_product_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_product_quantity_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_product_to_receipt_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_receipt_discount_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/receipt/add_receipt_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_email_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delivery/send_sms_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_history/get_receipts_use_case.dart';
@@ -140,6 +145,19 @@ Future<void> initializeDI() async {
   sl.registerLazySingleton<SendEmailUseCase>(() => SendEmailUseCase(sl()));
   sl.registerLazySingleton<SendSmsUseCase>(() => SendSmsUseCase(sl()));
   sl.registerLazySingleton<GetReceiptsUseCase>(() => GetReceiptsUseCase(sl()));
+  sl.registerLazySingleton<AddProductToReceiptUseCase>(
+    () => AddProductToReceiptUseCase(),
+  );
+  sl.registerLazySingleton<AddProductQuantityUseCase>(
+    () => AddProductQuantityUseCase(),
+  );
+  sl.registerLazySingleton<AddDiscountToProductUseCase>(
+    () => AddDiscountToProductUseCase(),
+  );
+  sl.registerLazySingleton<AddReceiptDiscountUseCase>(
+    () => AddReceiptDiscountUseCase(),
+  );
+  sl.registerLazySingleton<AddReceiptUseCase>(() => AddReceiptUseCase(sl()));
 
   //blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));
@@ -150,7 +168,9 @@ Future<void> initializeDI() async {
   sl.registerFactory<LoginFormBloc>(() => LoginFormBloc(sl()));
   sl.registerFactory<PaymentsBloc>(() => PaymentsBloc(sl()));
   sl.registerFactory<ProductsBloc>(() => ProductsBloc(sl(), sl(), sl()));
-  sl.registerFactory<ReceiptBloc>(() => ReceiptBloc(sl(), sl(), sl()));
+  sl.registerFactory<ReceiptBloc>(
+    () => ReceiptBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
+  );
   sl.registerFactory<ReceiptDeliveryBloc>(
     () => ReceiptDeliveryBloc(sl(), sl()),
   );
