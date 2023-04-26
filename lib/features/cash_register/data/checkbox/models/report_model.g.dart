@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'z_report_model.dart';
+part of 'report_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ZReportModel _$ZReportModelFromJson(Map<String, dynamic> json) => ZReportModel(
+ReportModel _$ReportModelFromJson(Map<String, dynamic> json) => ReportModel(
       id: json['id'] as String,
       serial: json['serial'] as int,
       isZReport: json['is_z_report'] as bool,
@@ -31,7 +31,7 @@ ZReportModel _$ZReportModelFromJson(Map<String, dynamic> json) => ZReportModel(
       transactionFail: json['transaction_fail'] as bool,
     );
 
-Map<String, dynamic> _$ZReportModelToJson(ZReportModel instance) =>
+Map<String, dynamic> _$ReportModelToJson(ReportModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'serial': instance.serial,

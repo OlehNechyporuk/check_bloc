@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/payment_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/tax_entity.dart';
 
-class ZReportEntity extends Equatable {
+class ReportEntity extends Equatable {
   final String id;
   final int serial;
   final bool isZReport;
@@ -22,7 +22,7 @@ class ZReportEntity extends Equatable {
   final int extraChargeSum;
   final bool transactionFail;
 
-  const ZReportEntity({
+  const ReportEntity({
     required this.id,
     required this.serial,
     required this.isZReport,

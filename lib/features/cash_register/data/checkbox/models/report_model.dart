@@ -2,18 +2,18 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:check_bloc/features/cash_register/data/checkbox/models/payment_model.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/models/tax_model.dart';
-import 'package:check_bloc/features/cash_register/domain/entity/z_report_entity.dart';
+import 'package:check_bloc/features/cash_register/domain/entity/report_entity.dart';
 
-part 'z_report_model.g.dart';
+part 'report_model.g.dart';
 
 @JsonSerializable()
-class ZReportModel extends ZReportEntity {
+class ReportModel extends ReportEntity {
   @JsonKey(name: 'payments')
   final List<PaymentModel> paymentsModel;
   @JsonKey(name: 'taxes')
   final List<TaxModel> taxesModel;
 
-  const ZReportModel({
+  const ReportModel({
     required super.id,
     required super.serial,
     required super.isZReport,
@@ -36,8 +36,8 @@ class ZReportModel extends ZReportEntity {
           taxes: taxesModel,
         );
 
-  factory ZReportModel.fromJson(Map<String, dynamic> json) =>
-      _$ZReportModelFromJson(json);
+  factory ReportModel.fromJson(Map<String, dynamic> json) =>
+      _$ReportModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ZReportModelToJson(this);
+  Map<String, dynamic> toJson() => _$ReportModelToJson(this);
 }

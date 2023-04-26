@@ -3,12 +3,12 @@ import 'package:equatable/equatable.dart';
 class GoodEntity extends Equatable {
   final String code;
   final String name;
-  final String barcode;
-  final String exciseBarcode;
-  final List<String> exciseBarcodes;
+  final String? barcode;
+  final String? exciseBarcode;
+  final List<String>? exciseBarcodes;
   final double price;
-  final List<int> tax;
-  final String uktzed;
+  final List<int>? tax;
+  final String? uktzed;
 
   const GoodEntity({
     required this.code,
@@ -22,7 +22,7 @@ class GoodEntity extends Equatable {
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       code,
       name,
