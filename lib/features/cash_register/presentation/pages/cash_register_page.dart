@@ -17,7 +17,6 @@ class CashRegisterPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           '${AppLocalizations.of(context)?.cashRegisterSettings}',
-          style: const TextStyle(color: Colors.black),
         ),
         centerTitle: false,
       ),

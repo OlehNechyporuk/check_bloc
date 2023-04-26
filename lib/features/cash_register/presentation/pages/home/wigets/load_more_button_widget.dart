@@ -18,8 +18,14 @@ class LoadMoreButtonWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.refresh_outlined),
-                Text('${AppLocalizations.of(context)?.loadMore}')
+                Icon(
+                  Icons.refresh_outlined,
+                  color: Theme.of(context).primaryColor,
+                ),
+                Text(
+                  '${AppLocalizations.of(context)?.loadMore}',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                )
               ],
             ),
           );

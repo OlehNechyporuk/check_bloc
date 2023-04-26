@@ -18,6 +18,7 @@ class BottomNavWidget extends StatelessWidget {
           currentIndex: state.index,
           unselectedFontSize: 14,
           selectedFontSize: 14,
+          selectedItemColor: Theme.of(context).primaryColor,
           onTap: (value) {
             if (value < 2) {
               BlocProvider.of<BottomNavbarBloc>(context)

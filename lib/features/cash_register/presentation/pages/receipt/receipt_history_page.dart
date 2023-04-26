@@ -1,3 +1,4 @@
+import 'package:check_bloc/core/extesions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,11 +20,8 @@ class ReceiptHistoryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Історія чеків',
-          style: TextStyle(
-            color: Colors.black,
-          ),
         ),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: Column(
         children: const [
@@ -127,18 +125,16 @@ class ReceiptRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final fiscalCode = receipt?.fiscalCode == null
-    //     ? ''
-    //     : 'Фіскальний номер: ${receipt?.fiscalCode}\n';
+    final fiscalCode = receipt?.fiscalCode == null
+        ? ''
+        : 'Фіскальний номер: ${receipt?.fiscalCode}\n';
     return ListTile(
-      title: const Text(
-        ''
-        // '${receipt?.typeConvert} (${receipt?.payments?.first.label})  ${receipt?.totalSum?.toDouble().toUAH()} ₴',
-        ,
+      title: Text(
+        '(${receipt?.payments.first.label})  ${receipt?.totalSum.toDouble().toUAH()} ₴',
       ),
-      // subtitle: Text(
-      //   // '$fiscalCodeНомер зміни ${receipt?.shift?.serial}\nДата/час: ${receipt?.createdAt?.toLocalTime()}',
-      // ),
+      subtitle: Text(
+        '$fiscalCodeНомер зміни \nДата/час: ${receipt?.createdAt?.toLocalTime()}',
+      ),
       trailing: PopupMenuButton(
         elevation: 4,
         padding: EdgeInsets.zero,

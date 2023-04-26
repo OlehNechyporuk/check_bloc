@@ -62,11 +62,11 @@ class ProductRowWidget extends StatelessWidget {
                         .read<ReceiptBloc>()
                         .add(ReceiptAddGoodEvent(product));
                   },
-                  icon: const ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                  icon: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     child: ColoredBox(
-                      color: Colors.grey,
-                      child: Icon(
+                      color: Theme.of(context).primaryColor,
+                      child: const Icon(
                         Icons.add,
                       ),
                     ),
