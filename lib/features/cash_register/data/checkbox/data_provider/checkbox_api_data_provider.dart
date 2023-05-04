@@ -6,6 +6,7 @@ import 'package:check_bloc/features/cash_register/data/checkbox/models/receipt_p
 import 'package:check_bloc/features/cash_register/data/checkbox/models/shift_model.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_entity.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:check_bloc/config/constants.dart';
@@ -140,9 +141,12 @@ class CheckboxApiDataProvider {
     });
   }
 
-  Future<Either<Failure, List<ReceiptModel>>> receipts(String key) async {
+  Future<Either<Failure, List<ReceiptModel>>> receipts(
+    String key,
+    DateTimeRange? dateTimeRange,
+  ) async {
     final url = Uri.parse(
-      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true',
+      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true&from_date=${dateTimeRange?.start.toLocal()}&to_date=${dateTimeRange?.end.toLocal()}&limit=2',
     );
 
     final result = await _getRequest(url: url, key: key);

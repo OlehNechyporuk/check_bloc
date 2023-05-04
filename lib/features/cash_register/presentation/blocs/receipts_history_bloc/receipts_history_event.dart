@@ -7,4 +7,8 @@ abstract class ReceiptsHistoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ReceiptsHistoryLoadedEvent extends ReceiptsHistoryEvent {}
+class ReceiptsHistoryLoadedEvent extends ReceiptsHistoryEvent {
+  final DateTimeRange? dateRange;
+
+  const ReceiptsHistoryLoadedEvent(this.dateRange);
+}

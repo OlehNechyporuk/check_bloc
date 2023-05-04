@@ -114,7 +114,9 @@ class SessionDataProvider {
   }
 
   Future<void> saveCrmApiKey(String token) async {
-    await _storage.write(key: SessionDataProviderKeys._crmApiKey, value: token);
+    final result = await _storage.write(
+        key: SessionDataProviderKeys._crmApiKey, value: token);
+    return result;
   }
 
   Future<void> removeCrmApiKey() async {

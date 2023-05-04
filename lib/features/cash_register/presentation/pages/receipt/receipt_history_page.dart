@@ -9,6 +9,7 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_hi
 import 'package:check_bloc/features/cash_register/presentation/pages/receipt/widget/show_send_email_form_modal.dart';
 import 'package:check_bloc/features/cash_register/presentation/pages/receipt/widget/show_send_sms_form_modal.dart';
 import 'package:check_bloc/features/cash_register/presentation/widgets/receipt_modal.dart';
+import 'package:intl/intl.dart';
 
 class ReceiptHistoryPage extends StatelessWidget {
   const ReceiptHistoryPage({super.key});
@@ -25,6 +26,9 @@ class ReceiptHistoryPage extends StatelessWidget {
       ),
       body: Column(
         children: const [
+          SizedBox(
+            height: 20,
+          ),
           SearchControls(),
           Expanded(
             flex: 2,
@@ -47,27 +51,54 @@ class SearchControls extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             children: [
-              Expanded(
-                child: IconButton(
-                  onPressed: () async {
-                    await showDateRangePicker(
-                      locale: const Locale('uk'),
-                      context: context,
-                      firstDate: DateTime.utc(2023),
-                      lastDate: DateTime.now(),
-                      builder: (context, child) => Theme(
-                        data: ThemeData(
-                          appBarTheme: const AppBarTheme(
-                            color: Colors.blue,
-                            elevation: 0,
+              BlocBuilder<ReceiptsHistoryBloc, ReceiptsHistoryState>(
+                builder: (context, state) {
+                  return Expanded(
+                    child: IconButton(
+                      onPressed: () async {
+                        final dateRange = await showDateRangePicker(
+                          locale: const Locale('uk'),
+                          context: context,
+                          initialDateRange: state.dateRange,
+                          firstDate: DateTime.utc(2020),
+                          lastDate: state.dateRange.end,
+                          builder: (context, child) => Theme(
+                            data: ThemeData(
+                              appBarTheme: AppBarTheme(
+                                color: Theme.of(context).primaryColor,
+                                elevation: 0,
+                              ),
+                            ),
+                            child: child!,
                           ),
-                        ),
-                        child: child!,
+                        );
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          context
+                              .read<ReceiptsHistoryBloc>()
+                              .add(ReceiptsHistoryLoadedEvent(dateRange));
+                        });
+                      },
+                      icon: BlocBuilder<ReceiptsHistoryBloc,
+                          ReceiptsHistoryState>(
+                        builder: (context, state) {
+                          return Row(
+                            children: [
+                              const Icon(Icons.calendar_today),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                DateFormat.Md().format(state.dateRange.start),
+                              ),
+                              const Text('-'),
+                              Text(DateFormat.Md().format(state.dateRange.end)),
+                            ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                  icon: const Icon(Icons.calendar_today),
-                ),
+                    ),
+                  );
+                },
               ),
               const Expanded(
                 child: SizedBox(
@@ -97,7 +128,11 @@ class ReceiptsListWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ReceiptsHistoryBloc>().add(ReceiptsHistoryLoadedEvent());
+    context.read<ReceiptsHistoryBloc>().add(
+          ReceiptsHistoryLoadedEvent(
+            DateTimeRange(start: DateTime.now(), end: DateTime.now()),
+          ),
+        );
 
     return BlocBuilder<ReceiptsHistoryBloc, ReceiptsHistoryState>(
       builder: (context, state) {

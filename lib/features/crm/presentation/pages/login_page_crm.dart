@@ -65,7 +65,7 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
                   TextField(
                     controller: loginController,
                     onChanged: (value) => update(),
-                    onSubmitted: canSubmit ? (value) => submit(context) : null,
+                    // onSubmitted: canSubmit ? (value) => submit(context) : null,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       hintText: '${AppLocalizations.of(context)?.loginLabel}',
@@ -78,7 +78,7 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
                   TextField(
                     controller: passwordController,
                     onChanged: (value) => update(),
-                    onSubmitted: canSubmit ? (value) => submit(context) : null,
+                    // onSubmitted: canSubmit ? (value) => submit(context) : null,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
@@ -98,7 +98,7 @@ class _LoginPageCrmState extends State<LoginPageCrm> {
                         child: ElevatedButton(
                           onPressed: canSubmit &&
                                   state.status != BlocStateStatus.loading
-                              ? submit(context)
+                              ? () => submit(context)
                               : null,
                           child: state.status == BlocStateStatus.loading
                               ? const Center(child: CircularProgressIndicator())

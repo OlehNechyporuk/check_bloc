@@ -5,6 +5,7 @@ import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/data_provider/session_data_provider.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/receipt_repository.dart';
+import 'package:flutter/material.dart';
 
 class ReceiptRepositoryCheckboxImpl extends ReceiptRepository {
   final SessionDataProvider _sessionDataProvider;
@@ -22,9 +23,11 @@ class ReceiptRepositoryCheckboxImpl extends ReceiptRepository {
   }
 
   @override
-  Future<Either<Failure, List<ReceiptEntity>>> receipts() async {
+  Future<Either<Failure, List<ReceiptEntity>>> receipts({
+    required DateTimeRange? dateTimeRange,
+  }) async {
     final apiKey = await _sessionDataProvider.apiKey();
-    return _apiProvider.receipts(apiKey);
+    return _apiProvider.receipts(apiKey, dateTimeRange);
   }
 
   @override
