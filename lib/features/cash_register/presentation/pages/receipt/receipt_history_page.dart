@@ -10,6 +10,7 @@ import 'package:check_bloc/features/cash_register/presentation/pages/receipt/wid
 import 'package:check_bloc/features/cash_register/presentation/pages/receipt/widget/show_send_sms_form_modal.dart';
 import 'package:check_bloc/features/cash_register/presentation/widgets/receipt_modal.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReceiptHistoryPage extends StatelessWidget {
   const ReceiptHistoryPage({super.key});
@@ -129,9 +130,7 @@ class ReceiptsListWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ReceiptsHistoryBloc>().add(
-          ReceiptsHistoryLoadedEvent(
-            DateTimeRange(start: DateTime.now(), end: DateTime.now()),
-          ),
+          const ReceiptsHistoryLoadedEvent(null),
         );
 
     return BlocBuilder<ReceiptsHistoryBloc, ReceiptsHistoryState>(
@@ -142,11 +141,13 @@ class ReceiptsListWiget extends StatelessWidget {
           );
         } else if (state.status == BlocStateStatus.success) {
           return ListView.separated(
-            itemCount: state.receipts?.length ?? 0,
-            separatorBuilder: (context, index) => const Divider(),
-            itemBuilder: (context, index) =>
-                ReceiptRowWidget(receipt: state.receipts?[index]),
-          );
+              itemCount: state.receipts.length + 1,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                return index == state.receipts.length
+                    ? const LoadMoreButton()
+                    : ReceiptRowWidget(receipt: state.receipts[index]);
+              });
         }
         return const SizedBox();
       },
@@ -245,6 +246,40 @@ class ReceiptRowWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class LoadMoreButton extends StatelessWidget {
+  const LoadMoreButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ReceiptsHistoryBloc, ReceiptsHistoryState>(
+      builder: (context, state) {
+        if (state.showLoadMoreBtn) {
+          return TextButton(
+            onPressed: () => context
+                .read<ReceiptsHistoryBloc>()
+                .add(const ReceiptsHistoryLoadedMoreEvent()),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.refresh_outlined,
+                  color: Theme.of(context).primaryColor,
+                ),
+                Text(
+                  '${AppLocalizations.of(context)?.loadMore}',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                )
+              ],
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
     );
   }
 }

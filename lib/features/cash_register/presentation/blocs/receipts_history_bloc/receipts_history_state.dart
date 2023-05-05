@@ -1,11 +1,12 @@
 part of 'receipts_history_bloc.dart';
 
 class ReceiptsHistoryState extends Equatable {
-  final List<ReceiptEntity>? receipts;
+  final List<ReceiptEntity> receipts;
   final String? receiptId;
   final BlocStateStatus status;
   final String? errorText;
   final DateTimeRange dateRange;
+  final bool showLoadMoreBtn;
 
   const ReceiptsHistoryState({
     required this.receipts,
@@ -13,17 +14,19 @@ class ReceiptsHistoryState extends Equatable {
     required this.status,
     required this.errorText,
     required this.dateRange,
+    required this.showLoadMoreBtn,
   });
 
   ReceiptsHistoryState.empty()
-      : receipts = null,
+      : receipts = [],
         receiptId = null,
         status = BlocStateStatus.initial,
         errorText = null,
         dateRange = DateTimeRange(
           start: DateTime.now(),
           end: DateTime.now(),
-        );
+        ),
+        showLoadMoreBtn = true;
 
   @override
   List<Object?> get props => [
@@ -32,6 +35,7 @@ class ReceiptsHistoryState extends Equatable {
         status,
         errorText,
         dateRange,
+        showLoadMoreBtn,
       ];
 
   ReceiptsHistoryState copyWith({
@@ -40,6 +44,7 @@ class ReceiptsHistoryState extends Equatable {
     BlocStateStatus? status,
     String? errorText,
     DateTimeRange? dateRange,
+    bool? showLoadMoreBtn,
   }) {
     return ReceiptsHistoryState(
       receipts: receipts ?? this.receipts,
@@ -47,6 +52,7 @@ class ReceiptsHistoryState extends Equatable {
       status: status ?? this.status,
       errorText: errorText ?? this.errorText,
       dateRange: dateRange ?? this.dateRange,
+      showLoadMoreBtn: showLoadMoreBtn ?? this.showLoadMoreBtn,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:check_bloc/core/usecases/usecase.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_history/get_receipts_use_case.dart';
 import 'package:equatable/equatable.dart';
 
@@ -16,13 +15,17 @@ class ReceiptsHistoryBloc
   ReceiptsHistoryBloc(this._getReceiptsUseCase)
       : super(ReceiptsHistoryState.empty()) {
     on<ReceiptsHistoryLoadedEvent>(_loaded);
+    on<ReceiptsHistoryLoadedMoreEvent>(_loadMore);
   }
 
   _loaded(ReceiptsHistoryLoadedEvent event, emit) async {
     emit(state.copyWith(status: BlocStateStatus.loading));
 
     final result = await _getReceiptsUseCase(
-      ReceiptHistoryParams(event.dateRange),
+      ReceiptHistoryParams(
+        event.dateRange ?? state.dateRange,
+        0,
+      ),
     );
 
     result.fold(
@@ -30,6 +33,7 @@ class ReceiptsHistoryBloc
         state.copyWith(
           errorText: error.message,
           status: BlocStateStatus.failure,
+          showLoadMoreBtn: false,
         ),
       ),
       (reciepts) => emit(
@@ -37,6 +41,33 @@ class ReceiptsHistoryBloc
           receipts: reciepts,
           status: BlocStateStatus.success,
           dateRange: event.dateRange,
+          showLoadMoreBtn: reciepts.isNotEmpty,
+        ),
+      ),
+    );
+  }
+
+  _loadMore(ReceiptsHistoryLoadedMoreEvent event, emit) async {
+    final result = await _getReceiptsUseCase(
+      ReceiptHistoryParams(
+        state.dateRange,
+        state.receipts.length,
+      ),
+    );
+
+    result.fold(
+      (error) => emit(
+        state.copyWith(
+          errorText: error.message,
+          status: BlocStateStatus.failure,
+          showLoadMoreBtn: false,
+        ),
+      ),
+      (reciepts) => emit(
+        state.copyWith(
+          receipts: [...state.receipts, ...reciepts],
+          status: BlocStateStatus.success,
+          showLoadMoreBtn: reciepts.isNotEmpty,
         ),
       ),
     );

@@ -25,9 +25,10 @@ class ReceiptRepositoryCheckboxImpl extends ReceiptRepository {
   @override
   Future<Either<Failure, List<ReceiptEntity>>> receipts({
     required DateTimeRange? dateTimeRange,
+    required int offset,
   }) async {
     final apiKey = await _sessionDataProvider.apiKey();
-    return _apiProvider.receipts(apiKey, dateTimeRange);
+    return _apiProvider.receipts(apiKey, dateTimeRange, 25, offset);
   }
 
   @override

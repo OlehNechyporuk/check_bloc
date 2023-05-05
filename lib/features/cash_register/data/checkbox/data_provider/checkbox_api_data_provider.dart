@@ -14,6 +14,7 @@ import 'package:check_bloc/core/failure.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/models/cash_register_model.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/models/cashier_model.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/models/product_model.dart';
+import 'package:intl/intl.dart';
 
 class CheckboxApiDataProvider {
   final http.Client _client;
@@ -144,9 +145,15 @@ class CheckboxApiDataProvider {
   Future<Either<Failure, List<ReceiptModel>>> receipts(
     String key,
     DateTimeRange? dateTimeRange,
+    int limit,
+    int offset,
   ) async {
+    final start =
+        DateFormat('yyyy-MM-dd').format(dateTimeRange?.start ?? DateTime.now());
+    final end =
+        DateFormat('yyyy-MM-dd').format(dateTimeRange?.end ?? DateTime.now());
     final url = Uri.parse(
-      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true&from_date=${dateTimeRange?.start.toLocal()}&to_date=${dateTimeRange?.end.toLocal()}&limit=2',
+      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true&from_date=$start 00:00:00&to_date=$end 00:00:00&limit=$limit&offset=$offset',
     );
 
     final result = await _getRequest(url: url, key: key);

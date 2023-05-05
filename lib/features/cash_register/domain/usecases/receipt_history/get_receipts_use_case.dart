@@ -17,11 +17,14 @@ class GetReceiptsUseCase
   ) async {
     return await _receiptRepository.receipts(
       dateTimeRange: params.dateTimeRange,
+      offset: params.offset,
     );
   }
 }
 
 class ReceiptHistoryParams {
   final DateTimeRange? dateTimeRange;
-  const ReceiptHistoryParams(this.dateTimeRange);
+  final int offset;
+
+  const ReceiptHistoryParams(this.dateTimeRange, this.offset);
 }

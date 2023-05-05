@@ -12,3 +12,7 @@ class ReceiptsHistoryLoadedEvent extends ReceiptsHistoryEvent {
 
   const ReceiptsHistoryLoadedEvent(this.dateRange);
 }
+
+class ReceiptsHistoryLoadedMoreEvent extends ReceiptsHistoryEvent {
+  const ReceiptsHistoryLoadedMoreEvent();
+}

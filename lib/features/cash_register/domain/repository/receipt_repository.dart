@@ -8,6 +8,7 @@ abstract class ReceiptRepository {
   Future<Either<Failure, ReceiptEntity>> add(ReceiptEntity receipt);
   Future<Either<Failure, List<ReceiptEntity>>> receipts({
     required DateTimeRange? dateTimeRange,
+    required int offset,
   });
   Future<Either<Failure, bool>> sendEmail(String receiptId, String email);
   Future<Either<Failure, bool>> sendSms(String receiptId, String phone);
