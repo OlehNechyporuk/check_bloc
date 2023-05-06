@@ -1,4 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/modal_report_bloc/modal_report_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +60,7 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_blo
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_delivery_bloc/receipt_delivery_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
-import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc+/shifts_history_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc/shifts_history_bloc.dart';
 import 'package:check_bloc/features/crm/data/data_provider/auth_crm_data_provider.dart';
 import 'package:check_bloc/features/crm/data/data_provider/cash_register_crm_data_provider.dart';
 import 'package:check_bloc/features/crm/data/data_provider/user_crm_data_provider.dart';
@@ -184,7 +185,9 @@ Future<void> initializeDI() async {
   );
   sl.registerFactory<ReceiptsHistoryBloc>(() => ReceiptsHistoryBloc(sl()));
   sl.registerFactory<ShiftBloc>(() => ShiftBloc(sl(), sl(), sl(), sl(), sl()));
-  sl.registerFactory<ShiftsHistoryBloc>(() => ShiftsHistoryBloc(sl(), sl()));
+  sl.registerFactory<ShiftsHistoryBloc>(() => ShiftsHistoryBloc(sl()));
+  sl.registerFactory<ModalReportBloc>(() => ModalReportBloc(sl()));
+
   //CRM
   //data providers
   sl.registerLazySingleton<AuthCrmDataProvider>(

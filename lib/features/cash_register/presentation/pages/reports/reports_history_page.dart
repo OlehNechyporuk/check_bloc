@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/core/extesions.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/shift_entity.dart';
-import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc+/shifts_history_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc/shifts_history_bloc.dart';
 
 class ReportsHistoryPage extends StatelessWidget {
   const ReportsHistoryPage({Key? key}) : super(key: key);
@@ -100,32 +100,48 @@ class ShiftRowWidget extends StatelessWidget {
             Text(shift.closedAt?.toLocalTime() ?? ''),
           ],
         ),
-        trailing: PopupMenuButton(
-          elevation: 4,
-          padding: EdgeInsets.zero,
-          icon: const Icon(Icons.more_vert_outlined),
-          itemBuilder: (BuildContext context) => [
-            PopupMenuItem(
-              onTap: () {
-                final id = shift.zReport?.id;
-                if (id != null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showReportModal(context: context, id: id);
-                  });
-                }
-              },
-              child: Row(
-                children: const [
-                  Icon(Icons.visibility),
-                  SizedBox(width: 10),
-                  Text('Переглянути чек')
-                ],
-              ),
-            ),
-          ],
-        ),
+        trailing: MenuItemsWidget(shift: shift),
       ),
     );
+  }
+}
+
+class MenuItemsWidget extends StatelessWidget {
+  const MenuItemsWidget({
+    super.key,
+    required this.shift,
+  });
+
+  final ShiftEntity shift;
+
+  @override
+  Widget build(BuildContext context) {
+    final id = shift.zReport?.id;
+    if (id != null) {
+      return PopupMenuButton(
+        elevation: 4,
+        padding: EdgeInsets.zero,
+        icon: const Icon(Icons.more_vert_outlined),
+        itemBuilder: (BuildContext context) => [
+          PopupMenuItem(
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showReportModal(context: context, id: id);
+              });
+            },
+            child: Row(
+              children: const [
+                Icon(Icons.visibility),
+                SizedBox(width: 10),
+                Text('Переглянути чек')
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }
 

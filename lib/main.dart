@@ -1,7 +1,3 @@
-import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc+/shifts_history_bloc.dart';
-import 'package:check_bloc/features/crm/presentation/blocs/add_cash_register_crm_bloc/add_cash_register_crm_bloc.dart';
-import 'package:check_bloc/features/crm/presentation/blocs/cash_register_crm_bloc/cash_register_crm_bloc.dart';
-import 'package:check_bloc/features/crm/presentation/blocs/user_crm_bloc/user_crm_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,6 +13,7 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/cash_regist
 import 'package:check_bloc/features/cash_register/presentation/blocs/cash_register_form_bloc/cash_register_form_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/cashier_bloc/cashier_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/login_form_bloc/login_form_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/modal_report_bloc/modal_report_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/my_bloc_observer.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/payments_bloc/payments_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/products_bloc/products_bloc.dart';
@@ -24,7 +21,11 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_blo
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_delivery_bloc/receipt_delivery_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipts_history_bloc/receipts_history_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc/shifts_history_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/add_cash_register_crm_bloc/add_cash_register_crm_bloc.dart';
 import 'package:check_bloc/features/crm/presentation/blocs/auth_crm_bloc/auth_crm_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/cash_register_crm_bloc/cash_register_crm_bloc.dart';
+import 'package:check_bloc/features/crm/presentation/blocs/user_crm_bloc/user_crm_bloc.dart';
 import 'package:check_bloc/injector.dart';
 import 'package:check_bloc/theme/theme_constants.dart';
 
@@ -82,6 +83,9 @@ class MyApp extends StatelessWidget {
           create: (context) => sl(),
         ),
         BlocProvider<ShiftsHistoryBloc>(
+          create: (context) => sl(),
+        ),
+        BlocProvider<ModalReportBloc>(
           create: (context) => sl(),
         ),
 
