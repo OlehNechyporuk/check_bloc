@@ -7,6 +7,7 @@ import 'package:check_bloc/features/cash_register/data/checkbox/models/receipt_p
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/shift_entity.dart';
 import 'package:check_bloc/features/cash_register/domain/repository/shift_repository.dart';
+import 'package:flutter/src/material/date.dart';
 
 class ShiftRepositoryCheckboxImpl extends ShiftRepository {
   final SessionDataProvider _sessionDataProvider;
@@ -67,5 +68,16 @@ class ShiftRepositoryCheckboxImpl extends ShiftRepository {
     }
 
     return _apiDataProvider.openShift(apiKey, licenceKey);
+  }
+
+  @override
+  Future<Either<Failure, List<ShiftEntity>>> shifts(
+    DateTimeRange dateTimeRange,
+    int limit,
+    int offset,
+  ) async {
+    final apiKey = await _sessionDataProvider.apiKey();
+
+    return _apiDataProvider.getShifts(apiKey, dateTimeRange, 25, offset);
   }
 }

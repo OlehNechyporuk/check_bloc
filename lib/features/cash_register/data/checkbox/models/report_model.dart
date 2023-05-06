@@ -9,9 +9,9 @@ part 'report_model.g.dart';
 @JsonSerializable()
 class ReportModel extends ReportEntity {
   @JsonKey(name: 'payments')
-  final List<PaymentModel> paymentsModel;
+  final List<PaymentModel>? paymentsModel;
   @JsonKey(name: 'taxes')
-  final List<TaxModel> taxesModel;
+  final List<TaxModel>? taxesModel;
 
   const ReportModel({
     required super.id,

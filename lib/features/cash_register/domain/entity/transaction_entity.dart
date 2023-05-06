@@ -5,12 +5,12 @@ class TransactionEntity extends Equatable {
   final String type;
   final int serial;
   final String status;
-  final DateTime requestSignedAt;
-  final DateTime requestReceivedAt;
+  final DateTime? requestSignedAt;
+  final DateTime? requestReceivedAt;
   final String responseStatus;
-  final String responseErrorMessage;
+  final String? responseErrorMessage;
   final String responseId;
-  final String offlineId;
+  final String? offlineId;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime originalDatetime;
@@ -34,7 +34,7 @@ class TransactionEntity extends Equatable {
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       type,

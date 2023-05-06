@@ -276,6 +276,35 @@ class CheckboxApiDataProvider {
     });
   }
 
+  Future<Either<Failure, List<ShiftModel>>> getShifts(
+    String apiKey,
+    DateTimeRange dateTimeRange,
+    int limit,
+    int offset,
+  ) async {
+    final url = Uri.parse(
+      '${AppConstants.checkboxApiServer}shifts?desc=true&limit=$limit&offset=$offset',
+    );
+
+    final result = await _getRequest(url: url, key: apiKey);
+
+    return result.fold((l) => left(l), (response) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode == 200) {
+        final jsonShifts = body['results'] as List;
+
+        final result = jsonShifts.map((e) {
+          return ShiftModel.fromJson(e);
+        });
+
+        return right(result.toList());
+      } else {
+        return left(Failure('${body['message']}'));
+      }
+    });
+  }
+
   Future<Either<Failure, ReceiptModel>> cashReceiptService(
     String apiKey,
     ReceiptPaymentModel payment,
@@ -295,6 +324,26 @@ class CheckboxApiDataProvider {
         return right(ReceiptModel.fromJson(body));
       } else {
         return left(Failure('${body['message']}'));
+      }
+    });
+  }
+
+  Future<Either<Failure, String>> getReport(
+    String apiKey,
+    String id,
+  ) async {
+    final url = Uri.parse('${AppConstants.checkboxApiServer}reports/$id/text');
+
+    final result = await _getRequest(url: url, key: apiKey);
+
+    return result.fold((error) => left(error), (response) {
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+
+        return right(body);
+      } else {
+        final body = jsonDecode(utf8.decode(response.bodyBytes));
+        return left(Failure(body['message']));
       }
     });
   }

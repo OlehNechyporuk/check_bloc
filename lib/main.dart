@@ -1,3 +1,4 @@
+import 'package:check_bloc/features/cash_register/presentation/blocs/shifts_history_bloc+/shifts_history_bloc.dart';
 import 'package:check_bloc/features/crm/presentation/blocs/add_cash_register_crm_bloc/add_cash_register_crm_bloc.dart';
 import 'package:check_bloc/features/crm/presentation/blocs/cash_register_crm_bloc/cash_register_crm_bloc.dart';
 import 'package:check_bloc/features/crm/presentation/blocs/user_crm_bloc/user_crm_bloc.dart';
@@ -78,6 +79,9 @@ class MyApp extends StatelessWidget {
           create: (context) => sl(),
         ),
         BlocProvider<ReceiptDeliveryBloc>(
+          create: (context) => sl(),
+        ),
+        BlocProvider<ShiftsHistoryBloc>(
           create: (context) => sl(),
         ),
 

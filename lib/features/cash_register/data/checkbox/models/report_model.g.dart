@@ -10,11 +10,11 @@ ReportModel _$ReportModelFromJson(Map<String, dynamic> json) => ReportModel(
       id: json['id'] as String,
       serial: json['serial'] as int,
       isZReport: json['is_z_report'] as bool,
-      paymentsModel: (json['payments'] as List<dynamic>)
-          .map((e) => PaymentModel.fromJson(e as Map<String, dynamic>))
+      paymentsModel: (json['payments'] as List<dynamic>?)
+          ?.map((e) => PaymentModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      taxesModel: (json['taxes'] as List<dynamic>)
-          .map((e) => TaxModel.fromJson(e as Map<String, dynamic>))
+      taxesModel: (json['taxes'] as List<dynamic>?)
+          ?.map((e) => TaxModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       sellReceiptsCount: json['sell_receipts_count'] as int,
       returnReceiptsCount: json['return_receipts_count'] as int,
@@ -26,8 +26,8 @@ ReportModel _$ReportModelFromJson(Map<String, dynamic> json) => ReportModel(
       initial: json['initial'] as int,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      discountsSum: json['discounts_sum'] as int,
-      extraChargeSum: json['extra_charge_sum'] as int,
+      discountsSum: json['discounts_sum'] as int?,
+      extraChargeSum: json['extra_charge_sum'] as int?,
       transactionFail: json['transaction_fail'] as bool,
     );
 

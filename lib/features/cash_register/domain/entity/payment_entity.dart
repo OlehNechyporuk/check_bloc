@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 
 class PaymentEntity extends Equatable {
   final String id;
-  final int code;
+  final int? code;
   final String type;
-  final String providerType;
+  final String? providerType;
   final String label;
   final int sellSum;
   final int returnSum;
@@ -28,7 +28,7 @@ class PaymentEntity extends Equatable {
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       code,

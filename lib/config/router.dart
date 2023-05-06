@@ -1,3 +1,4 @@
+import 'package:check_bloc/features/cash_register/presentation/pages/reports/reports_history_page.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:check_bloc/config/main_navigation_name.dart';
@@ -47,6 +48,11 @@ final router = GoRouter(
           path: 'receipt_history_page',
           name: CashRegisterNavigationName.receiptHistoryPage,
           builder: (context, state) => const ReceiptHistoryPage(),
+        ),
+        GoRoute(
+          path: 'reports_history_page',
+          name: CashRegisterNavigationName.reportsHistoryPage,
+          builder: (context, state) => const ReportsHistoryPage(),
         ),
       ],
     ),

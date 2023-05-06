@@ -5,6 +5,7 @@ class CashRegisterNavigationName {
   static const String cashRegisterPage = 'cash_register';
   static const String receiptAddPage = 'add_receipt';
   static const String receiptHistoryPage = 'history_receipt';
+  static const String reportsHistoryPage = 'history_reports';
 }
 
 class MainNavigationName {

@@ -42,3 +42,4 @@ flutter:
   generate: true
   assets: 
     - assets/audio/scanner-beep.mp3
+    

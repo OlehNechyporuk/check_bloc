@@ -8,9 +8,9 @@ part of 'payment_model.dart';
 
 PaymentModel _$PaymentModelFromJson(Map<String, dynamic> json) => PaymentModel(
       id: json['id'] as String,
-      code: json['code'] as int,
+      code: json['code'] as int?,
       type: json['type'] as String,
-      providerType: json['provider_type'] as String,
+      providerType: json['provider_type'] as String?,
       label: json['label'] as String,
       sellSum: json['sell_sum'] as int,
       returnSum: json['return_sum'] as int,

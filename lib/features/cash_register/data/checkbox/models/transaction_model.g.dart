@@ -12,12 +12,16 @@ TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String,
       serial: json['serial'] as int,
       status: json['status'] as String,
-      requestSignedAt: DateTime.parse(json['request_signed_at'] as String),
-      requestReceivedAt: DateTime.parse(json['request_received_at'] as String),
+      requestSignedAt: json['request_signed_at'] == null
+          ? null
+          : DateTime.parse(json['request_signed_at'] as String),
+      requestReceivedAt: json['request_received_at'] == null
+          ? null
+          : DateTime.parse(json['request_received_at'] as String),
       responseStatus: json['response_status'] as String,
-      responseErrorMessage: json['response_error_message'] as String,
+      responseErrorMessage: json['response_error_message'] as String?,
       responseId: json['response_id'] as String,
-      offlineId: json['offline_id'] as String,
+      offlineId: json['offline_id'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       originalDatetime: DateTime.parse(json['original_datetime'] as String),
@@ -30,8 +34,8 @@ Map<String, dynamic> _$TransactionModelToJson(TransactionModel instance) =>
       'type': instance.type,
       'serial': instance.serial,
       'status': instance.status,
-      'request_signed_at': instance.requestSignedAt.toIso8601String(),
-      'request_received_at': instance.requestReceivedAt.toIso8601String(),
+      'request_signed_at': instance.requestSignedAt?.toIso8601String(),
+      'request_received_at': instance.requestReceivedAt?.toIso8601String(),
       'response_status': instance.responseStatus,
       'response_error_message': instance.responseErrorMessage,
       'response_id': instance.responseId,

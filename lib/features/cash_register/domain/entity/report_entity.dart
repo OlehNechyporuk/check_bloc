@@ -7,8 +7,8 @@ class ReportEntity extends Equatable {
   final String id;
   final int serial;
   final bool isZReport;
-  final List<PaymentEntity> payments;
-  final List<TaxEntity> taxes;
+  final List<PaymentEntity>? payments;
+  final List<TaxEntity>? taxes;
   final int sellReceiptsCount;
   final int returnReceiptsCount;
   final int cashWithdrawalReceiptsCount;
@@ -18,8 +18,8 @@ class ReportEntity extends Equatable {
   final int initial;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final int discountsSum;
-  final int extraChargeSum;
+  final int? discountsSum;
+  final int? extraChargeSum;
   final bool transactionFail;
 
   const ReportEntity({
@@ -43,7 +43,7 @@ class ReportEntity extends Equatable {
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       serial,

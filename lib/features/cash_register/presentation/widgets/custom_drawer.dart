@@ -116,7 +116,7 @@ class CustomDrawer extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.pop();
-              context.pushNamed(CashRegisterNavigationName.cashRegisterPage);
+              context.pushNamed(CashRegisterNavigationName.reportsHistoryPage);
             },
           ),
         ],
