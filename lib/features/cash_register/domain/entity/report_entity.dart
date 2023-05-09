@@ -17,7 +17,7 @@ class ReportEntity extends Equatable {
   final int balance;
   final int initial;
   final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
   final int? discountsSum;
   final int? extraChargeSum;
   final bool transactionFail;

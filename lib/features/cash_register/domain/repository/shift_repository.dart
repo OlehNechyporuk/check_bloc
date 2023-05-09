@@ -14,7 +14,7 @@ abstract class ShiftRepository {
   );
   Future<Either<Failure, ShiftEntity>> open();
   Future<Either<Failure, ShiftEntity>> get();
-  Future<Either<Failure, ReceiptEntity>> close();
+  Future<Either<Failure, ShiftEntity>> close();
   Future<Either<Failure, ReceiptEntity>> cashIn(double sum);
   Future<Either<Failure, ReceiptEntity>> cashOut(double sum);
 }

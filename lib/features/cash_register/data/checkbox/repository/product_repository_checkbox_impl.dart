@@ -24,7 +24,7 @@ class ProductRepositoryCheckboxImpl extends ProductRepository {
   }) async {
     final apiKey = await _sessionDataProvider.apiKey();
 
-    return _apiDataProvider.getProudcts(
+    return _apiDataProvider.getProducts(
       key: apiKey,
       limit: limit,
       offest: offset,

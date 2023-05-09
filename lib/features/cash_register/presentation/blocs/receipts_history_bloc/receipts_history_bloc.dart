@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:check_bloc/config/constants.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 part 'receipts_history_event.dart';
 part 'receipts_history_state.dart';
 

@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/models/balance_model.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/models/cash_register_model.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_in_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_out_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/close_shift_use_case.dart';
@@ -75,7 +77,11 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _open(ShiftOpenEvent event, emit) async {
-    emit(state.copyWith(status: BlocStateStatus.loading));
+    emit(
+      state.copyWith(
+        status: BlocStateStatus.loading,
+      ),
+    );
 
     final result = await _openShiftUseCase(NoParams());
 
@@ -96,7 +102,13 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
   }
 
   _close(ShifCloseEvent event, emit) async {
-    state.copyWith(shift: null, status: BlocStateStatus.loading);
+    emit(
+      state.copyWith(
+        status: BlocStateStatus.loading,
+        shift: null,
+        zReportId: null,
+      ),
+    );
 
     final result = await _closeShiftUseCase(NoParams());
 
@@ -107,7 +119,12 @@ class ShiftBloc extends Bloc<ShiftEvent, ShiftState> {
           status: BlocStateStatus.failure,
         ),
       ),
-      (r) => emit(state.copyWith(status: BlocStateStatus.success)),
+      (shift) => emit(
+        state.copyWith(
+          status: BlocStateStatus.success,
+          zReportId: shift.zReport?.id,
+        ),
+      ),
     );
   }
 

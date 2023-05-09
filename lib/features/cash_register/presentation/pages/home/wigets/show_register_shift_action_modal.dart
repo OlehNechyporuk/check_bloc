@@ -1,3 +1,4 @@
+import 'package:check_bloc/features/cash_register/presentation/widgets/report_x_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -74,7 +75,9 @@ showRegisterShiftActionModal(BuildContext context) {
               ),
               const Divider(),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showXReportModal(context: context);
+                },
                 style: const ButtonStyle(
                   minimumSize:
                       MaterialStatePropertyAll(Size(double.maxFinite, 50)),

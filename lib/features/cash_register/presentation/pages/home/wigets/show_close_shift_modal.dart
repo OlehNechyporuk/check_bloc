@@ -1,3 +1,5 @@
+import 'package:check_bloc/config/constants.dart';
+import 'package:check_bloc/features/cash_register/presentation/widgets/report_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

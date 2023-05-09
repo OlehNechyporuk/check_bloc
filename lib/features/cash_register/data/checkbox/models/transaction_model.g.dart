@@ -18,9 +18,9 @@ TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) =>
       requestReceivedAt: json['request_received_at'] == null
           ? null
           : DateTime.parse(json['request_received_at'] as String),
-      responseStatus: json['response_status'] as String,
+      responseStatus: json['response_status'] as String?,
       responseErrorMessage: json['response_error_message'] as String?,
-      responseId: json['response_id'] as String,
+      responseId: json['response_id'] as String?,
       offlineId: json['offline_id'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),

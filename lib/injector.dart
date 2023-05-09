@@ -1,5 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:check_bloc/features/cash_register/presentation/blocs/modal_report_bloc/modal_report_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/modal_x_report_bloc/modal_x_report_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -43,6 +43,7 @@ import 'package:check_bloc/features/cash_register/domain/usecases/receipt_delive
 import 'package:check_bloc/features/cash_register/domain/usecases/receipt_history/get_receipts_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/reports/get_report_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/reports/get_shifts_use_case.dart';
+import 'package:check_bloc/features/cash_register/domain/usecases/reports/get_x_report_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_in_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/cash_out_shift_use_case.dart';
 import 'package:check_bloc/features/cash_register/domain/usecases/shift/close_shift_use_case.dart';
@@ -54,6 +55,7 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/cash_regist
 import 'package:check_bloc/features/cash_register/presentation/blocs/cash_register_form_bloc/cash_register_form_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/cashier_bloc/cashier_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/login_form_bloc/login_form_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/modal_report_bloc/modal_report_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/payments_bloc/payments_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/products_bloc/products_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/receipt_bloc/receipt_bloc.dart';
@@ -167,6 +169,7 @@ Future<void> initializeDI() async {
 
   sl.registerLazySingleton<GetShiftsUseCase>(() => GetShiftsUseCase(sl()));
   sl.registerLazySingleton<GetReportUseCase>(() => GetReportUseCase(sl()));
+  sl.registerLazySingleton<GetXReportUseCase>(() => GetXReportUseCase(sl()));
 
   //blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));
@@ -187,6 +190,7 @@ Future<void> initializeDI() async {
   sl.registerFactory<ShiftBloc>(() => ShiftBloc(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory<ShiftsHistoryBloc>(() => ShiftsHistoryBloc(sl()));
   sl.registerFactory<ModalReportBloc>(() => ModalReportBloc(sl()));
+  sl.registerFactory<ModalXReportBloc>(() => ModalXReportBloc(sl()));
 
   //CRM
   //data providers

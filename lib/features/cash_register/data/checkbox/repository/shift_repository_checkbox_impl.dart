@@ -45,7 +45,7 @@ class ShiftRepositoryCheckboxImpl extends ShiftRepository {
   }
 
   @override
-  Future<Either<Failure, ReceiptEntity>> close() async {
+  Future<Either<Failure, ShiftEntity>> close() async {
     final apiKey = await _sessionDataProvider.apiKey();
 
     return await _apiDataProvider.closeShift(apiKey);

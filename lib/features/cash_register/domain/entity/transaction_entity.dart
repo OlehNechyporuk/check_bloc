@@ -7,9 +7,9 @@ class TransactionEntity extends Equatable {
   final String status;
   final DateTime? requestSignedAt;
   final DateTime? requestReceivedAt;
-  final String responseStatus;
+  final String? responseStatus;
   final String? responseErrorMessage;
-  final String responseId;
+  final String? responseId;
   final String? offlineId;
   final DateTime createdAt;
   final DateTime updatedAt;

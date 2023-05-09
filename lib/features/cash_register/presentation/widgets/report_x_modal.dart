@@ -3,19 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:check_bloc/config/constants.dart';
-import 'package:check_bloc/features/cash_register/presentation/blocs/modal_report_bloc/modal_report_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/modal_x_report_bloc/modal_x_report_bloc.dart';
 
-showReportModal({
+showXReportModal({
   required BuildContext context,
-  required String id,
 }) {
   showDialog(
     context: context,
     builder: (context) {
-      context.read<ModalReportBloc>().add(
-            ModalReportLoadedEvent(
-              id,
-            ),
+      context.read<ModalXReportBloc>().add(
+            ModalXReportLoadedEvent(),
           );
       return AlertDialog(
         insetPadding: EdgeInsets.zero,
@@ -42,7 +39,7 @@ class ReportContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: BlocBuilder<ModalReportBloc, ModalReportState>(
+      child: BlocBuilder<ModalXReportBloc, ModalXReportState>(
         builder: (context, state) {
           if (state.status == BlocStateStatus.loading) {
             return const Center(

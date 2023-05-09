@@ -14,6 +14,7 @@ import 'package:check_bloc/features/cash_register/presentation/blocs/cash_regist
 import 'package:check_bloc/features/cash_register/presentation/blocs/cashier_bloc/cashier_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/login_form_bloc/login_form_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/modal_report_bloc/modal_report_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/blocs/modal_x_report_bloc/modal_x_report_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/my_bloc_observer.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/payments_bloc/payments_bloc.dart';
 import 'package:check_bloc/features/cash_register/presentation/blocs/products_bloc/products_bloc.dart';
@@ -86,6 +87,9 @@ class MyApp extends StatelessWidget {
           create: (context) => sl(),
         ),
         BlocProvider<ModalReportBloc>(
+          create: (context) => sl(),
+        ),
+        BlocProvider<ModalXReportBloc>(
           create: (context) => sl(),
         ),
 

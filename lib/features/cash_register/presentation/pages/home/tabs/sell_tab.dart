@@ -1,3 +1,5 @@
+import 'package:check_bloc/features/cash_register/presentation/blocs/shift_bloc/shift_bloc.dart';
+import 'package:check_bloc/features/cash_register/presentation/widgets/report_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,9 +34,30 @@ class SellTab extends StatelessWidget {
             Expanded(flex: 1, child: ProductsWidget()),
             ReceiptWidget(),
             SizedBox(height: 10),
+            CheckZreportModalWidget(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class CheckZreportModalWidget extends StatelessWidget {
+  const CheckZreportModalWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ShiftBloc, ShiftState>(
+      builder: (context, state) {
+        if (state.status == BlocStateStatus.success) {
+          if (state.zReportId != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showReportModal(context: context, id: state.zReportId!);
+            });
+          }
+        }
+        return const SizedBox();
+      },
     );
   }
 }

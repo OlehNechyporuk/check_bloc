@@ -25,7 +25,9 @@ ReportModel _$ReportModelFromJson(Map<String, dynamic> json) => ReportModel(
       balance: json['balance'] as int,
       initial: json['initial'] as int,
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
       discountsSum: json['discounts_sum'] as int?,
       extraChargeSum: json['extra_charge_sum'] as int?,
       transactionFail: json['transaction_fail'] as bool,
@@ -44,7 +46,7 @@ Map<String, dynamic> _$ReportModelToJson(ReportModel instance) =>
       'balance': instance.balance,
       'initial': instance.initial,
       'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'discounts_sum': instance.discountsSum,
       'extra_charge_sum': instance.extraChargeSum,
       'transaction_fail': instance.transactionFail,

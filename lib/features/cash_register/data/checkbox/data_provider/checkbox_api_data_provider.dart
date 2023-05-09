@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:check_bloc/features/cash_register/data/checkbox/models/receipt_model.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/models/receipt_payment_model.dart';
+import 'package:check_bloc/features/cash_register/data/checkbox/models/report_model.dart';
 import 'package:check_bloc/features/cash_register/data/checkbox/models/shift_model.dart';
 import 'package:check_bloc/features/cash_register/domain/entity/receipt_entity.dart';
+import 'package:check_bloc/features/cash_register/domain/entity/report_entity.dart';
+import 'package:check_bloc/features/cash_register/domain/entity/shift_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -87,7 +90,7 @@ class CheckboxApiDataProvider {
     });
   }
 
-  Future<Either<Failure, List<ProductModel>>> getProudcts({
+  Future<Either<Failure, List<ProductModel>>> getProducts({
     required String key,
     int limit = AppConstants.productsLimitPerPage,
     int offest = 0,
@@ -153,7 +156,7 @@ class CheckboxApiDataProvider {
     final end =
         DateFormat('yyyy-MM-dd').format(dateTimeRange?.end ?? DateTime.now());
     final url = Uri.parse(
-      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true&from_date=$start 00:00:00&to_date=$end 00:00:00&limit=$limit&offset=$offset',
+      '${AppConstants.checkboxApiServer}receipts/search/?&desc=true&from_date=$start 00:00:00&to_date=$end 23:59:59&limit=$limit&offset=$offset',
     );
 
     final result = await _getRequest(url: url, key: key);
@@ -261,7 +264,7 @@ class CheckboxApiDataProvider {
     });
   }
 
-  Future<Either<Failure, ReceiptModel>> closeShift(String apiKey) async {
+  Future<Either<Failure, ShiftEntity>> closeShift(String apiKey) async {
     final url = Uri.parse('${AppConstants.checkboxApiServer}shifts/close');
 
     final result = await _postRequest(url: url, key: apiKey);
@@ -269,7 +272,7 @@ class CheckboxApiDataProvider {
     return result.fold((l) => left(l), (response) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 202) {
-        return left(Failure(FailureMessages.shiftIsClosed));
+        return right(ShiftModel.fromJson(body));
       } else {
         return left(Failure('${body['message']}'));
       }
@@ -345,6 +348,20 @@ class CheckboxApiDataProvider {
         final body = jsonDecode(utf8.decode(response.bodyBytes));
         return left(Failure(body['message']));
       }
+    });
+  }
+
+  Future<Either<Failure, ReportEntity>> createReport(String apiKey) async {
+    final url = Uri.parse('${AppConstants.checkboxApiServer}reports');
+
+    final result = await _postRequest(url: url, key: apiKey);
+
+    return result.fold((error) => left(error), (response) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      if (response.statusCode == 201) {
+        return right(ReportModel.fromJson(body));
+      }
+      return left(Failure(body['message']));
     });
   }
 
